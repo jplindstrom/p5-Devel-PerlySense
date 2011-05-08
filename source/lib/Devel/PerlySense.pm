@@ -354,13 +354,13 @@ These are the ones I use every day so they may be a good start:
 
 =back
 
-=over4
+=over 4
 
 =item * Go to Version Control
 
 =back
 
-=over4
+=over 4
 
 =item * Find with Ack
 
@@ -368,7 +368,7 @@ These are the ones I use every day so they may be a good start:
 
 =back
 
-=over4
+=over 4
 
 =item * Run tests, Re-run tests
 
@@ -571,7 +571,7 @@ development.
 The search takes place from the Project directory. Before running ack
 you'll get to edit the command line with a sensible default chosen from:
 
-=over4
+=over 4
 
 =item * the active region
 
