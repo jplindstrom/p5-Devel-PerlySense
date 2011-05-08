@@ -1,0 +1,33 @@
+
+* Perl Needs Better Tools
+
+http://www.perl.com/lpt/a/955
+
+
+
+|-------------------------------------------+----------------------------+-----------------------+--------------+--------|
+| Issue                                     | Emacs                      | Vim                   | EPIC         | Komodo |
+|-------------------------------------------+----------------------------+-----------------------+--------------+--------|
+| Syntax-Coloring Text Editor               | cperl-mode                 | x                     | x            |        |
+| Real-Time Syntax Checking                 | PerlySense                 |                       | x            |        |
+| Version Control Integration               | psvn, vc-svn, pcvs         | ?                     | x            |        |
+| A Code-Assist Editor / Command completion | dabbrev (not syntax aware) | Limited, omnicomplete | Limited      |        |
+| Excellent Refactoring Support             |                            |                       | Very limited |        |
+| Tree View                                 | Speedbar                   |                       | x            |        |
+| Navigation                                | PerlySense                 | PerlySense            | ?            |        |
+| Creating  Unit Tests (?)                  |                            |                       |              |        |
+| Running Unit Tests                        | PerlySense                 | x                     | ?            | ?      |
+| Language-Specific Help                    | cperl-mode, PerlySense     | ?                     | x            | ?      |
+| Debugger                                  | cperl-mode GUD             |                       | x            | x      |
+| Automatic Code Reformatting               | PerlySense - PerlTidy      | PerlTidy              | ?            | ?      |
+| Multiple Languages                        | x                          | x                     | ?            | ?      |
+| Automated Building and Testing (?)        | PerlySense, kind of        |                       | ?            | ?      |
+|                                           |                            |                       |              |        |
+|                                           |                            |                       |              |        |
+|                                           |                            |                       |              |        |
+
+
+Find/Search
+Navigation
+Tests -- Code Coverage
+Collect/summarize comments

@@ -1,0 +1,82 @@
+
+<div class="feed_logo">
+<img src="[% c.uri_for("/") %]static/images/rss_large.jpg" alt="FeedMe Logo" width="120" height="129">
+</div>
+
+<h1><a href="[% c.uri_for("rss", feed.name) %]"><img src="[% c.uri_for("/") %]static/images/rss_16x16.gif" alt="RSS Feed" width="16" height="16" border="0"><a> Feed '[% feed.name %]'</h1>
+
+<div class="feed_item_list">
+<h2>Items</h2>
+
+<ul>
+[% WHILE (feed_item = feed_items.next) %]
+    <li>
+        [% IF feed_item.url %]
+            <img src="[% feed_item.favicon_url_for_url %]" alt="" width="16" height="16" class="feed_item_favicon">
+        [% END %]
+        <a href="[% c.uri_for("/feeditem/view", feed_item.feed_item_id) %]">[% feed_item.title | html %]</a>
+        <br>
+        [% IF feed_item.url %]
+            <a href="[% feed_item.url %]">[% feed_item.url | html %]</a><br>
+        [% END %]
+        [% feed_item.body | truncate(255) | html | html_para %]
+[% END %]
+</ul>
+</div>
+
+
+
+<div class="feed_item_crud">
+<h2>Add Feed Item</h2>
+
+<h3>Web Page (handheld format)</h3>
+[% feed_item_web_page_widget.as_xml %]
+
+
+<h3>Text</h3>
+[% feed_item_text_widget.as_xml %]
+
+
+</div>
+
+
+
+<h2>Tools</h2>
+
+<h3>RSS/Atom Feed</h3>
+
+<a href="[% c.uri_for("rss", feed.name) %]"><img src="[% c.uri_for("/") %]static/images/rss_16x16.gif" alt="RSS Feed" width="16" height="16" border="0"><a>
+RSS feed. This is what you subscribe to in you RSS reader.
+
+
+<h3>Bookmark links</h3>
+
+<ul>
+<li>fmt - <a href="[% c.uri_for("/feeditem/create_text", "?feed_name=" _ feed.name _ "&body=") %]%s">FeedMe Text Item</a>
+<li>fmu - <a href="[% c.uri_for("/feeditem/create_text", "?feed_name=" _ feed.name _ "&url=") %]%s">FeedMe URL Item</a>
+<li>fmw - <a href="[% c.uri_for("/feeditem/create_web_page", "?feed_name=" _ feed.name _ "&url=") %]%s">FeedMe Web Page Item (handheld format)</a>
+
+</ul>
+
+In Firefox, drag these links into your bookmark menu, then Edit
+Properties for the Bookmark and assign a Keyword (e.g. "fmt").
+<p>
+Now you can go to the Location field in Firefox (Ctrl-L) and
+enter e.g. "fmt Meet P for cofee at the Central Perk, 7pm".
+
+
+<h3>Bookmarklets</h3>
+
+<ul>
+
+<li><a href="[% c.uri_for("/feeditem/create_text", "?feed_name=" _
+feed.name _ "&body=") %]%s">Selected Text</a> - Add selected web page text to the feed.
+
+</ul>
+
+Drag these links to your Firefox toolbar to create Bookmarklets.
+
+
+
+
+

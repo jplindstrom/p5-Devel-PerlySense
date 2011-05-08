@@ -1,0 +1,290 @@
+
+
+
+= Roadmap
+
+== 0.1
+
+Smart docs, and Smart go to, for
+
+- $self->method
+
+- My::Module->method
+
+- My::Module
+
+- $object->method, simple heuristic, first find
+
+- $object->method->method2
+
+- sub call
+
+
+Tab support
+
+
+== 0.2
+
+
+
+
+
+
+= Design
+
+PerlySense - because 90% is better than 0%
+
+It's not about exact rules, but about heuristics and a 90% solution
+that isn't perfect, but good-enough.
+
+Not computer-controlled, but computer-aided. When in doubt--ask for a
+choise between educated guesses.
+
+
+        
+= Module Find File
+
+Take a line like:
+my $ua = LWP::UserAgent->new();
+
+When you are on the LWP::UserAgent, C-p m f
+should open the module file.
+
+Emacs function:
+      look up $nameModule
+      look up $fileOrigin
+      (row/col)
+      call perly_sense.pl find_module_source_file --module=$nameModule --file_origin --row=$row --col=$col
+      The program should print the file name relative to the $fileOrigin
+
+
+= perly_sense
+
+Find the file by looking at (in this order, until one is found):
+
+- Known project dirs (*hand waving*) from earlier runs
+
+- The $dirProject, which is $nameModule relative to the dir of $fileOrigin,
+
+  This will find modules in a local project tree
+
+  i.e. If the package of $fileOrigin at line $row is Foo::Bar, then
+  the $dirProject is one step up.
+
+      Look for "package Foo::Bar" using PPI.
+
+      Look for statically defined "use lib" statements and adjust
+      what's considered "local" directories.
+
+  If a local project dir is found, remember it somehow
+
+- Common default directories above the dir of $fileOrigin, stepping up
+one dir at a time
+
+  Common default directories are e.g. ".", "lib", "bin"
+
+  I.e. it will first look in . lib bin, then in ../. ../lib ../bin,
+  then ../../. ../../lib ../../../bin, etc.
+
+- Directories in the @INC
+
+  perl -e "print qq/@INC/"
+
+
+
+
+= Find file for module at point
+
+C-P m f
+
+
+= Show POD for module at point
+
+C-P m p
+
+
+
+= Show documentation for symbol at point
+
+C-p d
+
+If module name, show POD for module
+
+If variable, identify type and show POD for module
+
+If function, look in same file, or in "use" modules with import list,
+or in other "use" modules.
+
+If method, identify type of variable and show POD for that method, or
+display method signature if no POD.
+
+ - Simplest case is function in same file, or $self->method in same
+   file, or in inherited file, or in "use" modules.
+
+
+
+= Identifying a variable's type
+
+Look at the entire sub, from the declaration onwards. $self and $pkg
+and $package and __PACKAGE__ are special for the entire package.
+
+- What methods are called on it? Remember packages that have those
+  subs defined (including inheritance).
+
+  - Rememberd packages should include ones "use"d from the document,
+    recusively, and modules used from within this known project.
+
+
+(
+- What assignments are made to it?
+
+  - $var = PACKAGE->new() - it's package (or is it? no, it can be a factory method).
+  
+  - $var = $othervar->method() - Look up the package of $othervar, then look in method() and see
+    what is returned. This is very fragile. Avoid.
+)
+
+
+
+= Method completion with M-C-SPC or something
+
+Once the type of a variable is known/guessed, we can look up the
+available methods/properties to call and display and insert a
+boilerplate call.
+
+Not necessary to have 100% up-to-date info. The last edit is probably
+not very near the lookup point, so use cached info.
+
+The boilerplace call can come from
+
+- A method signature, either
+
+  - a POD signature that matches above the sub declaration
+  - a POD signature from wherever in the POD
+  - a "normal" call with my ($var1, $var2) = @_;
+  - a "normal" call with a number of shift() (more error prone)
+
+- A method example usage from somewhere else in the code, or in the SYNOPSIS 
+
+
+
+== Example
+
+$self->
+
+a init()                       Init the object. Called by new.
+b Open( )
+c SaveAs($file, %hOpt)         Save the document to $file (may be a relative file name...
+d WriteParagraph($text, [he... Append $text as a new paragraph of heading $level or st...
+e Write($text)                 Append $text to the document (using the current style e...
+
+
+== Example
+
+$self->Wri
+
+a WriteParagraph($text, [he... Append $text as a new paragraph of heading $evel or st..
+b Write($text)                 Append $text to the document (using the current style e...
+
+
+
+
+
+= Go to method definition for word at point
+
+C-p g
+
+a) Look in current buffer
+
+b) a + look up inheritance tree
+
+c) Identify type and look at that file, + up inheritance tree
+
+d) Look in parsed files in known projects
+
+
+If at the definition, look unconditionally upwards in the inheritance
+tree for superclass implementations.
+
+
+
+= Emacs: C-p g n -- Go to sub new in local file
+
+
+
+
+= Emacs command completion
+
+Fill in a buffer with proper keywords so they'll get picked up by
+Emacs's normal dabbrev-expand.
+
+  
+  
+== Persistent information
+
+Each known project dir can contain it's own set if persistent
+meta-information about the project, like:
+
+- The files visited by perly_sense. This information should be
+  updated as soon as a file is re-visited, or removed when gone from a
+  directory.
+
+- If a file is parsed, which modules it "use", which modules it calls
+  static methods on (mostly new), which modules it inherits from.
+
+
+
+
+
+= Profiling
+
+Without:
+
+Devel::PerlySense::Document::aNameBase
+
+
+
+
+0.5 - fileFindModule
+4.0 - Document parse (with caching)
+
+
+3.6 - parse (with caching)
+      0.6 - parseSingleWordTokens
+
+
+
+
+
+= Emacs lisp notes
+
+
+Eval text back from bin/perly_sense
+http://www.gnu.org/software/emacs/elisp-manual/html_node/Input-Functions.html#Input-Functions
+read-from-string
+
+http://www.gnu.org/software/emacs/elisp-manual/html_node/Eval.html#Eval
+eval
+
+
+
+hashes
+http://www.gnu.org/software/emacs/elisp-manual/html_node/Property-Lists.html#Property-Lists
+http://www.gnu.org/software/emacs/elisp-manual/html_node/Association-Lists.html#Association-Lists
+
+
+
+= Title: Pimp my editor
+
+How to turn Emacs--or any editor--into a shiny IDE
+
+From editor to IDE in n easy steps.
+
+
+
+= Charter
+
+* Defaults matter
+
+* 90% is better than 0%
+

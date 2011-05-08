@@ -1,0 +1,12 @@
+
+* Refactorings
+** Lexical
+*** Rename lexical variable
+*** Extract x to lexical
+**** Literal
+**** Expression
+*** Move declaration to outer scope
+
+E.g. when you add an eval thing
+
+

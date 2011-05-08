@@ -1,0 +1,30 @@
+---
+name: 'FeedMe - Your Personal RSS Feed'
+app:
+  db:
+    dsn: 'dbi:SQLite:./db/sqlite/feedme.db'
+    user: ''
+    password: ''
+  web_compression:
+    mlvb:
+      login_form_url: 'http://mlvb.net/register'
+      login_form_number: 2
+      login_form:
+        username: feedme
+        password: feedblvbme
+      convert_form_url: 'http://mlvb.net/'
+      convert_form:
+        url: url
+        submit: Mobilize
+authentication:
+  http:
+    type: basic
+  users:
+    jpl:
+      password: apelsinprat
+cache:
+  backends:
+    default:
+      class: Cache::FileCache
+  backend:
+    store: Memory

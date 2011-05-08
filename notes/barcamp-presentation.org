@@ -1,0 +1,202 @@
+
+* Talking Points
+
+** Intro
+
+*** Show of hands
+
+**** Programmers?
+
+**** Perl programmers?
+
+**** Emacs users?
+
+
+
+*** PerlySense
+
+*** It is an IDE backend for Perl programming
+
+*** Editors
+
+**** Emacs
+
+*** Started as "Intellisense for Perl"
+
+*** More important things
+
+*** Still in alpha, only developer releases
+
+**** Still useful
+
+*** Started thinking about programming
+
+
+
+** Principles
+
+*** Tightening the Feedback Loop...
+
+
+**** Example: Write-Compile-Run loop
+
+Tells you whether you had any syntax errors, whether the code you just
+wrote worked as you thought.
+
+
+**** Example in the large: Tests
+
+Find out immediately whenever you broke something, and
+the quality of your software doesn't go down. A system without tests
+will quickly enter a state of permanent brokenness. And it's unknown
+brokenness because you still haven't discovered in what way.
+
+
+**** Example in the extreme small: Syntax highlighting
+
+Not static, but when you type.
+
+You see when you have an unclosed string literal.
+
+
+
+*** ...to the point where there is no loop
+
+The best interface is "no interface"
+
+Bring everything into the editor.
+
+**** Instant syntax highlighting
+
+**** Continous compilation
+reveals syntax errors
+
+**** Running tests all the time
+reveals semantic errors
+
+
+
+*** Less distractions, less detours from the actual task at hand
+
+It's easy to lose the train of thought, losing track of the end
+goal. Yak shaving.
+
+Psychology. Flow.
+
+Manual details.
+
+Pragmatic Progammer's: Three strikes and then you automate
+
+Why automatic refactoring tools are useful. It keeps track of the
+details for you.
+
+
+
+*** Less (effort) is different
+
+Easier is different. Non-linear behaviour occur when things fall under
+a certain threshold level of difficulty/effort.
+
+Things that didn't make sense before now become indispensible.
+
+Just a little too much effort are barriers to doing useful things.
+
+
+
+**** Example in the small: Command completion
+
+
+**** Example: Rename a variable
+
+Even a local/lexical variable is a slight effort.
+
+Either manually, or search/replace.
+
+So you don't do it.
+
+Naming is important.
+
+
+
+
+*** ...to the point where there is no effort
+
+Same examples as before
+
+**** Syntax highligting
+
+**** Continuous compilation
+
+
+
+
+*** Visualization and abstraction
+
+Abstractions work not because they add information, but because they
+remove information. So the relative density of _useful_ information goes
+up.
+
+Visualization is a way to keep the bits that are geared towards the
+pattern matching abilities of the eye.
+
+This is important because it's a fundamental property of humans.
+
+A different modality than reading text.
+
+
+
+**** Examples
+
+***** Syntax highlighting
+
+***** Diffing
+
+***** Inheritance hierarchy
+
+***** Blame / annotate
+
+***** Volatility
+
+***** Coverage
+
+***** Extract interesting bits
+
+<draw image>
+
+
+**** Types of visualization
+***** Active
+***** Passive, unobtrusive
+
+
+* DEMO
+
+
+
+** Activities, overview
+
+*** Write code / Edit code
+**** Syntax Highlighting
+**** Write-compile-run - loop
+**** Transform code
+*** Run tests
+*** Read code / Understand code
+**** Diffing
+****
+*** Browse code
+**** Navigate to related things
+**** Find where things are used, declared
+**** Smart Goto
+**** Grep codebase
+**** Overview
+*** Source Control
+
+*** Debug code
+
+
+** Understand Code
+
+
+* Demo
+
+

@@ -1,0 +1,205 @@
+
+
+
+defcustom
+defface
+defvar
+
+
+margins
+http://www.gnu.org/software/emacs/elisp/html_node/Display-Margins.html#Display-Margins
+
+images
+http://www.gnu.org/software/emacs/elisp/html_node/Images.html#Images
+put-image
+
+
+
+
+
+dotimes
+
+dolist
+
+overlay-put
+
+		    (overlay-put (make-overlay (1+ offset) (+ offset
+length 1))
+				'face 'regex-tool-matched-face)
+
+remove-overlays
+
+erase-buffer
+
+buffer-substring
+
+ignore-errors
+
+
+
+completing-read
+
+
+
+
+(defun b-perl-httpd-restart nil
+  "Start an s-http-dispatcher in the current project's root"
+  (interactive)
+  (let
+      ((project (nth 1 (b-perl-which-project (buffer-file-name)))))
+    (save-excursion
+      (message "Restarting s-http-dispatcher")
+      (if (get-buffer "*httpd*")
+          (kill-buffer (get-buffer "*httpd*")))
+      (shell (get-buffer-create "*httpd*"))
+      (accept-process-output (get-buffer-process (current-buffer)))
+      (switch-to-buffer (get-buffer "*httpd*"))
+      (insert "b_" project " && s-http-dispatcher")
+      (comint-send-input)
+      )))
+
+
+(comint-mode)
+
+
+
+
+
+(when (ring-empty-p comint-input-ring)
+    (set-process-sentinel
+     (get-buffer-process (current-buffer))
+     'shell-write-history-on-exit)
+    (comint-read-input-ring))
+
+
+
+        (set-process-sentinel
+         (start-process "perldoc-build" nil pde-perl-program
+                    perldoc-cache-pl perldoc-cache-el)
+     (lambda (proc event)
+       (if (zerop (process-exit-status proc))
+           (progn
+             (message "Create perldoc cache successfully!")
+             (load perldoc-cache-el)
+             (if (get-buffer perldoc-tree-buffer)
+                 (with-current-buffer perldoc-tree-buffer
+                   (tree-mode-reflesh))))
+         (error "Create perldoc cache failed! %s" event))))))
+
+
+
+
+
+
+(defun inf-perl-switch-to-perl (arg)
+  "show perl process buffer. With argument, just display it,
+otherwise, switch to the buffer."
+  (interactive "P")
+  (unless (and (buffer-live-p inf-perl-buffer)
+               (get-buffer-process inf-perl-buffer)
+               (eq (process-status (get-buffer-process inf-perl-buffer)) 'run))
+    (save-window-excursion
+      (inf-perl-start)))
+  (if arg
+      (display-buffer inf-perl-buffer)
+    (pop-to-buffer inf-perl-buffer)))
+
+
+
+
+
+f
+
+
+(defvar b-perl-release-scope-history
+  '("YOUR PRODUCT"
+    "YOUR OTHER PRODUCT")
+  "*A list of possible release scopes")
+
+        (read-string "Release scope: "
+                     b-perl-release-scope
+                     '(b-perl-release-scope-history . 1)))
+
+
+
+condition-case  -- try block, type thing
+
+
+
+funcall
+
+
+
+
+var, determines case sensitivity in searches
+(case-fold-search nil)
+
+
+
+the region text
+(buffer-substring (point) (mark))
+
+
+
+
+
+(undo-boundary)
+
+
+substring
+
+
+
+
+
+M-x describe-face
+
+
+
+
+This is working fine for setting the bold letters:
+
+ (setq header-line-format
+       (mapconcat
+        (lambda (k)
+          (format "%s %s"
+                  (propertize (car k) 'face 'bold)
+                  (cdr k)))
+        '(("a" . "one,") ("b" . "two,") ("c" . "three,"))
+        " "))
+
+and I can 'switch-off' the underlining by evaluating this at any time:
+
+  (set-face-attribute 'header-line nil :underline nil)
+
+
+
+
+Is item part of list
+memq
+memql
+
+
+
+
+
+Left or right hand margin
+fringe-columns
+fringe-* for interesting things
+
+
+
+
+
+comint-dynamic-complete
+
+
+
+
+
+(setq eval-expression-print-length nil)
+
+
+
+
+(prin1-to-string thing)

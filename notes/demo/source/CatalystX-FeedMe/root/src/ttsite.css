@@ -1,0 +1,103 @@
+
+html {
+  height: 100%;
+}
+
+body { 
+  background-color: [% site.col.page %];
+  color: [% site.col.text %];
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+}
+
+#header {
+  background-color: [% site.col.head %];
+  border-bottom: 1px solid [% site.col.line %];
+}
+
+#footer {
+  background-color: [% site.col.head %];
+  text-align: center;
+  border-top: 1px solid [% site.col.line %];
+  left: 0px;
+  width: 100%;
+  padding: 4px;
+  clear: both;
+}
+
+#content {
+  padding: 10px;
+}
+
+h1.title {
+  padding: 4px;
+  margin: 0px;
+}
+
+.message {
+  color: [% site.col.message %];
+}
+
+.error {
+  color: [% site.col.error %];
+}
+
+
+
+.feed_logo {
+  float: right;
+}
+
+
+.feed_item_list {
+  width: 45%;
+  float: left;
+  padding-right: 1.5em;
+  margin-right: 1.5em;
+  border-right: solid 1px #000000;
+  overflow: hidden;
+}
+
+.feed_item_list h2 {
+  margin-top: 0px;
+}
+
+.feed_item_favicon {
+  margin-right: 0.2em;
+  margin-bottom: -0.1em;
+}
+
+.feed_item_delete_form {
+  float: right;
+  margin-right: 1em;
+}
+
+
+.feed_item_crud {
+  width: 100%;
+}
+
+form fieldset {
+  width: 40%;
+  border: 0;
+  margin-top: -1em;
+}
+label {
+  display: block;
+  position: relative;
+  margin: .5em 0em;
+}
+label input {
+  width: 100%;
+}
+label textarea {
+  width: 100%;
+}
+.submit {
+  margin-top: 0.5em;
+}
+.error_messages {
+  color: [% site.col.error %];
+}
+

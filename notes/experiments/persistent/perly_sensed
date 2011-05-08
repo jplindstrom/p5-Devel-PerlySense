@@ -1,0 +1,139 @@
+#!/usr/bin/perl -w
+use strict;
+$|++;
+
+use Path::Class;
+use File::Basename;
+use Data::Dumper;
+use IO::Socket;
+use IO::Select;
+use HTTP::Daemon;
+use HTTP::Status;
+use HTTP::Request;
+use HTTP::Response;
+use Data::Dumper;
+
+use Time::HiRes qw/ sleep /;
+
+#Use lib "../lib";
+use threads;
+use threads::shared;
+
+use Time::HiRes qw/ time /;
+
+
+
+main_perly_sense_daemon();
+
+
+
+
+sub main_perly_sense_daemon {
+    print "PerlySense Daemon 1.0\n";
+
+    my $port = 13831;
+    my $thread_count = 2;
+    my $life_span_request_count = 1;
+
+	my $server = HTTP::Daemon->new(
+        Proto => 'tcp',
+        LocalPort => $port,
+        Listen => SOMAXCONN
+    ) or die("Could not listen to port ($port)\n");
+    print "Listening to port ($port)...\n";
+
+#    my $concurrent : shared = 0;
+    my $current_thread_count : shared = 0;
+    my $thread_id = 0;
+
+    while (1) {
+        sleep(0.1);
+        while ($current_thread_count < $thread_count) {
+            $thread_id++;
+            $current_thread_count++;
+            print "Thread $thread_id\n";
+            threads->create(
+                sub {
+                    my ($no) = @_;
+#                    threads->self->detach();
+
+                    push(@INC, dirname($0));
+                    eval sprintf("require('perly_sense');");
+                    $@ and die($@);
+
+                    my $p = sub {
+                        print STDERR "$no: ", @_
+                    };
+                    $p->("Starting $no...\n");
+                    threads->self->detach();
+                    #                sleep(1);
+                    $p->("Starting to work...\n");
+                    ###TODO: move this to home dir, loaded by require perly_sense
+                    open(my $fh, "$0.lock") or die("Could not open $0 for reading\n");
+
+                    for my $request_count (1 .. $life_span_request_count) {
+                        $p->("Waiting for request ($request_count)...\n");
+                        flock($fh, 2); #LOCK_EX
+
+                        $p->("Accepting\n");
+                        my $connection = $server->accept() or warn("Could not accept a connection request\n"), next;
+
+                        $p->("Getting request\n");
+                        my $start_time = time();
+
+                        my $request = $connection->get_request;
+                        flock($fh, 8); #LOCK_UN                    $request = $connection->get_request
+
+                        if ($request) {
+                            $p->("  Request: " . $request->url ."\n");
+                            if (my $query = $request->url->query) {
+
+#                                $concurrent++;
+#                                $p->(" $concurrent: $query\n");
+#                                print "$no($concurrent)> ";
+
+                                local @ARGV = split(/\+/, $query);
+
+                                my $stdout = "";
+                                close(STDOUT);
+                                open(STDOUT, ">", \$stdout) or die("Can't open STDOUT to string\n");
+
+                                $p->("Calling PerlySense @ARGV");
+                                ::main_perly_sense();
+                                $p->("Back from PerlySense(\n$stdout\n)");
+
+                                my $response = HTTP::Response->new(200);
+                                $response->content($stdout);
+                                $connection->send_response($response);
+#                                $concurrent--;
+                                $p->(" Done\n");
+                            } else {
+                                $p->("Nope, no url...\n");
+                                my $response = HTTP::Response->new(content => "Nope\n");
+                                $connection->send_response($response);
+                            }
+                            $p->(" Request done!\n");
+                        }
+
+                        my $elapsed_seconds = time() - $start_time;
+                        print sprintf("<$no(%.2f) ", $elapsed_seconds);
+
+                        $connection->close;
+                        undef($connection);
+
+                        $p->("Connection closed\n");
+                    }
+
+                    $current_thread_count--;
+                    $p->("Exiting thread");
+                }, $thread_id);
+            print "Thread $thread_id started\n";
+        }
+    }
+
+}
+
+
+
+
+__END__

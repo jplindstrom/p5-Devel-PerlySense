@@ -1,0 +1,216 @@
+#+SEQ_TODO:  TODO DOING DONE
+
+* Activities
+
+** Write code
+
+*** Write-compile-run - loop
+
+Tightening the Feedback Loop
+
+Bring everything into the editor
+
+Easier is different. Non-linear behaviour occur when things fall under
+a certain threshold level of difficulty/effort. 
+
+Things that didn't make sense before now become indispensible.
+
+Example: Tests. Find out immediately whenever you broke something, and
+the quality of your software doesn't go down. A system without tests
+will quickly enter a state of permanent brokenness. And it's unknown
+brokenness because you still haven't discovered in what way.
+
+
+**** Syntax check
+**** Perl::Critic
+
+** Automate anything you see yourself doing a lot
+
+*** Typing Common forms
+**** Named Keyboard Macros
+
+How many times have you written these things in your life?
+
+=>
+
+->
+
+$self->
+
+{}
+
+**** Templates
+
+***** for
+***** 
+
+*** Transform code
+**** Delete trailing whitespace
+**** Collapse whitespace
+**** Align things
+**** Dereference array and hash refs  %{}  @{}
+*** Completion
+*** Search (inc-search)
+**** Highlights
+** Run tests
+*** compilation mode
+** Browse code
+*** Find where things are used, declared
+*** Smart Goto
+*** Grep codebase
+*** Overview 
+** Source Control
+          
+** Debug code
+
+* Concepts
+
+http://elzr.com/posts/iibb-june-17-2006
+
+Augmenting the intellect
+http://www.bootstrap.org/augdocs/friedewald030402/augmentinghumanintellect/ahi62index.html
+
+
+** Emacs on Perlmonks PBP
+http://www.perlmonks.org/?node_id=650413
+
+
+* Screencast
+
+Hi! I'm Johan Lindstrom and this is a PerlySense demo screencast.
+
+PerlySense is Perl IDE framework that you can integrate into
+editors. Currently, I'm working on integrating it into Emacs.
+
+Some of the things I'm gonna show here today are Emacs specific, or
+very tightly integrated into Emacs. 
+
+Others are basic blocks of functionality that can potentially be
+integrated any other editor a Perl programmer would like to use, like
+Vim, TextMate, or Eclipse.
+
+** Principles
+
+The overarching principles behind PerlySense:
+
+*** Closing the feedback loop...
+
+*** ...to the point where there is no loop
+
+*** Less (effort) is different
+
+Easier is different. Non-linear behaviour occur when things fall under
+a certain threshold level of difficulty/effort.
+
+Things that didn't make sense before now become indispensible.
+
+
+*** The best interface is "no interface"
+
+
+*** Important things should either:
+**** be made available where you are; or
+**** be available by taking you there; or
+
+*** Visualization is important
+
+Abstractions work not because they add information, but because they
+remove information. So the relative density of _useful_ information goes
+up.
+
+Visualization is a way to keep the bits that are geared towards the
+pattern matching abilities of the eye. This is important because it's
+a fundamental property of humans.
+
+
+*** Less distractions, less detours from the actual task at hand
+
+It's easy to lose the train of thought, losing track of the end
+goal. Yak shaving.
+
+Psychology. Flow. In the Zone.
+
+Manual details 
+
+Why automatic refactoring tools are useful. It keeps track of the details.
+
+
+
+
+** Issues
+
+*** Dynamic languages
+
+Static typing. The advantage of static analysis of the code.
+
+Dynamic languages. Anything can change at any time (compile time,
+startup time, run time). Nothing is given by looking at the source text.
+
+Educated guesses, let you clarify when in doubt.
+
+
+*** Important things should either:
+**** be available by taking you there
+**** be made available where you are; or
+
+
+*** Active vs Passive
+**** Active Overview/Abstraction
+**** Pasive Ambient hints
+**** Take one measurement and use it for the other
+
+
+
+
+* Philosophy
+
+** Always work without any extra setup no matter which file you're browsing.
+*** If anything needs to be indexed, PerlySense should know that and do it for you 
+
+** Deduce setup and config if possible
+*** and provide a way to configure it explicitly if need be
+
+** Try to provide "smart" / DWIM versions of commands
+*** Oriented around actions, not objects
+*** Just do it!
+
+** 90% is better than 0%
+
+
+
+http://www.perlmonks.org/index.pl?node_id=467729
+
+IDEs are tools that remove the menial, tedious, unproductive,
+uncreative tasks involved with programming on the CLI.
+
+In addition, a good IDE provides a level of support that empowers, not
+satiates, the developer.
+
+
+
+
+http://www.ecotopia.com/webpress/futures.htm
+
+When we think about the ways that mankind has extended itself over the
+year ... one is through the notion of amplifying tools, something
+which amplifies our reach into the world.
+
+
+
+
+IDE vs language
+http://osteele.com/archives/2004/11/ides
+
+
+
+* Example files
+
+
+c:/Dokument/Project/Dev/CPAN/Devel-PerlySense/trunk/notes/demo/source/Worm/source/lib/Game/Object/Worm.pm
+c:/Dokument/Project/Dev/CPAN/Devel-PerlySense/trunk/notes/demo/source/Worm/source/t/Game-Lawn.t
+c:/Dokument/Project/Dev/CPAN/Devel-PerlySense/trunk/notes/demo/source/Worm/source/lib/Game/Object/Worm/Bot.pm
+c:/Dokument/Project/Dev/CPAN/Devel-PerlySense/trunk/notes/demo/source/CatalystX-FeedMe/lib/CatalystX/FeedMe/View/Atom.pm
+c:/Dokument/Project/Dev/CPAN/Devel-PerlySense/trunk/source/lib/Devel/PerlySense/Class.pm
+c:/Dokument/Project/Dev/CPAN/Devel-PerlySense/trunk/source/.PerlySenseProject/project.yml
+
+

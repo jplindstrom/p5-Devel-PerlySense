@@ -1,0 +1,24 @@
+<div class="feed_item">
+<h1 class="feed_name"><a href="[% c.uri_for("/feed/list/", feed.name) %]">Feed '[% feed.name %]'</a></h1>
+
+
+<div class="feed_item_delete_form">
+<form action="[% c.uri_for("/feeditem/delete", feed_item.id) %]" method="POST">
+<input type="submit" value="Delete">
+</form>
+</div>
+
+<h3 class="feed_item_title">[% feed_item.title | html %]</h3>
+
+[% IF feed_item.url %]
+    <div class="feed_item_url">
+    <a href="[% feed_item.url %]">[% feed_item.url %]</a><br>
+    </div>
+[% END %]
+
+<div class="feed_item_body">
+[% feed_item.body | html_para %]
+</div>
+
+
+</div>

@@ -1,0 +1,13 @@
+
+<div class="feed_logo">
+<img src="[% c.uri_for("/") %]static/images/rss_large.jpg" alt="FeedMe Logo" width="120" height="129">
+</div>
+
+<h1>Feeds</h1>
+
+<ul>
+[% FOR feed IN feeds %]
+    <li><a href="[% c.uri_for("/feed/list", feed.name) %]">[% feed.name %]</a>
+[% END %]
+</ul>
+

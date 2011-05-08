@@ -1,0 +1,5059 @@
+
+#+Seq_TODO: TODO DOING DONE
+* User Stories
+** DONE Bug: Build.pl
+
+Fix Build.PM to refer to the file with / not \\
+
+** DONE Recompile -- reuse visible *compiation* buffer
+
+If the *compiation* buffer is already visible in any frame, switch to
+that first, so we don't get to see two *compiation* buffers next to
+each other. That just looks silly.
+
+select-window
+get-buffer-window
+
+
+
+** DONE Flymake
+
+Call perly_sense which in turn does the right thing, e.g.
+
+Configurable
+- Run perl -c   2>&1| perl -ne " /Subroutine \w+ redefined at/ or print"
+
+http://www.gnu.org/software/emacs/manual/html_node/flymake/Adding-support-for-a-new-syntax-check-tool.html#Adding-support-for-a-new-syntax-check-tool
+
+http://www.geocities.com/kensanata/colors.html
+
+
+
+
+** DONE Run file
+
+*** Cd or don't cd to the project root
+
+
+
+
+
+** DONE Run file
+
+*** Decide what type from config
+
+
+Take the run command from config, match it against file name
+
+test
+\.t$ => "prove -v -I $INC $FILE"
+cd
+
+\.pm$ => "perl -c -I $INC $FILE"
+cd
+
+\.pl$ => "perl -I $INC $FILE"
+don't cd
+
+. => "perl -I $INC $FILE"
+don't cd
+
+
+
+
+
+** DONE Run file
+
+*** Add INC from config
+
+
+
+
+** DONE Project concept
+
+perly_sense create_project
+- Load config when project dir is found
+
+
+
+
+
+
+** DONE Project concept
+
+perly_sense create_project
+- Backup existing config file
+
+
+
+
+
+** DONE Run File - Recompile
+
+If Run File is perfomed from within the compile buffer, to a recompile
+
+Useful when you have opened other files with errors in it and the .t
+file isn't visible.
+
+Doc it.
+
+
+
+
+
+** DONE Change from Perl to YAML
+
+
+
+
+
+** DONE Run file - tests
+
+Special case /, that can never be the project root (un Unixen, it may
+often contain lib).
+
+
+PerlySense Run-file
+
+like($rhRun->{command_run}, qr|prove -v "-I." "-Ilib" "t.Game-Lawn.t"|,
+"    command_run");
+
+
+
+
+** DONE Run current test file
+
+In a compile-like buffer
+
+Using the project or found root dir to set INC properly, or even cd to
+the root dir?
+
+Fix the output so find file+line number works properly
+
+
+
+
+
+
+** DONE Run file - perly_sense run_file --file=FILE
+
+Take params, call PerlySense->runFile
+
+- Find project from file
+
+- Assume just a run from current dir with a .t
+
+Return dir-run-from, command-run, type-source-file
+
+
+
+
+** DONE Project concept
+
+Devel::PerlySense::Project
+
+dirProjectImplicitUse
+
+dirProjectImplicitDir
+
+dirProjectEplicitDir
+
+dirProject
+
+
+setDirProjectImplicitUse - found used module
+setDirProjectImplicitDir - found lib or t
+setDirProjectExplicitDir - found config file
+
+
+
+
+** DONE Run file
+
+We don't compile, we run files.
+
+Usually test files, but also scripts in general.
+
+
+C-p C-r
+
+Find the project home and then find the inc from the project setting
+or environment/file.
+
+Report back to Emacs which dir to cd to, and what -I to set
+
+
+** DONE elisp *
+default-directory
+cd
+(create temp buffer to execute from to avoid changing dir of buffer)
+
+
+
+
+** DONE POD
+
+Mention/provide link to the perly-sense.el apart from just the manifest.
+
+
+
+
+
+
+
+** DONE Signature Survey - attributes
+
+Take attributes into account in the survey
+
+sub search : Path('search') {
+
+
+
+
+** DONE Class Overview - Structure
+
+Replace read_file with Util::slurp to avoid regexp mishaps
+
+Signature Survey - show file summary with what lines in the file are
+
+http://c2.com/doc/SignatureSurvey/
+
+POD =
+
+Or do color background to indicate the number of them in a row!
+
+
+
+
+
+** DONE NeighbourHood *
+
+List classes in the above directory, same directory, and below. Or
+something like that. (three columns?)
+
+List them in space saving columns
+
+Don't store each Class, only get the names
+
+
+
+
+** DONE Class Overview - disable sub classes
+
+To much time, too weird layout
+
+
+
+
+
+
+** DONE PerlySense && Emacs: Class Hierarchy Step 5?
+
+Including subclasses found under the namespace dir structure (or in
+the project, introduce the project concept (not yet)).
+
+
+
+
+** DONE Class Overview - indicate current Class
+
+Using [< This::Class    >] syntax, and highlight it differently.
+
+
+
+
+** DONE Cache on PerlySense version too (and PPI version?)
+
+
+
+
+
+** DONE Emacs: Have the Overview do actions
+
+g - Goto Class
+
+d - Document Class
+
+q - Quit Overview
+
+I - Interface
+
+H - Hierarchy
+
+
+
+
+(perly-sense-display-class-overview "* Inheritance *\n    [ Class::Accessor               ]\n +> [ Class::Accessor::Fast         ] <-----+\n |  [ Catalyst::AttrContainer       ] ------+---------------------------+\n |    |                                     |                           v\n +- [ Catalyst::Base                ] --> [ Catalyst::Component ] --> [ Class::Data::Inheritable ]\n    [ Catalyst::View::Atom::XML     ]\n    [ CatalystX::FeedMe::View::Atom ]\n" "CatalystX::FeedMe::View::Atom")
+
+(perly-sense-fontify-class-overview-buffer "* Class Overview *")
+
+
+(list-faces-display)
+
+
+
+
+** DONE Emacs: Have the Class Overview be color highlighted
+
+
+
+
+** DONE Class Hierarchy => Class View
+
+
+
+** DONE PerlySense && Emacs: Class Hierarchy Step 3
+
+With multiple inheritance working
+
+---------------------------------------------------------------------------
+                                                Class::Pluggable
+                     Catalyst                   Class::Pluggable::Plugin
+ Game                Catalyst::Plugin
+ Game::Object        Catalyst::Plugin::Session
+>Game::Object::Worm
+---------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------
+                                                  Class::Pluggable
+                      Catalyst------------------+-Class::Pluggable::Plugin
+ Game                 Catalyst::Plugin          |
+ Game::Object-------+-Catalyst::Plugin::Session
+>Game::Object::Worm |
+---------------------------------------------------------------------------
+
+
+graph { flow: up; }
+[ Game::Object::Worm ] ==> [ Game::Object ]
+[ Game::Object ] ==> [ Game ]
+[ Game::Object ] ==> [ Catalyst::Plugin::Session ]
+[ Catalyst::Plugin::Session ] ==> [ Catalyst::Plugin ]
+[ Catalyst::Plugin ] ==> [ Catalyst ]
+[ Catalyst ] ==> [ Catalyst::Base ]
+[ Catalyst::Plugin ] ==> [ Class::Pluggable::Plugin ]
+[ Class::Pluggable::Plugin ] ==> [ Class::Pluggable ]
+[ Catalyst::Base ] ==> [ Class::Pluggable ]
+
+
+
+** DONE Fix POD
+
+Docs pod for overview
+- Example of output!
+- RET
+- Structure
+
+Put the overview last to ease people in
+
+Go to named class
+
+
+On parsing Perl
+
+Sometimes it won't work at all. That obviously sucks, but on the other
+hand you could be coding Java (IMHO, the most obvious benefit of static
+typing? Brilliant IDEs).
+
+
+
+POD for PerlySense.pm fileFoundInDir($dir, $fileModuleBase)
+
+
+
+
+
+
+
+** DONE Class Overview - Structure
+
+Signature Survey - show file summary with what lines in the file are
+
+http://c2.com/doc/SignatureSurvey/
+
+sub s
+{}
+"  Remove every other
+'  Remove every other
+
+
+
+
+
+
+** DONE Emacs: Class Overview - Navigate to Hierarchy
+
+I - Interface
+
+
+
+
+** DONE Class Overview with Used Modules
+
+** DONE Used Modules *
+[ Carp ] [ Pips3::C::Import::TVA ]
+
+
+
+
+
+
+** DONE Let Emacs specify the window width to perly_sense
+
+Let that override any configuration. Use that window width when laying
+out things.
+
+(window-width)
+
+
+
+
+
+** DONE Class Overview - Used classes
+
+** DONE Used Classes *
+U
+
+List used classes (and classes used for class method calls).
+
+List them in four cols (first attempt), or fewer until it doesn't
+spill over 80 lines
+
+
+
+
+** DONE Neighbourhood - only one subdir
+
+On the right, only show one subdirectory, the one which can expand the
+current class with subclases.
+
+
+
+
+
+
+** DONE Emacs incompatibilities
+
+
+Replace backward-char-nomark with backward-char
+
+
+
+
+
+
+
+** DONE Class Overview - c to do Class Overview for the class
+
+
+
+
+
+
+** DONE Class Overview
+
+If in package main, default to the next package in the document!
+
+
+
+
+= Class Overview - Nearby classes
+H
+
+** DONE Class Hierarchy *
+Class::Pluggable
+Class::Pluggable::Plugin      Catalyst::Base
+Catalyst::Plugin -----------> Catalyst
+Catalyst::Plugin::Session
+Game::Object ---------------> Game
+Game::Object::Worm
+
+
+
+
+[ Class::Pluggable   ] <-----+
+[ Catalyst::Base     ]       |
+[ Catalyst::Plugin   ] --> [ Class::Pluggable::Plugin ]
+[ Game::Object       ] --> [ Game                     ]
+[ Game::Object::Worm ]
+
+
+
+
+** DONE Use base with scalar
+
+Now only list of quoted values work, or something.
+
+
+
+
+** DONE PerlySense && Emacs: Class Hierarchy Step 2
+
+Figure out the entire MI thing, but don't display it
+
+Display the current Class name and it's ancestors
+
+-------------------------
+Game
+Game::Object
+Game::Object::Worm
+-------------------------
+
+
+
+
+
+
+** DONE PerlySense && Emacs: Class Hierarchy Step 1
+
+When C-p C-c (later C-p C-c h), display the Class name of the current
+class
+
+Example
+-------------------------
+Game::Object::Worm
+-------------------------
+
+
+
+
+** DONE Emacs: After goto: show destination as message
+
+a. Show file
+
+
+** DONE When looking for string modules, check for module file existance in
+Meta->parse()
+
+See comment.
+
+
+
+** DONE Document oLocationSub should use oMeta, not oDocument.
+
+
+** DONE Bug: $object->parse doesn't work the second time
+
+Re-work: use Location instead of Node
+oNodeEnclosingSub - return location (tests)
+aObjectMethodCallAt -> return location
+aMethodCallOf - change oNodeWithin -> oLocationWithin
+
+
+
+** DONE Cache meta
+
+
+** DONE Parse all medadata in a single pass
+
+Good for caching metadata.
+
+Do one feature at a time. Focus on those who use raToken, then we can
+remove the parseSingleWordTokens method.
+
+*** Parse metadata: Remove parseSingleWordTokens
+*** Parse metadata: Remove indexTokenAt
+*** Parse metadata: Remove aTokensAroundAt
+
+*** Parse metadata: oLocationPod
+
+*** Parse metadata: isEmptyAt
+
+*** Parse metadata: methodCallAt
+
+*** Parse metadata: moduleAt
+
+*** Parse metadata: aNameBase
+
+*** Parse metadata: aNameModuleUse
+
+*** Parse metadata: packageAt
+
+
+
+
+
+** DONE Cache the document API
+
+Cache on the file name + file time stamp
+
+Put cache files in a cache dir specified in PerlySense.
+
+
+** DONE Cache the Document->oDocument
+
+
+
+** DONE Emacs: Fontify the POD buffer
+
+
+
+** DONE Smart docs: $object->method - best match
+
+
+
+** DONE Smart goto: $object->method in this module and used modules
+
+Look for other method calls on this object in the same scope/sub.
+
+
+*** Rate modules compliance to an interface
+
+
+*** Identify modules used in a Document
+
+Don't find pragmas (lcfirst or number)
+
+Only report one module once even if it's used with different params
+many times.
+
+Don't look for modules used in used modules, i.e. skip the recursive
+search. This may be needed later on.
+
+Include any "use base" since that implicitly uses a module. Or skip
+this since we may not need it for looking up the inheritance tree?
+
+Are there any other modules that use other modules? Any inheritance
+modules?
+
+
+*** Identify all methods a class supports, i.e. it's likely interface
+
+When identifying the subs of a module, look at $self->method calls as
+well as sub definitions. Also, assume that hash accesses, like
+$self->{property} could be a method call with a getter/setter
+generated. (also look for get_$property, set_$property ? not yet)
+
+
+*** Find the object->method call and the enclosing sub
+
+
+*** Find all $object method calls in $object's scope.
+
+
+
+** DONE Smart docs: When finding POD docs for a method, also display the higher-level
+headings, it's visible if it's METHODS or PROPERTIES or whatever.
+
+
+
+** DONE Smart docs: If a method isn't defined in the current module,
+indicate the actual module as a =head1 below the text
+
+
+** DONE Follow ISA when looking for docs
+
+
+*** Fix the rhProperty, set them in the oDocument->oLocationPod instead,
+and maybe it can work with the recursive ISA searc
+
+
+
+** DONE Follow ISA when looking for My::Module->method
+
+Document->oLocationSubDefinition should look in base classes
+
+
+*** Make sure the aSingleWordTokens contains string literals etc. also
+
+*** Follow ISA: @ISA =
+
+*** Follow ISA: push(@ISA)
+
+
+*** Follow ISA: use base
+
+
+*** oPearlySense property in Document
+
+
+** DONE Smart docs on Some::Module->method - Display docs
+
+Determine the package by the static module name
+
+
+*** PPI parse bug (package) worked around
+
+
+** DONE oLocationSubDefinition - should it take a row param?
+
+it should take either a row and deduce the package, or a package
+param.
+
+
+
+** DONE raLocationSub, raLocationPod - wrong name for returning oLocation
+
+
+
+** DONE Smart go on Some::Module->method - go to definition
+
+Determine the package by the static module name
+
+
+** DONE Refactor Document, tree traversal
+
+
+** DONE Smart docs on nothing::Module Display POD for current module
+
+
+
+** DONE Smart docs on Some::Module Display POD for Some::Module
+*** Emacs: Smart doc: parse result type and show message or in buffer name
+
+Determine the package by the static module name
+
+*** perly_sense - Smart doc: pass back result type: message or buffer,
+and content-type (module, method etc)
+
+
+
+**** Smart doc: output location tagged with docType and name
+
+
+**** Remove the relative thing in PerlySense find file methods
+
+
+
+** DONE Smart docs on empty space and C-P m p: show POD for current file
+
+
+** DONE Smart goto: on Some::Module - go to module file
+
+*** Find module at location in document
+
+
+
+*** No trailing whitespace in doc view
+
+
+*** Smart docs - find the POD for an identified method and show it as text
+
+*** Emacs C-p C-d - Show the docs in the message window(?)
+
+**** Smart docs - perly_sense - find the POD for a method
+
+**** Smart docs - find the POD for a method
+
+
+
+
+
+** DONE Bug: Smart docs for POD in same file doesn't work: elisp error
+
+
+
+** DONE Smart go on $self->method - fail to POD
+
+If a sub definitinon is missing (like with Class::MethodMaker), go to
+the POD heading in the same package.
+
+*** Look for =head.
+
+*** Look for =item
+
+*** Escape B<dsfs>
+
+
+
+
+
+
+
+
+** DONE Put perly-sense POD in a buffer named after the buffer, not the file
+
+
+** DONE Identify baz in $self->foo->bar( $self->baz() )
+
+
+** DONE Identify foo in $self->foo->bar()
+
+
+** DONE Identify foo in $self->foo
+
+
+** DONE Emacs: Bind C-p C-g - Smart go on $self->method
+
+$self->collapseDir($dir)
+          ^
+
+Go to the sub definition in the same package.
+
+
+
+*** perly_sense command for smart go to on $self->method
+
+
+
+
+** DONE Test and patch for PPI::Document->index_locations
+
+
+
+*** Given a document, row, col, find $self->method call
+
+
+
+*** Given the file and method name and package, locate sub definition
+
+
+
+*** Given a file and cursor pos, identify package
+
+
+
+** DONE Bug: POD display croaks on head3
+
+
+
+** DONE Emacs: Bind C-p C-g - Smart go on module name
+
+Devel::PerlySense->new()
+  ^
+
+
+
+** DONE Emacs: Bind C-p C-d - Smart docs on current buffer
+
+
+
+** DONE Emacs: Bind C-p C-d - Smart docs on module name
+
+
+
+** DONE Bug: Emacs: When no word found, don't open dired
+
+
+
+** DONE Display POD with display_module_pod
+
+With Emacs bindings C-p m p
+
+
+
+
+** DONE Emacs bindings for perly-sense-find-source-for-module-at-point
+
+C-p m f
+
+
+
+** DONE Find file in @INC
+
+Given a special @INC, find the Game::Event::Timed file
+
+
+
+** DONE CLI program with find_module_source_file
+
+Basic script
+
+
+
+** DONE Find local file upwards from dir
+
+Given Win32::Word::Writer::Table, find the Win32::Word::Writer file
+
+
+
+** DONE Find local file downwards from dir
+
+Given Win32/Word/Writer.pm, find the Win32::Word::Writer::Table file
+
+
+
+
+
+
+
+= Nonfunctional requirements
+
+** DONE Cross-platform wrt
+
+- file names
+
+- newline
+
+
+
+
+** DONE ack fix
+
+Apply this and it works
+http://rt.cpan.org/Public/Bug/Display.html?id=24670
+
+** DONE Bug: warning
+
+Use of uninitialized value in concatenation (.) or string at
+/home/lindsj05/perl/lib/perl5/site_perl/Devel/PerlySense/Document/Meta.pm line 497.
+
+Silenced by putting all warnings in the debug log
+
+
+** DONE Bug: Logging warnings disabled Perl::Critic
+
+http://rt.cpan.org/Public/Bug/Display.html?id=30775
+
+** DONE Class Overview - List Bookmarks
+
+*** DONE Single regex
+Needs a project def with regexps
+*** DONE Multiple regexes syntax
+
+*** DONE List the texts
+
+Bookmarks
+
+*** DONE B to navigate
+*** DONE g to Go to a link
+
+** DONE elisp location reported by perly_sense
+
+perly_sense elisp_location
+
+return the base url for where perly-sense.pl is, load it from there.
+
+declare the .el files as scripts?
+
+
+
+** DONE perly_sense info
+
+Display env info:
+*** HOME dir
+*** Project dir
+*** Summary of project config ?
+
+** DONE Install Emacs files via perly_sense
+Locate yourself in the elisp dir and run
+
+perly_sense install_elisp
+
+Get the correct version from CPAN's web interface
+
+** DONE Smart-docs Method - Show Signature Survey
+
+Maybe not so useful in the method docs, it's the API one is interested
+in in that case.
+
+http://c2.com/doc/SignatureSurvey/
+
+Maybe in the Overview too, per method
+
+
+
+
+** DONE Emacs: Font faces defined properly
+
+grep isn't in Emacs 21, so that's a deal breaker
+
+
+
+** DONE Failing test
+*** DONE Have entered debug info
+
+This failed install on Solaris
+
+t/PerlySense-project-config.......................1/7 # No project --
+default config
+# Look for a .PerlySenseProject indicate a project
+t/PerlySense-project-config.......................ok
+t/PerlySense-Project-file-in-project..............1/11 # Test inc_dir
+
+#   Failed test 'Missing file that could be in project is. It does not
+have to exist'
+#   at t/PerlySense-Project-file-in-project.t line 58.
+# Looks like you failed 1 test of 11.
+t/PerlySense-Project-file-in-project.............. Dubious, test
+returned 1 (wstat 256, 0x100)
+
+
+-------------------
+t/PerlySense-Project-file-in-project.t        (Wstat: 256 Tests: 11
+Failed: 1)
+  Failed test number(s):  11
+  Non-zero exit status: 1
+Files=62, Tests=967, 89 wallclock secs ( 0.34 usr  0.23 sys + 76.80 cusr
+6.20 csys = 83.57 CPU)
+Result: FAIL
+Failed 1/62 test programs. 1/967 subtests failed.
+
+
+
+
+*** DONE Fixed
+** DONE C-p g b -- Go to Base Class
+*** DONE Overview
+Take one step up in the class hierarchy.
+
+If MI, let user choose which class to go to.
+
+If the originating sub is implemented in the base class, go to that
+sub.
+
+*** DONE Find a class (from package at point), then identify the Base Class(es).
+
+*** DONE If only one (no MI), go to that class
+
+show the entire hierarchy (all the way up) in the message and which
+was chosen. ?
+
+*** DONE If more than one, display *Choose Base Class*
+
+MakeMaker
+
+buffer with hierarchy?
+displayed, any of the base classes pre-chosen. Go to and display
+hierarchy.
+
+*** DONE If already open, don't move point.
+*** DONE Display in which classes the current sub is present
+**** DONE Identify the current sub, if any
+**** DONE Display
+*** DONE If there is a current cub in the base class, go to it,
+*** DONE Display the inheritance hierarchy after going to the Base class
+** DONE Smart Goto and Docs etc from the Class overview doesn't work
+
+Just the keystroke works, but not the prefix-Smart-xxx command.
+
+Could this be overridden in the local keymap?
+
+
+** DONE Document Inheritance -- C-o d i
+
+Display the Ineritance graph in the echo area
+
+** DONE Goto New Method -- C-o g n
+
+In this or base class
+
+*** DONE Shortcut if the sub is in the current file
+
+*** DONE Works if it isn't
+
+*** DONE Shortcut works in Overview
+
+
+** DONE Document Uses -- C-o d u
+
+Display list of used modules in the echo areaa
+
+** DONE Goto Uses -- C-o g u
+
+Set mark and navigate to the last "use Module" statement in the file
+
+
+
+** DONE Goto Version Control
+
+\C-o g v
+
+
+
+*** DONE Check what kind of VCS is being used in the project, then go to the correct buffer
+
+*** DONE SVN
+**** DONE Go to *svn-status* buffer
+**** DONE If there is no buffer, do a svn-status on the project dir
+
+*** DONE None
+
+**** DONE Go to project directory
+
+
+
+** DONE Edit -- Move use Module statement
+
+C-o e m u
+
+Move use Module to use section
+
+Check if point is on a line with only a use statement on.
+Set mark
+Kill use Module;
+
+Find the last use. New line. Yank it there. Indent.
+Leave the cursor at the beginning of the "use".
+Message: Moved "use" statement. Hit C-u C-SPC to return.
+
+** DONE Assist with Test Count
+
+Assist with adjusting the test count
+
+
+C-o C-a If there is a *compilation* buffer with invalid test count, fix
+the source .t file and re-run
+
+*** DONE C-o e t c Edit test count
+
+
+**** Examples
+
+-*- mode: compilation; default-directory:
+"~/source/pips3/branches/add_promotions/" -*-
+Compilation started at Thu Feb 21 14:04:30
+
+prove  --norc --nocolor -v "-I." "-Ilib"
+"aggtests/unit/api/v1/brand/promotions.t"
+aggtests/unit/api/v1/brand/promotions......
+1..13
+ok 1 - use Catalyst::Test;
+ok 2 - got a response
+
+...
+
+ok 14 - ... and the second promotion should have the lowest priority
+# Looks like you planned 13 tests but ran 1 extra.
+ Dubious, test returned 255 (wstat 65280, 0xff00)
+ All 13 subtests passed
+
+Test Summary Report
+-------------------
+aggtests/unit/api/v1/brand/promotions.t (Wstat: 65280 Tests: 14 Failed:
+1)
+  Failed test:  14
+  Non-zero exit status: 255
+  Parse errors: Bad plan.  You planned 13 tests but ran 14.
+Files=1, Tests=14, 11 wallclock secs ( 0.02 usr  0.00 sys +  8.19 cusr
+0.43 csys =  8.64 CPU)
+Result: FAIL
+
+Compilation exited abnormally with code 1 at Thu Feb 21 14:04:41
+
+
+**** Look for
+***** Old failures, wrong test count
+Looks like you planned 47 tests but ran 27 extra
+***** Failures, wrong test count
+You planned 13 tests but ran 14
+***** Failures
+Failed 1/21 tests
+***** Success
+Files=1, Tests=21,  2 wallclock secs ( 0.00 cusr +  0.00 csys =  0.00 CPU)
+
+
+***** Other things use Pips3::Test::More tests => 13;
+
+
+
+
+** DONE Assist Test Count
+
+
+C-o C-a -- Assist-with Anything
+
+C-o a t -- Assist-with Tests
+
+
+Adjust the test count to the currently reported one, by
+the *compilation* buffer.
+
+If in test file? And there is a corresponding *compilation* buffer
+with the same file?
+
+Or if in the *compilation* buffer, and the tested .t file is in a
+buffer prove --nocolor -v "-I." "-Ilib" "t/unit/inspector/import.t"
+
+
+And the test outcome says you've got the wrong number of tests:
+# Looks like you planned 7 tests but only ran 6.
+or
+  Parse errors: Bad plan.  You planned 3 tests but ran 6.
+or
+Something with you ran "but ran 3 extra" (looka t my blog post about
+it).
+
+
+
+** DONE Vim serialization format
+** DONE Use dropdown-list to choose stuff
+
+dropdown-list.el
+
+
+** DONE Build Perl
+
+*** Adding -Wl,--export-all-symbols
+
+Symbols in perl510.dll, but installing Devel::Dover didn't work
+
+*** Adding -Wl,--enable-auto-import
+
+No difference
+
+*** makefile.mk
+INST_TOP	*= $(INST_DRV)\perl_5.8.8_jpl
+CCHOME		*= C:\strawberry-perl\mingw
+
+
+*** Symbols to global.sym
+
+which may be wrong, since the comment at the top says it's auto
+generated by "make regen_headers". However there doesn't seem to be a
+make target for that, so I don't know.
+
+
+Added
+
+Perl_pp_nextstate
+Perl_pp_nextstate
+Perl_pp_setstate
+Perl_pp_setstate
+Perl_pp_dbstate
+Perl_pp_dbstate
+Perl_pp_entersub
+Perl_pp_entersub
+Perl_pp_cond_expr
+Perl_pp_and
+Perl_pp_andassign
+Perl_pp_or
+Perl_pp_orassign
+Perl_pp_xor
+Perl_pp_require
+Perl_pp_exec
+
+Perl_pp_dor
+Perl_pp_dorassign
+
+
+*** Patch existing strawberry
+
+cp perl58.dll \strawberry-perl\perl\bin\
+cp lib\CORE\libperl58.a \strawberry-perl\perl\lib\CORE\
+
+
+*** Perlmonks
+
+I just built a Perl 5.10 with the link flags added to makefile.mk, but
+that didn't solve the problem with Devel::Cover.
+<p>
+What did work was to add the following symbols to global.sym
+<code>
+Perl_pp_nextstate
+Perl_pp_nextstate
+Perl_pp_setstate
+Perl_pp_setstate
+Perl_pp_dbstate
+Perl_pp_dbstate
+Perl_pp_entersub
+Perl_pp_entersub
+Perl_pp_cond_expr
+Perl_pp_and
+Perl_pp_andassign
+Perl_pp_or
+Perl_pp_orassign
+Perl_pp_xor
+Perl_pp_require
+Perl_pp_exec
+Perl_pp_dor
+Perl_pp_dorassign
+</code>
+<p>
+This may be wrong way to do this since the comment at the top of
+global.sym says it's auto generated by "make regen_headers". However
+there doesn't seem to be a make target for that, so I don't
+know. It's a workaround for this particular module anyway.
+<p>
+Now, whether this is a good idea or not, I can't tell you. I have no
+clue about those issues.
+<p>
+I do know, however, that I would very, very much like Devel::Cover to build on
+Windows.
+<p>
+
+/J
+
+
+
+*** Perl::Dist
+Perl::Dist::Downloads
+nowhere to be found
+
+
+had to create auto/Perl/Dist/Config.pm
+
+
+** DONE Cover
+
+Template
+PPI::HTML
+checking for Perl::Tidy        version 20060719 .... 20071205 C:/strawberry-perl/perl/site/lib/Perl/Tidy.pm
+checking for Pod::Coverage.pm  version 0.06 ........ 0.18     C:/strawberry-perl/perl/site/lib/Pod/Coverage.pm
+checking for Pod::Coverage::CountParents.pm ........          C:/strawberry-perl/perl/site/lib/Pod/Coverage/CountParents.pm
+checking for Test::Differences.pm           ........ 0.47     C:/strawberry-perl/perl/site/lib/Test/Differences.pm
+
+
+** DONE New serialization format for all operations
+*** DONE Convert perly_sense to Serializer
+**** DONE smart_go_to
+**** DONE smart_doc
+**** DONE method_doc
+**** DONE class_api
+**** DONE display_module_pod
+**** DONE display_file_pod
+*** DONE elisp
+** DONE process_project
+
+Cache files in the current project.
+
+
+** DONE Emacs escape output
+Replace - with _
+
+Or just remove the smarts from ps altogether!
+
+** DONE Fix release - test file in root dir
+
+PerlySense-Editor-Vim-output.t
+
+** DONE Various Find related things
+
+- Establish a Project concept
+
+- Add Ack to the deps
+
+
+
+
+** DONE Run flymake
+
+Using project settings for INC etc
+
+
+
+
+** DONE POD rendering not taking into account =item
+
+POD ERRORS
+    Hey! The above document had some coding errors, which are explained
+    below:
+
+    Around line 3:
+        '=item' outside of any '=over'
+
+*** e.g. LWP::UserAgent->new
+
+** DONE Mojolicious
+*** Usable on Windows?
+**** No
+*** Concurrent requests with some kind of prefork or multiple listeners?
+*** Spawn server to handle next
+** DONE Overview -- Optimize
+*** DONE Remove Neighbourhood
+**** Too slow, not useful
+*** Remove other unused  things too
+** DONE Persistent env
+*** DONE Skip web server, or shell
+*** DONE Prepare by keeping one ps process waiting at all times
+**** Wait for input on <STDIN>
+**** When  a request needs to be made
+***** Send the request to the waiting one
+***** Wait for end
+***** Start preparing another process
+*** DONE BUG: cwd!
+**** DONE Set cwd as first input
+**** DONE perly_sense must do it too
+*** Possibly prepare a small pool (a puddle) of processes
+**** shell-command-pool
+**** 30M per process, keep 2 or 3
+**** Are they properly deleted on Emacs exit?
+**** Keep one at all times
+***** Once one is used, fill the puddle
+***** After n seconds of inactivity, let all but one exit
+****** 5 min?
+**** pool class
+***** DONE :command
+***** :in-use-prepared-count: 3
+***** :in-use-timeout-seconds: 5*60  ;; Seconds before leaving in-use mode -> standy
+***** :standy-prepared-count: 1
+***** :stanby-timeout-seconds: 5*60  ;; seconds before leaving standby  mode -> off
+***** :setup-idle-timeout-seconds: 3 ;; Seconds after launching a command until preparing new ones
+*** elisp
+**** collections of async buffers
+***** ready - setup and ready to be run
+***** running - stdin written and waiting to terminate
+***** finished - terminated, has full output text
+***** reported - had output returned to caller
+**** default command setting
+**** list of command settings
+**** (scp/activate)
+**** (scp/prepare-shell-command command)
+**** (scp/shell-command-to-string command stdin-args)
+***** If no prepared, setup one first
+***** Run command in prepared process and send stdin-args to it. 
+***** Wait for process termination and return the output
+***** cleanup-shell-commands
+***** Setup idle timer (2s?) to check if a new shell-command needs preparing
+****** If a new was created, setup new idle timer again, so that one at a time is spawned
+**** (scp/cleanup-shell-command command)
+***** 
+**** Stories
+***** I
+****** DONE Setup
+****** DONE Prepare one with hard coded command and default settings
+****** DONE Call the one with args
+****** DONE Wait for response
+****** DONE re-setup one
+****** use sleep instead of sit?
+      (accept-process-output (get-buffer-process scp/buffer-command-running) 0 100)
+      (sleep-for 0 100)
+      (sit-for 0.1)
+
+****** stress test it
+******* make it robust so it restarts and  can recover from being out of sync
+****** bug with method docs from overview?
+****** 
+***** Refactor elisp to use ps/command
+***** Time/benchmark ps/command
+***** Switch over to shell-command-prepared
+***** Time/benchmark that
+***** Rearrange perly_sense so all agnostic setup is done at startup
+****** ps->new, cache, looking up home dir etc
+** DONE Debugger integration
+
+Make perldb work with the correct dir, and specify params
+*** DONE Revert
+
+(require 'gud)        ;; perldb
+
+
+;; Probably reinventing the wheel here
+(defmacro ps/with-default-directory (dir &rest body)
+  "Execute the forms in BODY with the current
+directory (default-directory) temporarily set to 'dir'.
+
+The value returned is the value of the last form in BODY."
+  (let ((original-dir default-directory)
+        (original-buffer (current-buffer)))
+    `(prog2
+         (cd ,dir)
+         ,@body
+       (with-current-buffer ,original-buffer
+         (cd ,original-dir)))))
+
+
+  (let ((command-line (ps/gud-query-cmdline command)))
+    (setq gud-chdir-before-run t)
+    (setq gud-perldb-command-name command)
+
+    (gud-common-init command-line 'gud-perldb-massage-args 'gud-perldb-marker-filter)
+    (set (make-local-variable 'gud-minor-mode) 'perldb)
+
+    (gud-def gud-break  "b %l"         "\C-b" "Set breakpoint at current line.")
+    (gud-def gud-remove "B %l"         "\C-d" "Remove breakpoint at current line")
+    (gud-def gud-step   "s"            "\C-s" "Step one source line with display.")
+    (gud-def gud-next   "n"            "\C-n" "Step one line (skip functions).")
+    (gud-def gud-cont   "c"            "\C-r" "Continue with display.")
+                                        ;  (gud-def gud-finish "finish"       "\C-f" "Finish executing current function.")
+                                        ;  (gud-def gud-up     "up %p"        "<" "Up N stack frames (numeric arg).")
+                                        ;  (gud-def gud-down   "down %p"      ">" "Down N stack frames (numeric arg).")
+    (gud-def gud-print  "p %e"          "\C-p" "Evaluate perl expression at point.")
+    (gud-def gud-until  "c %l"          "\C-u" "Continue to current line.")
+
+    (setq comint-prompt-regexp "^  DB<+[0-9]+>+ ")
+    (setq paragraph-start comint-prompt-regexp)
+
+    ;; Chdir to the project dir the first thing we do, inside the perl debugger
+    (comint-send-string (current-buffer) (format "chdir('%s');\n" dir-debug-from))
+    ;;;; TODO: replace the first line in the buffer indicating cwd with the real cwd
+
+    (run-hooks 'perldb-mode-hook)))
+
+(defun ps/gud-query-cmdline (command)
+  (let* ((minor-mode 'perldb)
+         (hist-sym (gud-symbol 'history nil minor-mode))
+         (cmd-name (gud-val 'command-name minor-mode)))
+    (unless (boundp hist-sym) (set hist-sym nil))
+    (read-from-minibuffer
+     (format "Run %s (like this): " minor-mode)
+     command
+     gud-minibuffer-local-map nil
+     hist-sym)))
+
+
+*** DONE debug_from: file_directory to project_dir
+*** DONE with-project-dir
+*** DONE clean up project.yml in proj
+*** DONE Document in POD
+*** DONE Validate config file data so it doesn't blow up after someone upgrades
+*** run_file -> debug_file
+**** rhRunFile
+**** ps/run-file
+
+*** DONE setq gud-perldb-command-name
+*** DONE Config for e.g. yaml files
+**** .t
+***** perl -d $FILE
+***** DIR: project
+**** .yaml
+***** perl -d t/acceptance.t :: $FILE
+**** .pl
+***** perl -d $FILE
+***** DIR: FILE
+*** Refactor
+**** lib/Devel/PerlySense/Project.pm
+**** elisp
+** Key bindings
+
+*** C-o a is Assist-with
+**** r Regex
+
+*** C-o v is Visualize (toggle) (C-c C-v Toggle all display things)
+
+- c Coverage
+
+- d Duplication
+
+- a Activity (version control, or keep track of changes if it's a
+single developer?)
+
+- v Version-control (make a blame in the background, and colorize the
+margin (or first col) with age. Do a blame on the working copy? Does
+that work?)
+  - C-o d v r Display revision and user at point in Message
+  - C-o d v l Display log of revision at point in Message or buffer
+  - C-o d v w Bring up web page with in Trac/whatever with revision
+checkin/changeset
+    Config URL
+  - C-o d v W Bring up web page with in Trac/whatever with the document
+  - check what other C-x v * are being used, and what similar things can
+be done in context
+
+
+
+*** C-o e is Edit
+*** C-o E is Refactor
+- C-r Rename
+  - l Lexical
+  - m Method
+  - c Class
+- e Extract
+  - l Lexical / v Variable (make selection a lexical variable
+  - p Property (extract the selected thing and put it into $self->propname, getter/setter)
+  - m Method
+
+
+** Moose syntax parser
+*** DONE Plugin
+*** Syntax
+**** DONE has - method/attribute
+***** DONE Both barewords, and quoted strings
+***** DONE Deal with +NAME
+***** handles
+***** clearer
+***** predicate
+**** DONE extends
+***** DONE scalar
+***** DONE list
+**** DONE with
+***** Treat as ISA, that's the closest
+**** Methods
+***** before
+***** after
+***** around
+***** override
+***** augment
+**** has - handles (delegation)
+**** has - doc string from is/isa, etc?
+***** The documentation meta attribute
+***** Or just show the entire declaration, that's pretty explanatory
+**** Deal with "use Moose" and "no Moose"
+***** First, keep track of whether the use Moose::Something has been enabled
+***** Could that speed things up?
+**** MooseX::ClassAttributes
+***** class_has
+*** Proper plugin in its own distro
+*** Also: spiffy
+*** Also: Class::MethodMaker
+*** Also: Class::Accessor
+** TODO Emacs: C-p C-o - Show Class docs/api (subs under headings etc) in the
+*** DONE Show all subs in alhpabetic order
+
+*** DONE display super class implementations too
+
+*** DONE Strip trailing whitespace in list of methods
+
+*** Show POD and/or subs in proper overriden way
+
+Show =head1 in order, below
+
+**** Tasks
+***** Build separate test data
+***** DONE Display H1, H2 for current class
+***** TODO Display H1, H2, methods for current class
+***** Display H1, H2 for current and base classes
+**** POD structure
+***** Collect H1, H2
+***** Order by
+****** base in project,
+****** then sub class class,
+****** then base class outside project
+***** Sort H2 in below each H1, same way
+***** For each sub, possibly ignore the POD
+****** if it's immediately before the sub,
+****** and looks like it documents it (has the word on the first line)
+***** Put each sub under the respective POD heading (H1 or H2)
+***** Sort the subs according to
+****** class, then base class
+****** row location in file
+**** Only display headings which has methods under them
+
+*** Display
+
+Game::Object::Worm::Bot
+oLocation
+
+*** DONE Don't display _private methods outside of the Project
+
+**** DONE Filtering should be in model, not in view
+***** TODO Add oPerlySense to API, or possible the document, then get PerlySense from there
+
+
+*** Show non project methods different too (subdued?)
+**** config
+**** face
+
+Display base methods outside of the project in a more subdued color, so
+we have
+
+Methods in this class
+Methods in base classes
+Methods in base classes outside project
+Private methods in base classes outside project
+
+*** Show private methods subdued
+**** face
+
+*** Test cases
+**** Totally empty package
+**** Empty package, but with a base class, does it still return an API?
+
+
+
+*** Indicate on the method name whether there is docs
+
+or an example, or nothing at all for the method
+
+*** Check that the buffer has a file
+
+When doing Overview, check that the buffer has a file (comes out as
+"nil" otherwise).
+
+
+*** Indicate when a method has overriden a base class method
+
+    \->oDirection()  \->
+
+
+*** TODO Display docs or the method signature deduced from the source
+
+or example invocation (look for $self->{property} too)
+
+**** DONE Refactor and tests (doh)
+**** DONE Optimize to not go the long way for all of them
+***** Profile
+
+                      oDocumentParseFile:  101 : 25.86262
+oDocumentParseFile (C:\Dokument\Project\Dev\CPAN\Devel-PerlySense\trunk\source\t\data\project-lib\Game\Lawn.pm):   50 : 16.45556
+oDocumentParseFile (C:\Dokument\Project\Dev\CPAN\Devel-PerlySense\trunk\source\t\data\project-lib\Game\Object\Worm.pm):   19 : 7.48571
+oDocumentParseFile (C:\Dokument\Project\Dev\CPAN\Devel-PerlySense\trunk\source\t\data\project-lib\Game\Object.pm):   30 : 1.77109
+oDocumentParseFile (t/data/project-lib/Game/Object/Worm/ShaiHulud.pm):    1 : 0.08719
+oDocumentParseFile (t/data/project-lib/Game/Object.pm):    1 : 0.05983
+
+
+With caching
+                      oDocumentParseFile:  101 : 0.89784
+oDocumentParseFile (C:\Dokument\Project\Dev\CPAN\Devel-PerlySense\trunk\source\t\data\project-lib\Game\Object\Worm.pm):   19 : 0.37935
+oDocumentParseFile (C:\Dokument\Project\Dev\CPAN\Devel-PerlySense\trunk\source\t\data\project-lib\Game\Lawn.pm):   50 : 0.30802
+oDocumentParseFile (t/data/project-lib/Game/Object/Worm/ShaiHulud.pm):    1 : 0.07857
+oDocumentParseFile (C:\Dokument\Project\Dev\CPAN\Devel-PerlySense\trunk\source\t\data\project-lib\Game\Object.pm):   30 : 0.06685
+oDocumentParseFile (t/data/project-lib/Game/Object.pm):    1 : 0.06226
+
+
+
+***** Extract method docs during parse?
+**** Fix Class Overview navigation
+**** color code "something =>" as left side fat comma
+**** color code $@%stuff in parameter list as variables
+
+*** Wrong sort order?
+
+**** Devel::PerlySense::Document
+
+Why is _stringReplace below when it's really in the middle?
+->stringSignatureSurveyFromFile()
+->stringSignatureSurveyFromSource($stringSource)
+->_stringReplace
+
+**** PerlySense
+
+->new
+->rhConfig (is before)
+
+Seems to be sorted alphabetically?
+
+
+*** exclude_dir
+
+Not so important?
+
+If you have CPAN modules installed below the project dir, you may not
+want to have them treated like project/application code.
+
+- project:
+  - exclude_dir: []
+
+
+*** Misc
+
+C-2 XXX - other window, similar to C-x C-b.
+
+If no object at point, show the current class' API.
+
+If method call or class name or object at point, show that class' APi
+
+Determine what it looks like:
+property ($self->{something}) and/or
+method ($self->something) or
+function (none of the previous)?
+
+
+
+** TODO Bug: Docs found wrong
+
+Game::Object::Worm, docs for oLocation matches
+
+  Game::Direction->oMove($oLocation)
+
+Simplest thing? Block it from matching sigils before method name
+(because that indicates it's a variable, not a method).
+
+Or collect all, and chose the one nearest the start of the string
+
+Also, favour the word being close to the start of the docs
+
+
+
+Same? bug for goto from Game::Object::Worm::Bot, goto method
+oLocation.
+
+*** Hide particularly uninteresting base classes
+
+Move to config, so Class::Accessor, Class::Accessor::Fast can be added
+with Exporter.
+
+Ignore during parse altogether, or just hide from view?
+
+
+Document aNameBase has a hard coded list, use it for both ignoring base
+classes, and for not looking at base classes when listing methods.
+
+
+
+** TODO Bug: Infinite base class loop
+
+File::Spec
+my $module = $module{$^O} || 'Unix';
+
+require "File/Spec/$module.pm";
+@ISA = ("File::Spec::$module");
+
+
+
+
+Sun Dec 23 17:23:08 2007: ARGV: (perly_sense class_overview perly_sense class_overview --file=c:/strawberry-pe
+rl/perl/lib/File/Spec.pm --row=84 --col=1 --width_display=94)
+Sun Dec 23 17:23:09 2007: Checking class (File::Spec) for inheritance
+
+Sun Dec 23 17:23:09 2007:   Base for (File::Spec) is (File::Spec::)
+
+Sun Dec 23 17:23:09 2007: Checking class (File::Spec::) for inheritance
+
+Sun Dec 23 17:23:09 2007:   Base for (File::Spec::) is (File::Spec::)
+
+Sun Dec 23 17:23:09 2007: Checking class (File::Spec::) for inheritance
+
+Sun Dec 23 17:23:09 2007:   Base for (File::Spec::) is (File::Spec::)
+
+
+
+
+Sun Dec 23 17:23:10 2007:   Base for (File::Spec::) is (File::Spec::)
+
+Sun Dec 23 17:23:10 2007: Checking class (File::Spec::) for inheritance
+
+Sun Dec 23 17:23:10 2007:   Base for (File::Spec::) is (File::Spec::)
+
+Sun Dec 23 17:23:10 2007: Deep recursion on subroutine "Devel::PerlySense::Class::new" at c:/Dokument/Project/
+Dev/CPAN/Devel-PerlySense/trunk/source/lib/Devel/PerlySense/Class.pm line 192.
+
+Sun Dec 23 17:23:10 2007: Deep recursion on subroutine "Devel::PerlySense::Class::findBaseClasses" at c:/Dokum
+ent/Project/Dev/CPAN/Devel-PerlySense/trunk/source/lib/Devel/PerlySense/Class.pm line 130.
+
+Sun Dec 23 17:23:10 2007: Checking class (File::Spec::) for inheritance
+
+Sun Dec 23 17:23:10 2007:   Base for (File::Spec::) is (File::Spec::)
+
+Sun Dec 23 17:23:10 2007: Deep recursion on subroutine "Devel::PerlySense::Class::newFromName" at c:/Dokument/
+Project/Dev/CPAN/Devel-PerlySense/trunk/source/lib/Devel/PerlySense/Class.pm line 227.
+
+Sun Dec 23 17:23:10 2007: Checking class (File::Spec::) for inheritance
+
+Sun Dec 23 17:23:10 2007:   Base for (File::Spec::) is (File::Spec::)
+
+
+
+
+Thu May 22 16:21:59 2008: ARGV: (perly_sense smart_go_to --file=/home/lindsj05/source/pips3/branches/change_diffs/lib/Pips3/ControllerBase/Import.pm --row=105 --col=39 --width_display=83)
+Thu May 22 16:21:59 2008: oLocationSmartGoTo file(/home/lindsj05/source/pips3/branches/change_diffs/lib/Pips3/ControllerBase/Import.pm) row(105) col(39)
+Thu May 22 16:21:59 2008: Looking for $importer->is_success
+Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Document::determineLikelyApi" at /home/lindsj05/smoking_area/change_diffs_with_errors/deps/lib/perl5//Devel/PerlySense/Document.pm line 839.
+
+Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Document::determineLikelyApi0" at /home/lindsj05/smoking_area/change_diffs_with_errors/deps/lib/perl5//Devel/PerlySense/Document.pm line 783.
+
+
+
+
+
+** Docs 
+*** declarations
+** DONE Run current Test::Class method only
+*** C-o r m
+**** Mark method to be current, or toggle if already current
+**** Set whatever var
+** Mark many methods to be run in Test::Class
+** TODO Assist with test count for Test::Class
+*** Not as important, use no_plan instead anyway
+*** prove output
+
+sub media_set : Test(3) {
+
+ok 7 - Set to other valid value
+# expected 3 test(s) in media_set, 5 completed
+# Looks like you planned 5 tests but ran 7.
+
+
+
+sub media_set : Test(9) {
+
+ok 7 - Set to other valid value
+ok 8 # skip 1
+ok 9 # skip 1
+ok 10 # skip 1
+ok 11 # skip 1
+ok
+All tests successful.
+Files=1, Tests=11,  7 wallclock secs ( 0.03 usr  0.00 sys +  5.83 cusr
+0.18 csys =  6.04 CPU)
+
+
+# expected 5 test(s) in media_set, 6 completed
+
+
+*** Will only support "sub establish_meaning_of_life : Test(42)"
+*** implementation
+**** List with 2 cons, (name . delta)
+**** Add to list for each type of syntax
+***** expected 3 test(s) in media_set, 5 completed
+
+** Smart goto method - display class hierarchy
+*** After going to a method, show the class hier
+** Buglet: If nothing found  for smart docs, nothing is displayed
+*** So you can't see it returned
+*** Should display: nothing found
+** Smart Docs: parse params
+*** Module for that
+*** Identify method/sub
+*** Identify $self style
+**** my ($self, $arg) = @_;
+**** my $self = shift;
+*** Identify arg style
+**** my ($arg1, $arg2) = @_;
+**** my $arg1 = shift; my $arg2 = shift;
+*** named params?
+**** Hash
+**** Hashref
+*** Look at callers
+**** $self->abc();
+**** Args
+**** Named hash
+**** Named hashref
+** Repository
+*** Per project/user?
+**** Project I think
+*** Storage
+**** Probaly db since I don't know the access patterns
+**** SQLite
+**** Use ORM::Tiny?
+***** Padre interop?
+*** Table structure
+**** file
+***** file_id
+***** name
+****** absolute
+**** io_type
+***** io_type_id
+***** name
+****** editor_emacs
+**** datum_type
+***** datum_type_id
+***** name
+****** enum (not to begin with)
+******* declaration
+******* method_call
+******* sub_call
+******* pod
+******* overview
+******* overview_inheritance
+******* overview_api
+******* overview_bookmarks
+******* overview_uses
+******* overview_neighbourhood
+****** io_type NULL
+******* enum
+******** emacs_editor
+******** vim_editor
+***** for_io_id
+**** package
+***** package_id
+***** name
+**** datum
+***** datum_id
+***** file_id
+***** datum_type_id
+***** in_package_id
+***** symbol
+***** object NULL
+*** On save, stack up the file to be analyzed
+**** Populate repository, reset per file
+**** One worker, analyze the most recent
+**** If re-saved, bump to top of stack
+**** Only store successful parse
+**** Don't keep running
+***** When saving, launch a worker unless already running
+***** Worker should quit when stack is processed +n seconds
+**** Keep stack info in user config dir
+*** Use repo for certain operations
+**** Overview
+**** Docs in overview
+**** perhaps in eldoc?
+**** completion?
+** Find / Search in Project
+*** DONE Refactor
+*** Look for methods with _ in them
+*** Ack Project
+For general finds, populate the default ack command line, for specific
+things do it immediately, or ask for something to search for.
+
+**** DONE C-o f a  or just C-o C-f
+**** DONE in Project source dir
+***** DONE Run anything from project dir
+**** DONE Command line
+***** DONE ack --perl --nocolor -Q -- ""
+***** DONE Use "" and escape properly, so it works by default on Windows
+****** DONE Escape " and $
+****** DONE Escape % or something???
+(shell-quote-argument ";"))
+Yes this does it platform dependent too. Genius.
+
+***** DONE Default to
+****** DONE (find-tag-default)
+****** DONE region
+****** DONE word at point
+******* DONE Match across _ and include $@%
+******* DONE In which case, use -w
+****** DONE empty string
+***** DONE Make sure this works from the Class Overview
+
+**** C-u to search --all instead of --perl
+***** Or, if project find ack all_type:s are defined, find those
+*** Find sub declarations
+**** DONE C-o f s
+Just look for sub XXX declarations
+**** Look for default method
+***** DONE ->dir|Project
+***** DONE $s|elf->dirProject
+***** DONE or word at point
+***** or run interactively
+****** regex etc options
+****** default to and "\nsub +" with the cursor at a good place
+******* Default sub name to the surrounding sub or empty string?
+**** Moose plugin support that finds around, augment, etc.
+*** Find callers in Project
+From on a method call, or from inside a sub, find mehod calls that look
+like it in the project (simple ack on project).
+**** DONE C-p f c
+**** DONE find '->\s*METHOD\b
+**** What's at point
+***** $whatever->METHOD
+***** sub METHOD
+***** else ask, but use the sub point is _in_ as default.
+*** C-p f T t -- Find Tests.
+
+Already have goto Tests, other files, this could list them in a grep-mode buffer
+
+Ack version (maybe if Covered isn't installed, or if no  covered db):
+Find Method at point, or Class at point, or Class in Package, and then
+find .t files which mention them.
+** TODO Find all sorts of things
+
+New features, now that there is a Find
+Instead of having the user chose between them, list it in a grep buffer
+*** Find Base classes
+*** Find Super classes (all of them)
+*** Find Super methods
+*** Find Tests other dsfsdl
+*** Find Project Other files
+
+(or can we have the select dialog convert it to a grep buffer?)
+
+** Bug - infinite loop
+
+Class overview on Pips3/DateTime/DateTime.pm
+
+Infinite loop.
+
+
+** Bug: infinite loop
+
+c:/Perl/site/lib/Win32/GUI/Loft/Design.pm 2359
+    my $name = $objTabStrip->runtimeName($self);
+
+
+** Cleverer Go To method
+*** Do a center screen unless point is in the top half of the frame
+** Make sure we don't have infinite loops when following the ISA
+
+
+
+
+** TODO Vim features
+
+Put it under the synopsis as HTML only
+
+New synopsis
+
+|---------------------------+-----------+-----|
+| Feature                   | Emacs     | Vim |
+|---------------------------+-----------+-----|
+| ** OVERVIEW **            |           |     |
+| Overview                  | C-o C-o   |     |
+|                           |           |     |
+| ** DOCS **                |           |     |
+| Docs                      | C-o C-d   |     |
+| Document Inheritance      | C-o d i   |     |
+| Document 'use' statements | C-o d u   |     |
+|                           |           |     |
+| ** GO TO **               |           |     |
+| Go To                     | C-o C-g   |     |
+| Go To 'new'               | C-o g n   |     |
+| Go To Module              | C-o g m   |     |
+| Go To Base Class          | C-o g b   |     |
+| Go To Use section         | C-o g u   |     |
+| Go To Version Control     | C-o g v   |     |
+|                           |           |     |
+| ** Find **                |           |     |
+| Find with Ack             | C-o f a   |     |
+| Find Sub Declarations     | C-o f s   |     |
+| Find Method Calls         | C-o f c   |     |
+|                           |           |     |
+| ** RUN **                 |           |     |
+| Run file                  | C-o C-r   |     |
+| Re-run file               | C-o r r   |     |
+|                           |           |     |
+| ** EDIT **                |           |     |
+| Edit - Move Use Statement | C-o e m u |     |
+| Edit Test Count           | C-o e t c |     |
+|                           |           |     |
+| ** ASSIST **              |           |     |
+| Assist With Test Count    |           |     |
+|---------------------------+-----------+-----|
+
+
+
+** TODO Coverage -- default to disabled
+** Visualize Coverage information in buffer
+*** DONE Output as hash refs and collage them before
+*** DONE buffer-file-name not valid during fontification
+**** DONE hook into load of cperl-mode, load then, then load on demand
+**** DONE Only if enabled via customized var
+*** DONE Remove the _ -> - translation
+*** Bug fontification of sub with _ in
+
+Identfy sub, allow all non-whitespace as sub name
+
+Persist
+Persist_one
+
+Or is this a problem with the _ vs - ?
+
+(think this is fixed)
+
+*** Fontify when editing same line too (on a sub) not fontify-region?
+*** Minor mode? Overlay?
+**** Create overlay on cperl-mode, and on demand?
+*** Option for only displaying bad coverage, ignore good coverage.
+** Goto Project's Other Files
+*** DONE C-o g p o
+*** DONE Only files first
+*** Then with proper types and stuff
+*** Key bindings for stuff
+** Overview specific things
+*** DONE C-o o a -- Overwiew Api of current class
+**** DONE Don't fail when going to the initial location
+**** DONE Keep track of class, don't look up [<Class::Name>] in the buffer, it may not be there
+***** For example for doing docs or goto on method, or whatever
+*** C-o o s -- Overview Subs in current file
+**** Grep-mode buffer with the subs of this class
+***** Also display =head1
+**** ps/class-mode with ->class_name for consistency
+***** C-o o c
+*** C-o o I -- Overview of Inheritance of current class
+**** When displaying it, keep track of --show=X
+***** so if the user does Ret on a class, it also displays the same thing
+***** buffer local var? how is class set
+***** Not sure about this
+*** DONE Bookmarks
+*** DONE Uses
+*** DONE NeighbourHood
+*** DONE Docs
+** Bug: elisp - ps/find-class-name-at-point finds [ $class_name ] too
+*** Make it match [\s*\w\s*]
+** Secondary Project
+*** This is e.g. another branch
+*** Make it easy to diff files from different branches
+*** Switch between them?
+** Colorize inheritance Docs
+*** Both in doc inheritance and goto base class
+** Goto New should not leave the project
+*** But if you're unlucky, it might take you to your OO module's default new method
+*** This should stay inside the project
+**** New key, is_in_current_project ?
+***** The client (emacs) can ignore it, and display info that there is one
+** Sync Test Count - new format
+*** # Looks like you planned 1 test but ran 1 extra.
+** Go to more things
+*** C-p g s -- Go to SUPER Method
+
+Find a method from item at point, then identify the Base Method(s).
+
+If more than one, display *Choose Super Method* buffer with hierarchy
+displayed, any of the base classes pre-chosen. Go to and display
+hierarchy.
+
+Should work both in source and in Class Overview
+
+
+*** C-o g S -- Go to any SUPER method
+*** C-o g B -- Go to any BASE class
+*** Smart goto -- method -- shortcut for $self->METHOD in same file
+
+Check in elisp whether it's a $self->METHOD_CALL and whether
+METOD_CALL is a sub in the same file and package, etc. to avoid the
+round trip to perly_sense.
+
+** Other Window operations
+C-x 2 xxx to do the thing in the other window
+C-x 5  etc
+
+** Perl Shell - easy win
+
+Just lauch a shell with "perl -d -e 1" and name the buffer "*Perl shell*"
+
+Chdir to project dir, set @INC, etc.
+
+** Reset PERL5OPT before calling  perly_sense
+Setenv PERL5OPT= before calling perly_sense from elisp.
+
+Otherwise e.g. -MCarp::Always will be loaded.
+
+** Bug: docs
+
+Goto ->new found "setup_new" docs
+
+Search for data_collection finds create_data_collection
+
+Don't match if there's a leading sigil, e.g. $oLocation
+      
+** Refactor: Remove duplication in Project, for calling covered
+** Goto Other Test file - reuse window
+
+Try a switch to buffer first if possible.
+
+** Warning - undefined
+
+Wed May 21 16:38:15 2008: Processing file (/home/lindsj05/source/pips3/branches/imi_length/t/lib/PIPTest/Setup.pm)
+Wed May 21 16:38:15 2008: Use of uninitialized value in concatenation (.) or string at /home/lindsj05/source/pips3/branches/imi_length/deps/lib/perl5//Devel/PerlySense/Document/Meta.pm line 500.
+
+** Source -- add module
+
+http://blog.jrock.us/articles/Learning%20Emacs%20Lisp%20has%20paid%20off.pod
+
+Either add at top, or add on this line.
+
+Assist for syntax errors that says: missing module, did you forget to use it
+
+
+
+** Documentation -- Smart docs
+
+When explaining e.g. Smart docs, $self->method
+
+Use examples, and show sample output
+
+
+** Goto any base class
+
+C-o g C-b - goto any base class, and list them if there are many.
+Display the hierarchy in the buffer during the selection if possible.
+
+** Document Inheritance -- show current class
+
+Document inheritance
+
+Markup the current class with [<Whatever >], just like everything else
+
+
+** Assist test count
+
+If in the compilation buffer, look up the .t file and do it right.
+
+Or if there is any open *compilation* buffer, find it, and go ahead.
+
+
+If in .t, assume *compilation* is for it.
+
+If not in .t look up *compilation*, and its .t file.
+
+
+** Run tests covering this source file
+
+C-o r t
+Ask covered for which files to test, then do it.
+
+
+** Doc Type
+
+C-o d t -- on a variable, or a method. Look up which class/type it is
+and display all matches.
+
+Choose one, then select the inheritance hierarchy
+
+** Find file, line number
+
+C-p g l
+
+Find a file location and go to it, if it can't find one at point, show
+an input buffer:
+
+Debugger example:
+. =
+Pips3::Persister::Mapper::DBIC::store(ref(Pips3::Persister::Mapper::DBIC
+::Broadcast), ref(Pips3::Broadcast)) called from file `/home/lindsj05/source/pips3/branches/fip_refactor/lib//Pips3/Persister/Mapper/DBIC/Schedule.pm' line 37. =
+Pips3::Persister::Mapper::DBIC::Schedule::store(ref(Pips3::Persister::Ma
+pper::DBIC::Schedule), ref(Pips3::Schedule),
+ref(Pips3::M::Pips3::TVAImport)) called from file `/home/lindsj05/source/pips3/branches/fip_refactor/lib//Pips3/Persister/DBIC.pm' line 92
+. = Pips3::Persister::DBIC::persist_one(ref(Pips3::Persister::DBIC),
+ref(Pips3::Schedule)) called from file `/home/lindsj05/source/pips3/branches/fip_refactor/lib//Pips3/Persister/DBIC.pm' line 127
+
+
+Syntax error example:
+
+Can't locate object method "add_to_pip_tva_imports" via package
+"Pips3::M::Pips3::Broadcast" at /home/lindsj05/source/pips3/branches/fip_refactor/lib//Pips3/Persister/Mapper/DBIC.pm line 61.
+
+
+
+From debugger
+
+file
+`/home/lindsj05/source/pips3/branches/genres_on_all_pip_objects/lib//Pip
+s3/V/API.pm' line 34
+
+
+
+
+Remember to normalize the path to remove double //
+
+"\\(file +`\\|at +\\)\\([/a-zA-Z0-9._ ]+\\)'? +line +\\([0-9]+\\)\\."
+2 - file
+3 - line
+
+
+
+When doing find error file, if the file can't be opened directly (it's a
+relative file name in the wrong dir), ask perly_sense to find it.
+
+
+
+port at /home/lindsj05/source/pips3/branches/fix_inspector/script/../lib/Pips3/C/Inspector.pm line 192
+
+
+
+
+
+*** Goto error line
+
+Doesn't work quite
+/home/lindsj05/smoking_area/add_promo_test_nowork/lib//Pips3/Schema/PCE.
+pm line 34.
+
+
+*** File at point
+
+Goto file name at point. Relative to the project, or just find it
+anywhere in the project.
+
+Also, if it's an error message/warning thing, goto the line
+
+
+** Goto tests -- deal with buffers properly
+
+After visit file, also go to buffer or something, what if the file is
+already open in a different window.
+
+
+** Flymake -- mode line indicator
+
+Flymake -- show errors and warnings in the mode line with a small
+colored blob.
+
+** Goto Sub / Method
+
+Show a list of subs, let user choose one of them, go there.
+
+
+** Bug: when running Goto Version Control from outside a project?
+
+If we run goto version control from outside anything, or don't send in
+the dir correctly or whatever...
+
+?
+
+** Goto POD heading
+
+List POD heading, let user chose which one to go to
+
+** Goto "use" section -- don't stop in comments
+
+Goto use section. Don't stop if in comment or pod.
+
+
+** Goto Project Dir
+
+\C-o g p d
+
+Visit the project dir
+
+
+** Go to variable declaration
+
+Smart goto on a variable, goto the my or local or use vars or whatever
+is the first mention of it.
+
+** Assist fixing syntax error
+
+C-o C-a Assist-with
+
+When on a syntax error:
+- If it's an undeclared variable, either
+  - find an existing variable with a similar name and rename the current
+one.
+  - Declare the variable just before, so it can be moved to wherever it
+should be.
+
+- If on "can't call method on XXX have you loaded it?", push-mark, add a
+"use XXX"
+
+
+When on a Perl Critic complaint:
+C-o a c  d -- Disable Rule - Open up the .perlcritic config file and add
+[-Critic::Rule]. Don't save the file. If no .perlcritic config file
+exists, create it first.
+C-o a c n -- Add ## no critic after
+
+
+
+When doing the flymake info, put [-YYY] in the kill ring.
+
+When Assist on a Perlcritic complaint:
+Open .perlcritic file and put the cursor after the last [-XX] heading.
+
+
+
+
+
+
+** Assist many things
+
+Assist things.
+1. Collect Emacs level assist things suggestions (prios?)
+2. Send to perly_sense to get back more suggestions
+3. Present all suggestions and let user choose one
+4. Dispatch to do the selected thing
+
+** TODO Cover
+*** DONE Emacs - go to test other files
+**** Figure out what the hell is up with [return] vs RET
+
+Send mail to maintainer
+;; Author: Jaeyoun Chung [jay.chung@gmail.com]
+
+(defun dropdown-list (candidates)
+
+                     ((or (member key `(,(char-to-string ?\r) [return]))
+                          (member key `(,(char-to-string ?\r) [return])))
+                      (setq selection selidx
+                            done      t))
+
+
+*** User config where the cover db is located
+*** Coverage -- last test run, or accumulated since last coverage reset
+
+Somehow run a t file with coverage enabled, then parse the report and
+highlight the source, so that we incrementally can see line, branch,
+flow coverage of the subs we develop.
+
+
+** Fix keybindings globally
+
+Add hook to dired, svn to rebind C-o stuff
+
+not use define-global, use define-key or something instead?
+
+
+*** Unbind \C-o in the SVN mode and rebind it to this. Hook on load mode.
+** Critic -- Find unused lexicals
+
+Find lexicals that are only declared, never used.
+
+** C-2 prefix for all navigation etc commands
+
+If with C-2 (or is it?) prefix, always open in other window, C-3 other window, etc
+
+
+** Goto Module -- selected text
+
+If selection, use that as the text, don't look at thing at point.
+
+Same as for other things?
+
+
+
+** Smart Goto for file => ffap, error message => goto error line
+
+Make \C-o \C-g context sensitive to error message, and file
+
+
+
+** Inheritance with many packagkes in the same file -- e.g. Datetime::Infinite inheritance
+
+
+
+** Integrate regex-tool
+*** DONE Bundle the regex tool,
+*** DONE C-o a r to bring it up
+*** Bug: newlines have a win/unix problem
+*** Smart: C-o C-a if in a regex
+**** TODO copy-paste that one into *Regex*
+**** copy-paste any comment into *Text*
+*** Explain
+
+http://search.cpan.org/~pinyan/YAPE-Regex-Explain-3.011/Explain.pm
+
+
+*** DONE Buffer local (if possible) perl-backend tool for the regex
+*** DONE Send new defun to maintainer
+*** DONE Fix so that the whole regex can be specified, with the regex separators
+**** DONE //g etc
+** Flymake key bindings
+
+C-o s n
+ p
+ s
+
+Should be goto command and and a Doc? Or something.
+
+Goto next
+C-o g f n
+C-o g f p
+
+C-o d f
+
+Or something, this is a little to convoluted.
+
+C-o g s n -- s is "Syntax"
+
+C-o d s
+
+
+** Alt. Run File
+
+C-u Run to run with Alt command line
+
+Or \C-o r c for Run with Cover
+
+If a .t file, run that file,
+If a .pm file, find the .t files, run those.
+
+
+** Goto Run file --
+
+\C-o g r c -- Go to *compilation* buffer
+\C-o g r f -- Go to file being run in the compilation buffer
+
+
+
+** Run History - Goto, Run
+
+\C-o g r r -- Go to run file (the one in the compilation buffer)
+\C-o g r h -- Go to file in Run History
+-- Keep them in ordered list, promote them to top when run
+
+
+\C-o r h -- Run files in Run History
+With numeric argument, run the last n files
+
+
+
+** Goto module -- understand sub
+
+Go to module. If a module name isn't found, consider if it's really
+Module::Name::sub_name, and try Module::Name.
+
+
+
+** perly-sense.el internals - trap error
+
+perl-sense.el trap eval error and display invalid input, and
+command. When evaling the response from perly_sense.
+
+
+** FindBugs -- like Critic but better
+http://perlcritic.tigris.org/servlets/ReadMsg?list=dev&msgNo=1619
+
+** Indent region
+
+C-o m i
+
+Indent region, or sub (select current sub if no selection)
+
+
+** Regex tool -- Explain
+
+Put this in the regex-tool, and display the explanation in real time
+http://search.cpan.org/search?mode=all&query=YAPE%3A%3ARegex%3A%3AExplain
+
+** Mark outer
+
+C-o m m o
+
+ForMat Mark Outer
+
+
+** Document Api -- C-o d a
+
+Display the Api in the echo area
+
+** Goto Project Config
+
+\C-o g p c
+
+Visit the project config dir
+
+From here it's simple to visit each type of thin
+
+
+** Goto find buffer
+
+After a C-o C-f or find or whatever
+
+Goto Find buffer *grep*
+
+C-o g f
+
+
+
+** Document Bookmarks -- C-o d b
+
+Display the bookmarks in the echo area
+
+** Document x -- indicate current class
+** Smart goto filename
+
+Goto file if on a filename. Try to find it in the project if partial.
+
+Integrate with goto error line
+
+
+** Smart Goto variable declaration
+
+If point is on a variable, go to the my, our, use vars or first use
+declaration. Deal with scope properly.
+
+
+** Document x -- colorize text in echo area
+** Smart Goto -- let user chose if multiple targets
+
+When doing goto on method call, there may be many potential target
+classes.
+
+Let the user choose which one, now that we have Choose Class.
+
+Display class name, and matching percentage
+
+
+** Goto base class from Overview
+
+\C-o g b from base class should work
+
+
+
+
+** Class Overview -- Hide private methods outside project
+
+This should be a setting
+
+- overview:
+  -     is_private_methods_from_outside_project_visible: 0
+
+
+
+** Perltidy
+
+*** Config
+**** config location
+**** Config command
+*** Sample config
+
+# PBP .perltidyrc file
+-l=78   # Max line width is 78 cols
+-i=4    # Indent level is 4 cols
+-ci=4   # Continuation indent is 4 cols
+-st     # Output to STDOUT
+-se     # Errors to STDERR
+-vt=2   # Maximal vertical tightness
+-cti=0  # No extra indentation for closing brackets
+-pt=1   # Medium parenthesis tightness
+-bt=1   # Medium brace tightness
+-sbt=1  # Medium square bracket tightness
+-bbt=0  # Tight block brace tightness
+-nsfs   # No space before semicolons
+-nolq   # Don't outdent long quoted strings
+-wbb="% + - * / x != == >= <= =~ !~ < > | & >= < = **= += *= &= <<= &&=
+-= /= |= >>= ||= .= %= ^= x="
+        # Break before all operators
+
+-sot    # Stack Opening Tokens
+-sct    # Stack Closing Tokens
+
+#-bar
+
+
+
+*** elisp
+
+
+(defun perltidy-region (beg end)
+  "Run perltidy on the current region."
+  (interactive "r")
+  (let ((original-point (point)))
+      (shell-command-on-region beg end "perltidy
+-pro=$PIPS3_ROOT/.perltidyrc" nil t)
+      (goto-char original-point)
+      )
+  )
+
+(defun perltidy-sub ()
+  "Run perltidy on the current sub."
+  (interactive)
+  (let ((original-point (point)))
+    (mark-defun)
+    (perltidy-region (point) (mark))
+    (goto-char original-point)
+    )
+  )
+
+(defun perltidy-buffer ()
+  "Run perltidy on the current buffer."
+  (interactive)
+  (let ((original-point (point)))
+    (mark-whole-buffer)
+    (perltidy-region (point) (mark))
+    (goto-char original-point)
+    )
+  )
+
+(defun perltidy-dwim ()
+  "Run perltidy on the region, or the current sub"
+  (interactive)
+  (save-excursion
+    (if (and mark-active transient-mark-mode)
+        (perltidy-region (region-beginning) (region-end))
+      (perltidy-sub)
+      )
+    )
+  )
+
+(global-set-key (kbd "\C-o m C-t") 'perltidy-dwim)
+(global-set-key (kbd "\C-o m t b") 'perltidy-buffer)
+(global-set-key (kbd "\C-o m t r") 'perltidy-region)
+(global-set-key (kbd "\C-o m t s") 'perltidy-sub)
+
+
+
+*** More elisp (maybe same)
+
+;; PerlTidy -- move this to PerlySense
+(defun perltidy-region (beg end)
+  "Run perltidy on the current region."
+  (interactive "r")
+  (let ((original-point (point)))
+      (shell-command-on-region beg end "pipstidy" nil t)
+      (goto-char original-point)
+      )
+  )
+
+(defun perltidy-sub ()
+  "Run perltidy on the current sub."
+  (interactive)
+  (let ((original-point (point)))
+    (if (perltidy-mark-sub-and-docs)
+        (progn
+          (perltidy-region (point) (mark))
+          (goto-char original-point)
+          )
+      )
+    )
+  )
+
+(defun perltidy-mark-sub-and-docs ()
+  "Mark the current sub, and possibly its preceeding POD block"
+  (interactive)
+  (mark-defun)
+  (if (looking-back "\n=cut *?\n+")
+      (progn
+        (cperl-backward-to-noncomment (point-min))
+        (if (search-forward-regexp "\n=" (mark) t)
+            (progn
+              (beginning-of-line)
+              (if (looking-back "\n") (forward-line -1))
+              t
+              )
+          nil
+          ))
+    t
+    )
+  )
+
+(defun perltidy-buffer ()
+  "Run perltidy on the current buffer."
+  (interactive)
+  (let ((original-point (point)))
+    (perltidy-region (point-min) (point-max))
+    (goto-char original-point)
+    )
+  (message "Ran Perl::Tidy on buffer")
+  )
+
+(defun perltidy-dwim ()
+  "Run perltidy on the region, or the current sub"
+  (interactive)
+  (if (and mark-active transient-mark-mode)
+      (progn
+        (perltidy-region (region-beginning) (region-end))
+        (message "Ran Perl::Tidy on region")  )
+    (progn
+      (perltidy-sub)
+      (message "Ran Perl::Tidy on sub")
+      )
+    )
+  (cperl-mode)
+  )
+
+(global-set-key (kbd "\C-o m t t") 'perltidy-dwim)
+(global-set-key (kbd "\C-o m t b") 'perltidy-buffer)
+(global-set-key (kbd "\C-o m t r") 'perltidy-region)
+(global-set-key (kbd "\C-o m t s") 'perltidy-sub)
+
+
+
+** Overview -- change key binding
+
+\C-o d o
+
+Much more logical
+
+Or are there more types of overviews?
+- It appars so
+
+
+** POD display from Class Overview should be nicely marked up
+
+At the moment, just text
+
+** Highlight / diff Testing Got vs Expected
+
+When in the *compiation* buffer, on an error, find the regions for the
+values, and start a diff.
+
+
+** TODO Bug: Inheritance with @ISA captures more than it should
+
+Cwd.pm
+use vars qw(@ISA @EXPORT @EXPORT_OK $VERSION);
+
+Picks up VERSION and stuff, when it obviously shouldn't.
+
+Not when @ISA is a quoted value / part of a string
+
+
+
+** TODO Bug: flymake captures "print" output
+
+If there is a print in a file, it gets run, and the output part of the
+diag message.
+
+E.g. print "Hello"; before a use strict
+
+** Make flymake handle taint mode
+
+*** Make flymake run perl -T or -t if the source file has that on the first line.
+
+*** Or, filter out taint too late warnings
+
+In Project
+                #Disable subroutine redefined, and taint must be used
+from command line
+                command => q{perl -c ${INC} "${SOURCE_FILE}" 2>&1 | perl
+-ne " /Subroutine [\\w:]+ redefined at/ || /line, it must also be used
+on the command line/ or print"},
+
+
+** Performance
+
+*** Persistent environment?
+
+**** inferior shell
+
+*** No PPI? Lots of memory and information that isn't needed in this
+case. Becomes harder as we use more and more capabilities. Because PPI
+is good.
+
+
+
+
+*** Flag in project config to pre-calculate Overview during flymake
+
+Do this async, queue up the work to be done and have a worker pick off
+queued things.
+
+** Bug: $self->X is found within comments
+E.g. in Api.pm
+** Cache management
+*** Clear cache automatically on upgrade?
+*** Spin of cache manager process to remove old cache entries?
+** Bug: when identifying subs $self->SUPER::anyting is picked up
+
+Identify  $self->SUPER::  ::NEXT
+
+even if $self->parent::mymethod is called, pick "mymethod"
+
+
+Game::Object::Worm, docs for oLocation matches
+
+  Game::Direction->oMove($oLocation)
+
+Simplest thing? Block it from matching sigils before method name
+(because that indicates it's a variable, not a method).
+
+Or collect all, and chose the one nearest the start of the string
+
+
+*** Indicate when a method has overriden a base class method
+
+\->oDirection
+
+*** C-o g s -- Go to SUPER method
+
+Should work both in source and in Class Overview
+
+
+
+*** Misc
+
+other window, similar to C-x C-b.
+
+If no object at point, show the current class' API.
+
+If method call or object at point, show that class' APi
+
+Show the entire api, including parent methods etc. and where they are
+implemented. imenu? Go to definition? Compilation mode?
+
+Determine location of POD if no sub definition.
+
+Determine what it looks like:
+property ($self->{something}) and/or
+method ($self->something) or
+function (none of the previous)?
+
+
+*** Also
+
+Identify  $self->SUPER::  ::NEXT
+
+even if $self->parent::mymethod is called, pick "mymethod"
+
+Don't pick up "SUPER", but look at what was supered.
+
+
+
+** POD display from Class Overview should be nicely marked up
+
+At the moment, just text
+
+** Tutorial for other editor authors
+
+This is slightly outdated
+
+ * Tutorial -- Integrate PerlySense with your own Editor *
+
+Tutorial to get an overview of what's required to integrate PerlySense
+with their own programmable editor.
+
+
+ ** Smart Doc **
+
+Open up the file
+  $ABSOLUTE_BRANCH_DIR/lib/Pips3/Importer/Validator/EpisodesHaveTitle.pm
+in your editor. Move the cursor down to row 35, col 27.
+
+This is where the user invokes the Smart Doc command somehow. It will
+display the POD for the thing (method in this case) under the cursor.
+
+The editor should shell out and run the command:
+  perly_sense smart_doc
+--file=$ABSOLUTE_BRANCH_DIR/lib/Pips3/Importer/Validator/EpisodesHaveTit
+le.pm --row=35 --col=27
+
+The output of the program is:
+
+-----
+METHODS
+  validate_each({ data => , type => , callback => }) : @domain_obj_list
+    Loop over each item in the array ref $data->{$type} and call
+$callback
+    with the item.
+
+    If type isn't defined then run callback against _all_ objects in
+data
+    (of any type).
+
+    Return the callback's return value.
+
+From <Pips3::Importer::Validator>
+-----
+
+The editor should display this as a doc hint somehow.
+
+
+** Smart Goto **
+
+In the same file, at the same location.
+
+This is where the user invokes to the Smart Goto command somehow. It
+will navigate to the declaration/definition for the thing under the
+cursor.
+
+The editor should shell out and run the command:
+  perly_sense smart_go_to
+--file=$ABSOLUTE_BRANCH_DIR/lib/Pips3/Importer/Validator/EpisodesHaveTit
+le.pm --row=35 --col=27
+
+The output of the program is:
+
+-----
+FILE_NAME\tROW\tCOL
+-----
+
+The editor should open the file and position the cursor at row/col.
+
+
+(Note that the output format for all output will change to a serialized
+key/value data structure at some point. The current format is a remnant
+of me not knowing elisp well enough. Following is an example of the new
+format for Emacs s-expressions, but the data structure may be serialized
+into any convenient format)
+
+
+ * Go to Base Class *
+
+In the original file, at the same location.
+
+This is where the user invokes the Go to Base Class command somehow. It
+will navigate to the base class of the current class. If there are many
+options, let the user choose one class first, then navigate to it.
+
+The editor should shell out and run the command:
+  perly_sense base_class_go_to
+--file=$ABSOLUTE_BRANCH_DIR/lib/Pips3/Importer/Validator/EpisodesHaveTit
+le.pm --row=35 --col=27
+
+The output of the program is:
+
+-----
+'(("class-list" . ((("class-name" . "Pips3::Importer::Validator")
+("file" . "$ABSOLUTE_BRANCH_DIR/lib/Pips3/Importer/Validator.pm") ("row"
+. "1")))))
+-----
+
+In case of many possible base classes, there will be many files in the
+class-list.
+
+
+** Performance
+
+*** Persistent environment?
+
+**** inferior shell
+
+*** No PPI? Lots of memory and information that isn't needed in this
+case. Becomes harder as we use more and more capabilities. Because PPI
+is good.
+
+
+
+** Overview -- histogram over subs
+
+sub SLOC
+complexity?
+coverage
+
+
+** Bug: Goto method should find a sub in base classes
+
+even if there is a POD entry in the current class.
+
+
+
+** Parse syntax - plugins
+
+Plugins for e.g. Class::Accessor idioms
+
+** Parse syntax - sub declaration wiht package specifier
+
+sub Catalyst::Log::Log4perl::logdie
+
+
+** POD display from Class Overview should be nicely marked up
+
+At the moment, just text
+
+** Smart Goto and Docs etc from the Class overview doesn't work
+
+Just the keystroke works, but not the prefix-Smart-xxx command.
+
+Could this be overridden in the local keymap?
+
+
+** C-2 other window for Clas Overview
+
+C-2 d, g, etc should work from the  Class Overview, display in other window
+
+
+** Performance
+
+*** Persistent environment?
+
+**** inferior shell
+
+*** No PPI? Lots of memory and information that isn't needed in this
+case. Becomes harder as we use more and more capabilities. Because PPI
+is good.
+
+
+
+** Run Perl in the Source - xmp filter
+
+http://eigenclass.org/hiki/xmpfilter
+
+** Run tests - display in mode line the test result
+
+http://www.emacswiki.org/cgi-bin/emacs/download/unit-test.el
+
+** Identify $self->method_call when using $_[0]->method_call
+
+$_[0] is $self, so look for that idiom too
+
+
+** Class Overview -- display non-project Classes differently
+
+In the Inheritance, Use, and Neighbourhood,d isplay Classes outside
+the current project in a more subdued color.
+
+
+** Bookmark navigation -- open in other frame
+
+If another frame is open, return should open the file there instead of
+the current one. If not, open in same.
+
+
+** Bug: when going to sub declaration, try parent subs before failing to POD
+
+
+P POD m
+P sub m
+
+S POD m
+
+should find the S POD, but go to the P sub
+
+
+
+** .emacs load improvement
+
+Load ps-flymake if flymake is already loaded
+Change the install docs
+
+
+
+** Go Back
+
+*** From Overview - b -- Go to previous Class Overview
+
+*** From Overview - C-b -- Go to previous Class Overview
+
+*** C-o g b -- Go to previous Class Overview
+
+*** C-o g C-b -- Show history navigation, like the C-x C-b
+
+List both Class Overview, and other things, like Smart Go To, Smart
+Docs, Run file(?)
+
+
+** Bookmarks - List bookmarks with transform sub ref
+
+Different transforms for different output formats? Or pass in the
+output object?
+
+** File/Project bookmarks (local to the file, not visible in the Project overview)
+
+Do when there is a Project Overview
+
+in config
+is_file_visible: 1  (default)
+is_project_visible: 1 (default)
+
+
+** Docs Method, fail to displaying other interesting stuff
+*** A notice where it is declared
+
+*** an example invocation, or the signature deduced from the code
+**** Signature
+***** shift self or assign self
+my $self = shift;
+***** shift parameters, or assign them
+my $file = shift;
+my $row = shift;
+
+my ($file, $row) = @_;
+
+$self or $class as first argument
+
+
+***** Assume self if not found?
+
+
+** Goto Method, fail to a use of it
+
+If a method can't be found, either declaration or doc, fail to an
+invocation of the method, and message an explanation.
+
+
+** Bug: Create Project -- no critic config created
+
+No critic config created by default when create_project
+
+
+** Directory Overview
+
+can be Project overview
+
+C-p o d for a dir
+
+C-p o p for the project dir
+
+*** Directory Overview
+
+**** Directory Overview
+
+o t .
+o t lib
+o t release.pl
+o t t
+
+Navigate to Directory Overview DIR, Directory Tree
+
+
+**** Bookmarks
+
+List all bookmarks in all files, grouped by definition
+
+
+
+** Class Overview for what's at point
+*** Class name
+*** $self (as today)
+*** $object
+**** Let user choose if there are many alternatives
+
+Both percent and slidebar
+
+89% XXXXXXXXXXXxxxxx
+47% XXXXXXXxxxxxxxxx
+
+
+** Make class overview become Overview
+
+Make it work for non-classes too, it's clearly useful to plain files,
+tests, etc.
+
+C-o C-o
+
+
+** Crap 4 Perl
+
+complexity (mccabe)
+
+
+
+Complexity Bad
+
+Tests good
+
+Debunking CC
+http://www.sdtimes.com/content/article.aspx?ArticleID=31820
+
+
+** Flymake - Don't run flymake unless the file exists
+** perly_sense - abort gracefully if Devel::PerlySense can't be loaded
+** Class Overview - List Perl::Critic tings
+
+
+
+** Class Overview - Go Back
+
+b
+
+*** Keep history of actions performed using perly_sense
+
+Which classes
+**** visited
+**** overviewed
+
+C-p C-h Smart History
+
+
+
+** Goto Project config file
+
+C-p g p p -- Go to the Project's project.yml config file.
+
+C-p g p c -- Go to the Project's Critic .perlcritic config file
+
+
+
+
+** Broken POD rendering/parsing in Mehod docs
+
+This doesn't show the item
+
+=head2 relationship_info
+
+=over 4
+
+=item Arguments: $relname
+
+=back
+
+Returns a hash of relationship information for the specified
+relationship
+name.
+
+=cut
+
+sub relationship_info {
+  my ($self, $rel) = @_;
+  return $self->_relationships->{$rel};
+}
+
+
+
+** Copy-paste / duplication identification and highligting
+
+Implement as different module, decoupled from PerlySense.
+
+          http://www.perlmonks.org/?node_id=667084
+http://www.perlmonks.org/?node_id=310219
+
+
+
+*** Types of copy-paste
+
+**** Straight copy-paste, i.e. exact copies of text longer than x lines.
+- some things may be legitimately ignored
+- boilerplate pod, copyright notices
+- use MODULE lines?
+- sub new, etc.
+
+
+**** Similar code, i.e. normalized repeating constructs.
+on a statement level, not per line. Identifiers and string literals
+collapsed.
+
+
+
+
+
+** Pod-mode
+
+http://search.cpan.org/~schwigon/pod-mode/
+
+Include this somehow
+
+
+** Tests for flymake!
+
+
+** Enhanced compilation regexes
+
+http://www.geocities.com/user42_kevin/compilation/compilation-perl.el.txt
+
+
+** Flymake filter out redefined warnings
+
+Filter out x::something not just something.
+
+
+** Flymake
+
+*** Configurable
+**** Re-analyse PPI Cache!
+**** DONE Run Critic using cached PPI doc (to store it once we parse the doc)
+**** Run other analysis (complexity)
+**** Copy-paste warnings?
+
+Critic and complexity requires it's own config, which things to check
+for.
+
+Go to next error: also display error text as (message), put any Critic
+module mentioned in the clipboard. If already on last error, redisplay
+message.
+
+
+** Doc: Trouble shooting Flymake
+
+(flymake-log-level 3)
+M-x flymake-mode
+Look in *Messages*
+
+
+
+
+
+** Config for Class Overview
+
+Which sections to display?
+
+- whether to display subclasses
+
+
+
+
+** Project Source Root directory
+
+Introduce this soon, before too many things confuse the Project Root
+(config, Find below here) and the Source Root (source root, run files
+from here, include files from here).
+
+Step 1: just call them two different things, let them both be the
+current thing.
+
+Step 2: make source configurable
+
+Step 3: add additional INC dirs, but keep one the primary source root.
+
+
+
+
+** Class Overview -- reorder method
+
+Move method within file
+
+
+
+** DONE Perl tests - increase test plan count
+
+C-o e t c
+C-o a t
+
+
+** PerlTidy
+
+http://obsidianrook.com/perlnow/emacs_as_perl_ide.html#perltidy
+
+
+** create_project - set initial values
+
+
+copy_from = DIR
+syntax = 1
+critic = 1
+
+
+** Project Config - perl critic config
+
+What default perlcritic is used, and why isn't it created at
+create_project?
+
+
+
+** Compilation - go back to source file
+
+C-p r f
+
+When in the compilation buffer, navigate to the original file
+
+
+** Refactorings -- list
+
+http://www.refactoring.com/catalog/index.html
+
+*** Check out whether these make sense
+
+**** Extract Superclass
+pick two or more base classes, and push common stuff to super class
+
+     http://www.refactoring.com/catalog/extractSuperclass.html
+
+
+**** Move method to other class (sub, super, other?)...
+
+****
+
+
+
+
+** Refactor: rename lexical
+
+C-o r r
+
+ l
+
+** Open file in Project
+
+C-p g p f  (Goto Project find-file)
+
+Give it any file name including a partial path, match it against all
+possible versions and let the user select the correct one to open.
+
+perly-sense-find-file-in-project
+
+
+
+** Refactor: Replace literal with named lexical.
+
+C-p e r l
+
+
+** Refactorign menu
+
+To increase discoverability.
+
+Create a PerlySense menu
+
+Refactoring
+
+http://www.refactoring.com/catalog/
+
+
+
+
+** Run file - Specify command line parameters - Emacs
+
+Prompt for command line, if called with C-u modifier
+
+When C-u, just skip setting the run command and let the user
+interactively edit it instead.
+
+Still, look up the correct dir to run from.
+
+
+
+** Run file -- without a project
+
+There may not be a project, and no lib, just a simple script with
+installed deps. Continue with the Unknown project (with default config).
+
+
+** Run File - error diag text is outside screen
+
+When C-c C-c, make sure the compilation buffer is scrolled down
+a bit so the test diagnose is visible on-screen.
+
+
+Defadvice this defun? (it's not a proper defun?)
+
+compilation-set-window
+
+
+** DONE Run File -- with plugins for file endings
+
+Plugins for file endings.
+
+
+** Perldb
+
+Run pelrdb from the root, with inc, etc
+
+Show prompt
+
+
+
+
+** DONE Run file - green text for "All tests successful."
+
+Change the syntax highlighting in the compilation mode?
+
+
+
+
+
+** Project docs
+
+If you have a t/lib in your t directory, you need a .PerlySenseProject
+dir, to override that, otherwise PerlySense will think that t is the
+Project root (since it has a lib dir it looks like somewhere from which
+modules are included. Which it does, it's just not where your primary
+lib is located).
+
+perly_sense create_project
+
+
+
+
+
+
+** Run test file
+
+C-p r t  or  C-p T t
+
+Smart run test --
+
+If in a .t buffer, run it
+
+If not in a .t buffer
+  If point is on a .t file, run that file
+  If not, find the tests that may test this class
+
+
+
+** Run test Suite
+
+C-p r s  or  C-p T s
+
+Run the entire test suite, in the *compiation* buffer
+
+prove -r t
+
+With modifier, show command line to provide editing
+
+
+
+
+
+** Open File -- check if directory exists, otherwise ask perly_sense to find it
+
+file-directory-p
+  Function: Return t if FILENAME names an existing directory.
+  Plist: ange-ftp
+
+
+
+
+
+
+
+** Find copy-pasted code
+
+Indicate it in the class overview, link to the other instances.
+
+Indicate it in the Project Overview.
+
+Run identification as a background job. Make it it's own module.
+
+
+
+
+
+
+
+** Find module backup
+
+If not on a class with C-p m f, ask for it in the minibuffer
+
+
+
+** Refactor x
+
+C-p e
+
+
+
+** Format: format parameter list
+
+C-p r f p
+
+- go from all params on one line to one with each param on a single
+  line, and back (if multiline, go to one line, etc)
+
+method($a, $b, [ $c, $d ], $e);
+
+method(
+    $a,
+    $b,
+    [ $c, $d ],
+    $e,
+);
+
+
+
+
+** Format: Align region
+
+C-c a
+
+Run align current, but only on the region, re-indent properly
+
+Also create a select-outer-block, C-c s o
+
+
+
+** Format: collapse whitespace
+
+
+** Format: delete trailing whitespace
+
+
+
+
+
+** Find the file mentioned in region in the project, open it.
+
+C-p f f
+
+
+
+
+** Change the bindings to be action oriented
+
+the first is always Ctrl-action on the current
+
+C-p g c -- Goto class at point (replaces C-p m f)
+
+
+
+
+
+** Overview -- visulizer
+
+Something similar to
+http://www.flickr.com/photos/carlmanaster/9254599/in/set-228603/
+
+
+** Class Overview -- works for any file, not just classes
+
+So, for .pl and .t files, it also makes sense to be able to see
+includes, structure, vcs activity, etc.
+
+So, don't stop the analysis just because it's not a Class.
+
+
+
+
+** Signature Survey - highlighting
+
+Syntax highlighting the survey with diff background color for S
+
+A very cool thing would be to increase the greyness as a Sub goes on,
+so that long subs are clearly visible, maybe they should turn towards
+red after n chars?
+
+
+
+
+** Class Overview - Structure navitation and docs
+
+When moving over things in the Structure, the message would update and
+show which sub name the point is in.
+
+When point is over anything in the Structure, pressing d or g would
+either bring up the smart doc for the sub, or go to that point in the file.
+
+Potentially, the structure "home" position would be the position where
+the point was in the file, and marked red. This is where S would jump
+to.
+
+Note: this position may not be known, but the editor should attempt to
+pass it in.
+
+
+
+
+
+** PerlySense config in $HOME
+
+Some things are User specific, some are Project specific. Overridable
+per Project.
+
+
+~/.perlysense/user.yml
+
+http    ://search.cpan.org/~hasant/Config-Merge-0.02/Merge.pm
+
+
+
+
+
+
+
+** Overview - Neighbourhood - don't list package names that don't have
+a file
+
+Check this out in production.
+
+Indicate that some aren't actually files you can visit by a faded
+color?
+
+
+
+
+** Class Overview - Back button
+b
+
+Keep an internal stack of Classes being overviewed, use b to go
+back. Also display it with under a * Recently Overviewed * heading?
+
+
+
+
+** Class Overview - Show Code coverage
+
+Use project config to point to a place where code coverage runs are
+available. Show in class overview
+
+Show inline with the file, for each sub?
+
+Link to file
+
+
+
+** Class Overview - Source Control - Related files
+
+Look at changesets and figure out which other files were checked in
+whenever this file was checked in.
+
+
+
+
+
+** Class Overview - Source Control Activity
+
+To complement "annotate"
+
+View something like checkin-comments, timeline for the most recent
+things, to see whether this file has been edited recently. (only
+display it if edited within x days (configurable)).
+
+Show overview timeline with commit time (and user?)
+
+Probably needs to be pulled out asynchronously to not slow things down.
+
+Example
+
+
+              l+                  jjddd            J         rjjlla.             ccr  l
+T=W=T=F=S=S=M=T=W=T=F=S=S=M=T==W==T====F==S==S==M==Tue==Wed==Thu==Fri==Sat==Sun==Mon==Tue=
+            20            27                  4                                11
+{log message here}
+
+
+The timeline is marked with dates of beginning of work weeks, and weekday.
+
+The timeline is more sparse recently, and more compact long ago.
+
+Checkins are marked with the first letter of the username. Usernames
+can be assigned alias chars in the config, either for PerlySense, or
+overridden per Project.
+
+Any checkin that doesn't fit in the default space of the day expands
+the day to fit all checkins. They are important enough to take the
+extra space.
+
+
+When placing point at a checkin:
+
+  v l -- Display the revision, username, checkin log message for that
+         revision below the timeline.
+
+  v E -- ediff the working revision against that checkin.
+
+  v c -- Display the other files in the changeset for that checkin.
+
+
+For things that make sense, placing the point at a day instead of a
+checkin would do the same, but for all checkins that day.
+
+
+
+
+
+** Project Overview - Source Control Activity
+
+Tree map with source file size as block size, and recent activity as
+color.
+
+http://grandperspectiv.sourceforge.net/
+
+Another view - Show recent number of bugs fixed related to files, red
+is many files with bug fixes.
+
+Checkin messages and/or Trac integration
+
+
+
+
+** Project Overview - Source Code Complexity
+
+Tree map with source complexity metric as block size.
+
+Coverage
+
+
+
+One of my favourite quotes from Ken Thompson (who apparently knows a bit about computers) is:
+
+I tend to break up a subprogram when there are too many local variables. Another clue is [too many] levels of indentation. I rarely look at length.
+
+
+
+
+** Emacs faces
+
+something like this?
+
+(defface erb-face
+  `((t (:background "grey18")))
+  "Default inherited face for ERB tag body"
+  :group 'rhtml-faces)
+
+(defface erb-delim-face
+  `((t (:background "grey15")))
+  "Default inherited face for ERB tag delimeters"
+  :group 'rhtml-faces)
+
+
+
+
+
+
+
+
+** Overview - Inheritance - find classes that are base classes which
+are packages in the same oDocument.
+
+
+
+
+
+** Show complexity or other metric
+
+Show Cyclomatic Complexity of class / sub somehow
+
+Other metrics that may be useful?
+
+http://search.cpan.org/dist/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm
+
+http://search.cpan.org/~nwclark/perl-5.8.8/ext/B/B/Concise.pm
+
+
+
+
+** Parse @ISA
+
+Text::Diff module:
+
+@Text::Diff::Unified::ISA = qw( Text::Diff::Base );
+
+
+
+
+
+
+** When ready, list PelrlySense on the EmacsWiki and elsewhere
+
+http://www.emacswiki.org/cgi-bin/wiki/PerlLanguage
+
+http://www.emacswiki.org/cgi-bin/emacs-se/EmacsScreencasts
+
+
+http://www.perlmonks.org/?node_id=164003
+
+
+
+http://www.perlmonks.org/index.pl?node_id=531175
+http://perldoc.perl.org/perlfaq3.html#Is-there-an-IDE-or-Windows-Perl-Editor%3F
+http://www.perlmonks.org/?node_id=639314
+
+http://www.perlmonks.org/?node_id=192684
+
+
+
+
+** Fix Class to lazily walk up the base class chain
+
+Initialize rhClassBase on first access
+
+
+
+
+** Class Overview - Neighbourhood with dir names
+
+Show the directory name at the top of each column? Just the actual
+directory:
+
+Pips3    Pips3/Series   Pips3/Series/*
+
+
+
+
+
+
+** PerlySense && Emacs: Class Hierarchy Step 6?
+
+Look at subclasses in the entire project, not just below
+directory-wise.
+
+Maybe this should be a separate thing to make it easier to visualize
+usefully?
+
+Just one level down? Maybe only one step down in the base classes?
+
+Maybe display them separately below?
+
+- Different colors for base classes (lighter) and sub classes (darker)
+
+- display installed modules with a different color (de-emphasized)
+from project modules.
+
+
+Have a complete hierarchy somewhere else usign GraphViz?
+
+Put base classes in one group and subclasses on one
+
+
+
+
+** Abbreviate long common class names in Class Overview
+
+Embedd full class names somehow (org-link thing?) with hidden
+formatting.
+
+Then shorten each class name with a header at the top of each column:
+
+[ Pips3::Series  ]
+[ Pips3::Setup   ]
+[ Pips3::Slurp   ]
+[ Pips3::Version ]
+
+ Pips3::*
+[ Series  ]
+[ Setup   ]
+[ Slurp   ]
+[ Version ]
+
+http://search.cpan.org/~simonw/Text-CommonParts-0.5/lib/Text/CommonParts.pm
+
+
+
+
+
+** Go to Class, and let me edit the text beforehand.
+
+Perhaps C-p m f could display the word at point and let me edit it
+first.
+
+
+
+
+
+** Put the log files in the project dir
+
+.perlysense/
+  config.yml
+  log/
+    debug.log
+    history.log
+
+
+
+
+
+** Emacs: Clean up Class Overview
+
+
+
+
+** Clean up perly_sense and perly-sense.el to use alists in a general
+way
+
+
+
+
+
+** There is a fundamental mis-design when it comes to Packages in Documents/Meta
+
+Documents should have Packages which should have other stuff. Walking
+upwards from a Document to a a base class something, should be moved
+to become the reponsibility of Class.
+
+
+
+
+** Pod display
+
+If there is a .pod file next to a module, use that one too (or
+instead?).
+
+
+
+
+** Project Class Overview
+\C-p p c
+
+List all Classes in the namespace hierarchy with the with the "current"
+class highlighted.
+
+Recently visited classes (maybe just highlighted?).
+
+
+
+
+** Eldoc - display the signature of the method you're typing
+
+
+http://www.emacswiki.org/cgi-bin/emacs-en/ElDoc
+
+** Create a reference card.
+
+This will probably make inconsistencies in the keymappings obvious.
+
+
+
+
+** Consider changing the default keymap from C-p to
+
+C-c C-p   ? Used by POD spell, but that's insignificant
+
+C-o       Used by open-line, fairly unuable...
+
+C-l       Used recenter, may actually be used by people
+
+
+
+
+** DONE Sync test count with compilation buffer
+
+Look at the *compilation* buffer, find the reported test count,
+whether it's ok or is missing any tests. Update the "tests => n"
+
+** Make keymappings buffer local, not global
+
+
+
+
+** Use the increment test count trick
+
+
+
+
+
+
+** Project History
+\C-p p h
+
+Recently visited Classes
+
+Recently visited .t files
+
+Recently visited .pl files
+
+
+
+
+
+** Class Overview is context sensitive
+
+Can identify whether it's on a named class (or literal), or not (and
+assume it's the current package).
+
+
+
+
+** History
+
+Store per project whenever a class, or method is looked up.
+
+\C-p \C-h -- Bring up PerlySense History for recent places you were
+
+.perlysense/log/history.log
+
+
+
+
+
+** Indent and align
+
+Use this with the select outer block
+
+(defun indent-and-align (beginning end)
+  (interactive "r")
+  (save-excursion
+    (indent-region beginning end nil)
+    (align beginning end)
+    ))
+
+
+** Class Overview: Group system classes
+
+In the class hierarchy, bounding box classes in the perl lib to
+separate them from the project classes
+
+
+
+---------------------------------------------------------------------------
+                    Catalyst
+Game                Catalyst::Plugin
+Game::Object        Catalyst::Plugin::Session
+>Game::Object::Worm
+Game::Object::Worm::Snake  Game::Object::Worm::Boa  Game::Object::Worm::
+---------------------------------------------------------------------------
+
+
+
+graph { flow: up; }
+
+( INC
+[ Catalyst::Plugin::Session ] ==> [ Catalyst::Plugin ]
+[ Catalyst::Plugin ] ==> [ Catalyst ]
+[ Catalyst ] ==> [ Catalyst::Base ]
+[ Catalyst::Plugin ] ==> [ Class::Pluggable::Plugin ]
+[ Class::Pluggable::Plugin ] ==> [ Class::Pluggable ]
+[ Catalyst::Base ] ==> [ Class::Pluggable ]
+)
+[ Game::Object::Worm ] ==> [ Game::Object ]
+[ Game::Object ] ==> [ Game ]
+[ Game::Object ] ==> [ Catalyst::Plugin::Session ]
+[ Game::Object::Worm::Snake ] ==> [ Game::Object::Worm ]
+[ Game::Object::Worm::Boa ] ==> [ Game::Object::Worm ]
+[ Game::Object::Worm::ShaiHulud ] ==> [ Game::Object::Worm ]
+[ Game::Object::Worm::Shaitan ] ==> [ Game::Object::Worm ]
+
+[ Game::Object::Worm::ShaiHulud ] ==> [ Catalyst ]
+
+
+
+
+                                           +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+                                           ' @INC                                                                '
+                                           '                                                                     '
+                                           ' +---------------------------+                                       '
+                                           ' |     Class::Pluggable      | <=======#                             '
+                                           ' +---------------------------+         H                             '
+                                           '   ^                                   H                             '
+                                           '   H                                   H                             '
+                                           '   H                                   H                             '
+                                           ' +---------------------------+         H                             '
+                                           ' |      Catalyst::Base       |         H                             '
+                                           ' +---------------------------+         H                             '
+                                           '   ^                                   H                             '
+                                           '   H                                   H                             '
+                                           '   H                                   H                             '
+     +-------------------------------+     ' +---------------------------+         H                             '
+     | Game::Object::Worm::ShaiHulud | ==> ' |         Catalyst          |         H                             '
+     +-------------------------------+     ' +---------------------------+         H                             '
+       H                                   '   ^                                   H                             '
+       H                                   '   H                                   H                             '
+       H                                   '   H                                   H                             '
+       H                                   ' +---------------------------+       +-----------------------------+ '
+       H                                   ' |     Catalyst::Plugin      | ====> |  Class::Pluggable::Plugin   | '
+       H                                   ' +---------------------------+       +-----------------------------+ '
+       H                                   '   ^                                                                 '
+       H                                   '   H                            - - - - - - - - - - - - - - - - - - -+
+       H                                   '   H                           '
+       H                                   '   H                           '
+       H                                   '   H                           '
+       H                                   ' +---------------------------+ '
+       H                                   ' | Catalyst::Plugin::Session | '
+       H                                   ' +---------------------------+ '
+       H                                   '                               '
+       H                                   +- - - - - - - - - - - - - - - -+
+       H                                       ^
+  #====#                                       H
+  H                                            H
+  H  +-------------------------------+       +---------------------------+       +-----------------------------+
+  H  |             Game              | <**   |       Game::Object        |       | Game::Object::Worm::Shaitan |
+  H  +-------------------------------+       +---------------------------+       +-----------------------------+
+  H                                            ^                                   H
+  H                                            H                                   H
+  H                                            H                                   v
+  H                                          +-----------------------------------------------------------------+       +---------------------------+
+  #======================================>   |                       Game::Object::Worm                        |   <** | Game::Object::Worm::Snake |
+                                             +-----------------------------------------------------------------+       +---------------------------+
+                                               ^
+                                               H
+                                               H
+                                             +---------------------------+
+                                             |  Game::Object::Worm::Boa  |
+                                             +---------------------------+
+
+
+
+                                           +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -+
+                                           ' [ Class::Pluggable          ] <=======#                             '
+                                           ' [ Catalyst::Base            ]         H                             '
+     [ Game::Object::Worm::ShaiHulud ] ==> ' [ Catalyst                  ]         H                             '
+       H                                   ' [ Catalyst::Plugin          ] ====> [ Class::Pluggable::Plugin    ] '
+       H                                   '   H                            - - - - - - - - - - - - - - - - - - -+
+       H                                   ' [ Catalyst::Plugin::Session ] '
+       H                                   +- - - - - - - - - - - - - - - -+
+       H                                       ^
+  #====#                                       H
+  H  [ Game                          ] <**   [ Game::Object              ]       [ Game::Object::Worm::Shaitan ]
+  H                                            H                                   v
+  #======================================>   [<Game::Object::Worm                                             >]   <** [ Game::Object::Worm::Snake ]
+                                             [ Game::Object::Worm::Boa   ]
+
+
+
+
+
+** Emacs: After goto: show destination as message
+
+b. Show package and sub(?)
+
+
+
+
+
+** Support XS stuff with Dynaloader
+
+Can we determine anything from XS code? Is there XS metadata anywhere
+to pick up?
+
+
+
+** Bug: look for @ISA only in the proper package
+
+When there are two packages (e.g. main and some other, or two package
+statements), the @ISA should only matter if it's in the proper
+package.
+
+
+
+
+** Smart-docs: on variable with method call shows class
+
+Whenever Smart-docs is invoked on an object, show which class it has.
+
+
+
+** Smart-docs: show package name of found method, etc
+
+Currently, the method is displayed, but it's impossible to see where
+the documentation came from.
+
+Show which class the method doc is for.
+
+
+
+** Smart-goto: look at chained methods
+
+$self->lawn->stuff
+$self->lawn()->stuff
+$self->lawn($dfskd)->stuff
+$self->lawn($dfskd / 2)->stuff
+
+It should work to find "stuff"
+
+
+
+
+** Refactoring: Fix Devel::PerlySense::Util::aNamedArg
+
+Export aNamedArg and replace all uses with the shorter version.
+
+
+
+
+** File bug about Token::QuoteLike
+
+Make sure it has a "string" method, like the Token::Quote classes.
+
+
+
+
+
+** Bug: warnings in Document->oLocationSub, line 457 (no package?)
+
+WindowTool.pm, line 236, Win32::GUI::Loft::Design->newLoad
+
+Remove the silenced warnings.
+
+
+
+** Debug support
+
+
+
+** Goto module as string
+
+As in:
+
+use base "Sdkjsd::Sd";
+
+
+
+
+
+** Use the entire project lib as context
+
+Usually, a module isn't "used" from within the document, still it's
+used in the code.
+
+
+
+
+** Determine probably "used" modules by looking for module looking stuff in comments and pod.
+
+Auto-prefix with the current thing?
+
+
+
+
+** Bug? $self->method in Opera
+
+c:/Dokument/Jobb/Projekt/BossOpera/Modules/Ray/source/lib/Boss/Opera/Ray/ProductGroup.pm, line 64
+
+
+
+
+** Anonymous subs within a sub
+
+sub a {
+    my $b = sub { my $c = shift; $c->methodcall() };
+}
+
+methodcall() isn't recognized?
+
+
+
+
+
+** Look why e.g. "use Catalyst" takes forever
+
+
+
+** Display stuff in a web browser
+http://search.cpan.org/~corion/HTML-Display-0.39/lib/HTML/Display.pm
+
+
+** Understand __PACKAGE__
+
+
+__PACKAGE__->newScalar
+
+
+
+
+** Discard oDocument ?
+
+The PPI data takes  a lot of memory
+
+
+
+
+
+** Look into POD warning
+
+(((C:\Perl\lib\Class\MethodMaker\hash.pm)))
+    Parsing: (((C:\Perl\lib\Class\MethodMaker\hash.pm)))
+Use of uninitialized value in concatenation (.) or string at ../lib/Devel/PerlySense/Document/Meta.pm line 461.
+
+
+
+
+
+** Lazy load everything?
+
+Document (most important, possible 2.5 profiling seconds to strip)
+
+22.66    1.3602        9   0.151135     PPI::Node::__link_children
+11.06    0.6641     3173   0.000209     PPI::Node::DESTROY
+ 8.49    0.5097    15829   0.000032     PPI::Element::DESTROY
+
+
+
+
+
+** Smart docs: always display which file the hint was taken from,
+since that may be unclear.
+
+
+
+
+** Smart goto: $object->method1->method2
+** Smart docs: $object->method1->method2
+
+
+** Smart goto: sub calls
+** Smart docs: sub calls
+
+
+
+** Smart: $object method: Also notice e.g. $aDocumentDest[0]->oLocationPod
+
+
+
+
+PPI::Structure::List (e.g. () )  with no children doesn't have a location?
+
+
+
+
+
+** Smart goto: $object->method  - deal with multiple matches
+
+Either pick the first and show the other ones, or Show all and let the
+user chose. This could be a choise within Emacs.
+
+** Smart docs: $object->method  - deal with multiple modules
+
+Either pick the first and show the other ones, or Show all and let the
+user chose. This could be a choise within Emacs.
+
+
+
+
+** Smart docs: $object->method
+
+*** Look for the method in use modules
+
+
+*** Find a use'd module which has some or all of the method calls
+
+List them all for user choise or goto right away? How about the C-p
+C-g goes to the first/best (most base in an inheritance situation +
+other characteristics), but signals in the message bar the other
+choises (including the ISA hierarchy of them)?
+
+
+
+**** Identify interface: ignore $self->{_something}
+
+Since it's private by convention
+
+
+
+
+**** Refactor: rename Document->aNameBase => aNameModuleBase
+
+Bad name.
+
+
+
+
+
+
+
+** Smart goto: $object->SUPER::method2
+
+** Smart docs: $object->SUPER::method2
+
+
+
+
+** Find interface: Look in the entire project's modules.
+
+Don't do this unless it was found in an explicitly used module?
+
+
+
+
+** GUI interaction: Show gui dialog with progress bar and current activity
+
+Some operations are very time consuming when not cached, so we need to
+give the user feedback + cancel ability. How cross platform is Tk? How
+fast does it load?
+
+
+
+
+**** Refactor: Clean up the naming convention for package/module etc.
+
+
+**** Refactor: Document->oLocationSmartGoTo
+
+Find commonalities to make the lookup more efficient.
+
+
+
+*** C-p g m - Go to the method, but show a list when there are ambiguities.
+
+
+
+
+
+** Hack in tab/space support in PPI, or fix it in PerlySense?
+
+
+
+
+**** Refactor Document oLocationPod, it's really ugly
+
+
+
+** Smart goto: Look around when looking for method calls
+
+
+
+** Smart docs: Look around when looking for method calls
+
+
+
+
+
+** Ask on PerlMonks: What modules are "stopwords"? E.g. Exporter.
+
+
+
+** Smart docs -
+
+*** Smart docs - Fail to: find the POD SYNOPSIS
+
+*** Smart docs - Fail to: find the sub declaration and find the proceeding comment block
+
+*** Smart docs - Fail to: find the sub declaration and figure out the parameter list
+**** Figure out a my "($param1, $param2) = @_;"
+**** Figure out a my "$param = shift;" sequence
+**** Figure out everything up to the first blank line, at most n lines.
+
+
+
+
+
+** Smart goto: $object->method
+*** Look for the method in previously studied modules in the project
+
+
+
+** Smart docs: $object->method
+*** Look for the method in use modules
+*** Look for the method in previously studied modules in the project
+
+
+
+** Smart goto: function or function()
+*** Look for the function in use modules
+*** Look for the function in previously studied modules in the project
+
+
+
+** Smart docs: function or function()
+*** Look for the function in use modules
+*** Look for the function in previously studied modules in the project
+*** Builtins
+
+
+
+
+
+** Smart go up: C-p g u - If in a sub, go to the parent class where
+the sub is also implemented or documented. If outside a sub, go to the
+immediate parent class at ? ?.
+
+
+
+** Smart docs up up: C-p d u - If in a sub, show the docs in the
+parent class where the sub is also implemented. If outside a sub, show
+POD of the immediate parent class. If multiple inheritance, go left-first.
+
+
+
+** Smart go to new: C-p g n - Go to the new() method, or find the base
+implementation or documented.
+
+
+
+
+
+
+** Determine class of $self->property->method_call()
+
+Do this by determining all calls to $self->property and look for this
+class by looking for a module which has all the subs (or
+inherited). Look in "use Module" and remembered modules in this
+project.
+
+
+
+** Determine class of $object->method_call() if $object was
+Module::Name->new in the same scope
+
+
+
+
+
+** Java ideas
+
+Mentioned here just so I don't forget about it
+
+http://jde-usages.sourceforge.net/
+
+(define-key jde-mode-map "\M-u" nil)
+(define-key jde-mode-map "\M-up" 'jde-usages-display-call-tree-for-thing-at-point) ;; p = point
+(define-key jde-mode-map "\M-ui" 'jde-usages-display-call-tree-for-specified-class) ;; i = interactive
+(define-key jde-mode-map "\M-uc" 'jde-usages-display-call-tree) ;; c = callers
+
+(define-key jde-mode-map "\M-ut" 'jde-usages-display-type-hierarchy) ;; t = types
+(define-key jde-mode-map "\M-ur" 'jde-usages-display-subs-implementing-method) ;; r = reimplements
+(define-key jde-mode-map "\M-ud" 'jde-usages-display-subs-and-implementers) ;; d = descendants
+(define-key jde-mode-map "\M-ua" 'jde-usages-display-superclasses) ;; a = ancestors
+
+(define-key jde-mode-map "\M-un" 'jde-usages-next-pos)
+(define-key jde-mode-map "\M-ul" 'jde-usages-locate-class)
+
+
+** Insert arglist
+
+When here
+
+  $something->method(_
+
+Look up what arguments are a) documented, or b) used elsewhere, and
+present it to the user. Perhaps with an abbrev thing, so the user can
+tab between the args, etc.
+
+** Smart docs: look in "use"
+
+Weigh possible matches against each other, with preferably no false
+positives (i.e. if a class (in module or parent) doesn't provide a
+method, disqualify it (this isn't possible since getters/setters may
+be auto-defined and not present in the code).
+
+
+** Smart goto: look in "use"
+
+
+
+** Smart docs: look in known already visited files
+
+
+** Smart goto: look in known already visited files
+
+
+
+** Emacs: Bind C-p SPC - IntelliSense command completion
+
+http://www.emacswiki.org/cgi-bin/emacs-en/CompletionUI
+
+http://nschum.de/src/emacs/company-mode/
+
+http://www.emacswiki.org/cgi-bin/emacs-en/PredictiveMode
+-fill a dictionary whenever -> is inserted in the buffer?
+
+
+** Get pod docs as HTML (just to make sure we bring a formatter
+object)
+
+
+
+
+
+** Show flattened POD for module
+
+in an imenu? Is that possible
+
+
+
+
+** Run file in bin directory
+
+Default to previous file name, or the first .pl file or the first file
+found in the bin dir.
+
+Translate file/line numbers to compilation errors.
+
+
+
+** Run current file (already in cperl-mode?), but translate "# Failed
+test (PerlySense-smart-doc-pod.t at line 60)" to something that looks
+like file/line compilation errors. Also syntax errors.
+
+
+
+** Look into gtags
+
+http://code.google.com/p/google-gtags/
+
+** Run perl test file
+
+Default to the current t file, or the previously run t file if the
+current buffer isn't a t file.
+
+
+** Prove the tests
+
+and open the test files that didn't pass all tests
+
+
+
+** Syntax check current file with perl -c (already in cperl-mode?)
+
+
+
+
+** Help with Demeter
+
+Find $self->getter->method->* method chains
+
+     Suggest refactoring of $self->getter->method into it's own method in
+this class if more than 2? 3?
+
+Perl::Critic plugin
+
+
+** Lazy load oDocument, replace parse with load, and parse on demand.
+
+(may not be needed even)
+
+
+
+
+
+** Pre-analyze time-consuming modules in @INC at installation
+
+1.010290 : C:\Perl\site\lib\Pod\Parser.pm
+1.014694 : C:\Perl\lib\Test\Harness.pm
+1.015496 : C:\Perl\site\lib\Tk\HList.pm
+1.046558 : C:\Perl\site\lib\HTML\Mason\Compiler.pm
+1.046655 : C:\Perl\site\lib\Tk\FileSelect.pm
+1.057213 : C:\Perl\site\lib\Template\Filters.pm
+1.060328 : C:\Perl\site\lib\Inline.pm
+1.060559 : C:\Perl\site\lib\Apache\TestSmoke.pm
+1.061308 : C:\Perl\site\lib\Config\Simple.pm
+1.068268 : C:\Perl\site\lib\Template\Context.pm
+1.077943 : C:\Perl\site\lib\Pod\Simple\HTML.pm
+1.077997 : C:\Perl\site\lib\Devel\Cover\Report\Html_subtle.pm
+1.081402 : C:\Perl\site\lib\HTTP\Cookies.pm
+1.090701 : C:\Perl\lib\ExtUtils\MM_MacOS.pm
+1.093618 : C:\Perl\site\lib\HTTP\Daemon.pm
+1.094050 : C:\Perl\site\lib\XML\Parser\Expat.pm
+1.096916 : C:\Perl\site\lib\Devel\PerlySense\Document.pm
+1.097466 : C:\Perl\site\lib\SQL\Abstract.pm
+1.106429 : C:\Perl\site\lib\Tk\Balloon.pm
+1.119938 : C:\Perl\site\lib\Module\Build\Platform\Windows.pm
+1.121789 : C:\Perl\site\lib\Template\Parser.pm
+1.124951 : C:\Perl\lib\Devel\PPPort.pm
+1.128120 : C:\Perl\site\lib\Tk\CursorControl.pm
+1.139466 : C:\Perl\site\lib\Convert\ASN1\_decode.pm
+1.140494 : C:\Perl\site\lib\CPANPLUS\Dist\MM.pm
+1.145811 : C:\Perl\site\lib\CPANPLUS\inc\installers\Module\Build\Platform\Windows.pm
+1.148886 : C:\Perl\site\lib\PPI\Lexer.pm
+1.155260 : C:\Perl\site\lib\Archive\Tar.pm
+1.156116 : C:\Perl\site\lib\HTML\Mason\Lexer.pm
+1.163074 : C:\Perl\site\lib\Win32\Console.pm
+1.168327 : C:\Perl\site\lib\Win32\ODBC.pm
+1.170816 : C:\Perl\site\lib\File\Tail.pm
+1.180613 : C:\Perl\lib\Data\Dumper.pm
+1.187386 : C:\Perl\site\lib\XML\Generator.pm
+1.196390 : C:\Perl\site\lib\Template\Stash.pm
+1.206099 : C:\Perl\site\lib\Tk\Table.pm
+1.218623 : C:\Perl\site\lib\CPANPLUS\inc\Archive\Tar.pm
+1.232688 : C:\Perl\lib\Class\MethodMaker\V1Compat.pm
+1.232776 : C:\Perl\site\lib\CPANPLUS\Module.pm
+1.234234 : C:\Perl\site\lib\Pod\Simple\HTMLBatch.pm
+1.234243 : C:\Perl\site\lib\Date\Calendar\Year.pm
+1.248840 : C:\Perl\lib\B\Bytecode.pm
+1.248990 : C:\Perl\lib\File\Find.pm
+1.249854 : C:\Perl\site\lib\Pod\Text.pm
+1.262441 : C:\Perl\lib\ExtUtils\MakeMaker.pm
+1.268838 : C:\Perl\site\lib\ExtUtils\AutoInstall.pm
+1.293527 : C:\Perl\site\lib\Apache2\Status.pm
+1.296756 : C:\Perl\site\lib\HTML\Mason\Interp.pm
+1.305767 : C:\Perl\site\lib\Inline\C.pm
+1.307523 : C:\Perl\lib\Pod\Man.pm
+1.327198 : C:\Perl\lib\Test\Builder.pm
+1.327700 : C:\Perl\site\lib\HTML\Mason\ApacheHandler.pm
+1.330678 : C:\Perl\site\lib\DBD\DBM.pm
+1.331770 : C:\Perl\lib\File\Temp.pm
+1.341168 : C:\Perl\lib\Pod\Checker.pm
+1.345958 : C:\Perl\site\lib\Parse\Yapp\Parse.pm
+1.359248 : C:\Perl\site\lib\Pod\Man.pm
+1.374871 : C:\Perl\site\lib\Text\ASCIITable.pm
+1.386452 : C:\Perl\site\lib\Data\FormValidator\Results.pm
+1.396242 : C:\Perl\site\lib\LWP\Protocol\ftp.pm
+1.402742 : C:\Perl\site\lib\Test\Builder.pm
+1.406114 : C:\Perl\site\lib\Pod\Checker.pm
+1.406123 : C:\Perl\site\lib\Tk\ColorEditor.pm
+1.420236 : C:\Perl\site\lib\CPANPLUS\Dist\Build.pm
+1.421735 : C:\Perl\site\lib\Tk\IconList.pm
+1.429117 : C:\Perl\site\lib\MIME\Entity.pm
+1.437352 : C:\Perl\site\lib\Tk\TextList.pm
+1.438188 : C:\Perl\site\lib\SOAP\Transport\HTTP.pm
+1.452173 : C:\Perl\lib\Pod\LaTeX.pm
+1.452988 : C:\Perl\site\lib\DBI\PurePerl.pm
+1.466124 : C:\Perl\site\lib\Template\Provider.pm
+1.476702 : C:\Perl\site\lib\Chart\Strip.pm
+1.484205 : C:\Perl\site\lib\Tk\Menu.pm
+1.484260 : C:\Perl\site\lib\DBI\SQL\Nano.pm
+1.485385 : C:\Perl\lib\CGI.pm
+1.493784 : C:\Perl\site\lib\ExtUtils\CBuilder\Platform\Windows.pm
+1.497091 : C:\Perl\site\lib\Text\Reform.pm
+1.518076 : C:\Perl\site\lib\Devel\Cover\DB.pm
+1.530308 : C:\Perl\lib\ExtUtils\Constant.pm
+1.544162 : C:\Perl\site\lib\DBD\Oracle.pm
+1.569554 : C:\Perl\site\lib\Module\ScanDeps.pm
+1.572461 : C:\Perl\site\lib\MSI\DB.pm
+1.577995 : C:\Perl\site\lib\MIME\Parser.pm
+1.585312 : C:\Perl\site\lib\Win32\GUI\Loft\Control.pm
+1.593610 : C:\Perl\site\lib\Text\Autoformat.pm
+1.593620 : C:\Perl\site\lib\Parse\Yapp\Lalr.pm
+1.608206 : C:\Perl\site\lib\Convert\ASN1\parser.pm
+1.608668 : C:\Perl\site\lib\DBD\File.pm
+1.624089 : C:\Perl\site\lib\PPM\Term\Shell.pm
+1.641360 : C:\Perl\site\lib\Parse\Binary.pm
+1.649039 : C:\Perl\site\lib\Data\Denter.pm
+1.671604 : C:\Perl\site\lib\Tk\FBox.pm
+1.671761 : C:\Perl\site\lib\Devel\Cover.pm
+1.701923 : C:\Perl\lib\B\Concise.pm
+1.717693 : C:\Perl\site\lib\Apache\TestRun.pm
+1.724521 : C:\Perl\lib\Text\Balanced.pm
+1.724779 : C:\Perl\site\lib\CPANPLUS\Internals\Constants\Report.pm
+1.749874 : C:\Perl\site\lib\LWP\UserAgent.pm
+1.765494 : C:\Perl\site\lib\Mail\Header.pm
+1.803642 : C:\Perl\lib\Unicode\Collate.pm
+1.811573 : C:\Perl\lib\Net\FTP.pm
+1.812366 : C:\Perl\site\lib\Unicode\Map.pm
+1.815214 : C:\Perl\site\lib\Bit\Vector\Overload.pm
+1.842762 : C:\Perl\site\lib\CPANPLUS\Shell\Classic.pm
+1.843616 : C:\Perl\site\lib\Tk\TextUndo.pm
+1.843625 : C:\Perl\site\lib\Devel\Cover\Report\Html_minimal.pm
+1.866282 : C:\Perl\site\lib\HTML\Form.pm
+1.906326 : C:\Perl\lib\Getopt\Long.pm
+1.921745 : C:\Perl\site\lib\WWW\Mechanize.pm
+1.937355 : C:\Perl\site\lib\Tk\ToolBar.pm
+1.952992 : C:\Perl\site\lib\DBD\Proxy.pm
+2.023268 : C:\Perl\site\lib\PPM\Make\Util.pm
+2.027889 : C:\Perl\site\lib\Class\DBI.pm
+2.041936 : C:\Perl\site\lib\HTML\Mason\Request.pm
+2.047163 : C:\Perl\site\lib\CPANPLUS\Configure\Setup.pm
+2.049731 : C:\Perl\site\lib\ModPerl\Code.pm
+2.062367 : C:\Perl\site\lib\CPANPLUS\Shell\Default.pm
+2.067047 : C:\Perl\site\lib\Lingua\EN\Inflect.pm
+2.123838 : C:\Perl\site\lib\Config\IniFiles.pm
+2.124023 : C:\Perl\lib\Pod\Perldoc.pm
+2.124041 : C:\Perl\lib\Net\Ping.pm
+2.139582 : C:\Perl\lib\Math\Complex.pm
+2.148563 : C:\Perl\site\lib\Win32\Internet.pm
+2.175522 : C:\Perl\site\lib\Tk\TixGrid.pm
+2.221730 : C:\Perl\site\lib\HTML\TreeBuilder.pm
+2.225389 : C:\Perl\site\lib\MSI\Vars.pm
+2.264440 : C:\Perl\site\lib\CGI\Simple.pm
+2.272833 : C:\Perl\site\lib\MIME\Lite.pm
+2.285995 : C:\Perl\site\lib\Tk\Widget.pm
+2.312297 : C:\Perl\site\lib\DBI\Const\GetInfo\ODBC.pm
+2.327159 : C:\Perl\lib\Pod\Html.pm
+2.327988 : C:\Perl\site\lib\PPM\Make.pm
+2.327992 : C:\Perl\site\lib\Unicode\CharName.pm
+2.387201 : C:\Perl\site\lib\PPM\UI.pm
+2.428330 : C:\Perl\site\lib\XML\Simple.pm
+2.439039 : C:\Perl\lib\ExtUtils\ParseXS.pm
+2.452064 : C:\Perl\lib\Math\BigRat.pm
+2.463136 : C:\Perl\site\lib\PAR\Packer.pm
+2.497655 : C:\Perl\site\lib\MSI\Installer.pm
+2.521492 : C:\Perl\site\lib\ModPerl\CScan.pm
+2.543180 : C:\Perl\site\lib\Apache2\Build.pm
+2.550434 : C:\Perl\site\lib\Win32\GUI\Loft\Design.pm
+2.566604 : C:\Perl\site\lib\Pod\Simple.pm
+2.637920 : C:\Perl\site\lib\Class\Prototyped.pm
+2.656718 : C:\Perl\lib\ExtUtils\MM_VMS.pm
+2.794244 : C:\Perl\site\lib\Tree\DAG_Node.pm
+2.811332 : C:\Perl\lib\B\CC.pm
+2.811633 : C:\Perl\site\lib\YAML.pm
+2.951960 : C:\Perl\lib\B\C.pm
+2.966721 : C:\Perl\lib\Tie\File.pm
+3.001988 : C:\Perl\site\lib\Date\Calc\Object.pm
+3.051179 : C:\Perl\site\lib\DBM\Deep.pm
+3.076954 : C:\Perl\site\lib\Apache\TestConfig.pm
+3.221900 : C:\Perl\lib\Math\BigInt\Calc.pm
+3.281115 : C:\Perl\site\lib\File\MMagic.pm
+3.370027 : C:\Perl\site\lib\DBI.pm
+3.372662 : C:\Perl\site\lib\Pod\Simple\BlackBox.pm
+3.483353 : C:\Perl\site\lib\Archive\Zip.pm
+3.562361 : C:\Perl\site\lib\Tk\Text.pm
+3.611287 : C:\Perl\site\lib\Win32\TieRegistry.pm
+3.711282 : C:\Perl\site\lib\ModPerl\MethodLookup.pm
+3.789291 : C:\Perl\site\lib\ModPerl\WrapXS.pm
+3.907669 : C:\Perl\lib\Class\MethodMaker\scalar.pm
+3.982083 : C:\Perl\lib\ExtUtils\MM_Unix.pm
+4.092083 : C:\Perl\site\lib\Win32\GUI.pm
+4.161912 : C:\Perl\lib\Math\BigFloat.pm
+4.187016 : C:\Perl\site\lib\Date\Calendar\Profiles.pm
+4.202993 : C:\Perl\site\lib\Parse\RecDescent.pm
+4.218616 : C:\Perl\site\lib\CPANPLUS\inc\installers\Module\Build\Base.pm
+4.260380 : C:\Perl\site\lib\LJ\Simple.pm
+4.342875 : C:\Perl\site\lib\CPANPLUS\inc\IPC\Run.pm
+4.346212 : C:\Perl\site\lib\SQL\Parser.pm
+4.436478 : C:\Perl\lib\Math\BigInt.pm
+4.528167 : C:\Perl\site\lib\IPC\Run.pm
+4.546748 : C:\Perl\site\lib\Module\Build\Base.pm
+4.615305 : C:\Perl\site\lib\HTML\Element.pm
+4.859212 : C:\Perl\site\lib\SQL\Statement.pm
+6.136199 : C:\Perl\site\lib\SOAP\Lite.pm
+7.581627 : C:\Perl\lib\B\Deparse.pm
+7.858738 : C:\Perl\site\lib\Template\Grammar.pm
+7.936736 : C:\Perl\site\lib\CPANPLUS\inc\Module\CoreList.pm
+9.030297 : C:\Perl\lib\Class\MethodMaker\array.pm
+9.406639 : C:\Perl\lib\CPAN.pm
+9.904557 : C:\Perl\lib\Class\MethodMaker\hash.pm
+12.223159 : C:\Perl\site\lib\Module\CoreList.pm
+14.633653 : C:\Perl\site\lib\Date\Manip.pm
+
+
+
+
+
+** Sparklines
+
+sparklines
+http://www.bissantz.de/sparklines/
+http://www.bonavistasystems.com/OnlineDemoReports.html
+http://sparkline.wikispaces.com/Examples
+
+
+*** For SVN activity going back x days
+
+try to at least show one checkin, and adjust the x scale accordingly,
+so that it's only a pixel wide if it was a long time ago.
+
+color: user; presence: checkin that day; height: size of commit
+
+
+*** For code coverage over time
+
+*** For code complexity over time
+
+*** For CRAP metric over time
+
+
+
+
+* Other
+** Docs
+
+
+|-------+-------------------------------------------------|
+|       | Browsing / Documentation                        |
+|       |                                                 |
+| C-o   | Overview of current Class                       |
+| C-d   | Docs of thing at point                          |
+| d i   | Doc Inheritance of current Class                |
+| d u   | Document "use Module"                           |
+|       |                                                 |
+|-------+-------------------------------------------------|
+|       | Navigation                                      |
+|       |                                                 |
+| C-g   | Go to origin of thing at point                  |
+| g n   | Go to "new" method                              |
+| g u   | Go to "use Module" section                      |
+| g b   | Go to base class                                |
+| g m   | Go to Module at point                           |
+| g v   | Go to Version Control                           |
+|       |                                                 |
+|-------+-------------------------------------------------|
+|       | Coding                                          |
+|       |                                                 |
+| e m u | Edit - Move Use Statement                       |
+| a r   | Assist with - Regex Tool                        |
+|       |                                                 |
+|-------+-------------------------------------------------|
+|       | On-the-fly syntax and Perl::Critic highlighting |
+|       |                                                 |
+| s n   | Syntax - Next error                             |
+| s p   | Syntax - Previous error                         |
+| s s   | Syntax - Show error at point                    |
+|       |                                                 |
+|-------+-------------------------------------------------|
+|       | Testing / Debugging                             |
+|       |                                                 |
+| Key   | Feature                                         |
+| C-r   | Run file                                        |
+| r r   | Re-run file                                     |
+| g t o | Go to Tests -- Other Files                      |
+| g e   | Go to Error line                                |
+| e t c | Edit Test Count                                 |
+| a t   | Assist with - Test Count                        |
+|       |                                                 |
+|-------+-------------------------------------------------|
+
+** DONE Help on emacs list
+
+(defun run-latex-or-whatever ()
+  "Convert the buffer to PDF"
+  (interactive)
+  (shell-command-to-string (format "ps2pdf %s &" (buffer-file-name)))
+  (message "The buffer was converted to PDF, ain't that great?")
+  )
+
+(global-set-key (kbd "\C-c L") 'run-latex-or-whatever)
+
+
+
+
+** Perl::Critic plugin -- unused variable
+*** Declared but not initialized
+*** Used only once.
+
+Declared my $dsfsd which isn't used in that scope.
+
+Same as the warning: only used once.
+
+
+** Perl::Critic plugin -- Cant call private method in another class
+
+Object other than $self calling private methods (with a leading underscore)
+
+Good
+$self->_persisted_objects
+
+Bad
+$importer->_persisted_objects
+
+** Emacs libs
+
+http://www.dr-qubit.org/emacs.php
+
+
