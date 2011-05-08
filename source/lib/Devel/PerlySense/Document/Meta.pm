@@ -219,7 +219,7 @@ appropriate data structures.
 Return 1 or die on errors.
 
 =cut
-sub _setRowColNodeModule(%$$$) {
+sub _setRowColNodeModule(\%$$$$) {
     my ($rhRowCol, $row, $col, $oNode, $module) = @_;
 
     $rhRowCol->{$row}->{$col} = {
@@ -351,7 +351,7 @@ sub parse {
                             $oNode =~ /^[A-Z][\w:]*$/ #Word chars and ::, Starts with uppercase, is pragma or number
                         ) {
                     if( ! ($aToken[-2]->isa("PPI::Token::Operator") && $aToken[-2] eq "->") ) {
-                        _setRowColNodeModule(\%hRowColModule, $row, $col, $oNode, "$oNode");
+                        _setRowColNodeModule(%hRowColModule, $row, $col, $oNode, "$oNode");
                     }
                 }
                 elsif(
@@ -361,12 +361,12 @@ sub parse {
                     my $module = $oNode->string;
                     if($module =~ /^ [A-Z]\w* (?: :: [A-Z]\w* )+ $/x) {
                         #Well formed, likely module, i.e. at least one :: separator
-                        _setRowColNodeModule(\%hRowColModule, $row, $col, $oNode, $module);
+                        _setRowColNodeModule(%hRowColModule, $row, $col, $oNode, $module);
                     }
                     elsif($module =~ /^[A-Z][\w]*$/) {
                         #Check whether there is a file anywhere matching the name (because only the string contents is a weak indicator of module-ness).
                         if($oDocument->fileFindModule(nameModule => $module)) {
-                            _setRowColNodeModule(\%hRowColModule, $row, $col, $oNode, $module);
+                            _setRowColNodeModule(%hRowColModule, $row, $col, $oNode, $module);
                         }
                     }
                 }
@@ -586,7 +586,7 @@ Return the new Location object.
 =cut
 sub oLocationSub {
     my ($oDocument, $oNode, $nameSub, $packageCurrent) = @_;
-    
+
     my $oLocation = Devel::PerlySense::Document::Location->new(
         file => $oDocument->file,
         row  => $oNode->location->[0],
