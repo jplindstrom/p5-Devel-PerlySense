@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* 
+
+
+
+0.0189 -- 2011-05-08 22:55:00 UTC
+
 Bug fix release. Thanks to John SJ Anderson for prodding me to get RT
 patches applied.
 
