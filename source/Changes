@@ -8,7 +8,10 @@ Bug fix release. Thanks to John SJ Anderson for prodding me to get RT
 patches applied.
 
 * Bug #65259 - sub prototype causes failure in perl 5.12 in emacs on
-  mac. Thanks to VANAMBURG for the bug report
+  mac. Thanks to VANAMBURG for the bug report and fix.
+
+* Bug #42827 - Flymake warnings not displayed with latest Perl::Critic
+  Thanks to Jan Tatarik for the bug report and fix.
 
 
 
@@ -49,7 +52,7 @@ patches applied.
   now.
 
 
-  
+
 0.0184
 ------
 

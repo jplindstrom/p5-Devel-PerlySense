@@ -34,7 +34,7 @@ use File::Basename;
 use Path::Class;
 use File::Slurp;
 use File::chdir;
-use Perl::Critic;
+use Perl::Critic 1.105;
 use List::MoreUtils qw/ uniq /;
 
 use Devel::PerlySense;
@@ -528,7 +528,7 @@ sub flymakeFile {
 
         my @aViolation = $oCritic->critique($file);
 
-        local $Perl::Critic::Violation::FORMAT = "%m near '%r' (%e, %p) at %f line %l.\n";
+        Perl::Critic::Violation::set_format( "%m near '%r' (%e, %p) at %f line %l.\n" );
         for my $violation (@aViolation) {
             print STDERR "Warning: $violation";
         }
