@@ -2,9 +2,7 @@
 Feature oriented Revision history for Devel-PerlySense
 ======================================================
 
-
-0.0187
-------
+{{$NEXT}}
 
 * Dist::Zilla build files
 
