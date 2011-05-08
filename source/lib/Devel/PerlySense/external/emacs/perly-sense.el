@@ -1081,7 +1081,7 @@ Module' section at the top of the file."
   (interactive "p")
   (save-excursion
     (goto-char (point-min))
-    (if (re-search-forward "tests\s+=>\s*[0-9]+" nil t)
+    (if (re-search-forward "tests\\s-+=>\\s-*[0-9]+" nil t)
         (progn
           (backward-char)
           (let ((inc-response (ps/increment-number-at-point amount)))
@@ -1096,7 +1096,7 @@ Module' section at the top of the file."
   "Set the Test::More test count from CURRENT-COUNT to NEW-COUNT."
   (save-excursion
     (goto-char (point-min))
-    (if (re-search-forward "tests\s+=>\s*[0-9]+" nil t)
+    (if (re-search-forward "tests\\s-+=>\\s-*[0-9]+" nil t)
         (let ((amount (- new-count current-count)))
           (backward-char)
           (let ((inc-response (ps/increment-number-at-point amount)))
@@ -1185,11 +1185,9 @@ current test run, if any"
   "Return the test count of the current buffer, or nil if that couldn't be deduced."
   (save-excursion
     (goto-char (point-min))
-    (if (re-search-forward "tests\s+=>\s*[0-9]+" nil t)
-        (let ((num (number-at-point)))
-          (if (numberp num)
-              num
-            nil)))))
+    (and (re-search-forward "tests\\s-+=>\\s-*\\([0-9]+\\)" nil t)
+         (string-to-number (match-string 1)))))
+
 
 
 

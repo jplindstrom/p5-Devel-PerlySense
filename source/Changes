@@ -13,6 +13,10 @@ patches applied.
 * Bug #42827 - Flymake warnings not displayed with latest Perl::Critic
   Thanks to Jan Tatarik for the bug report and fix.
 
+* Bug #61640 - perly-sense.el regexps
+  Thanks to Kevin Ryde for the bug report and John SJ Anderson for the
+  patch.
+
 
 
 0.0188 -- 2011-05-08 21:15:38 UTC
