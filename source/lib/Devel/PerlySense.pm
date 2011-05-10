@@ -1535,9 +1535,15 @@ L<http://vimdoc.sourceforge.net/htmldoc/eval.html#Dictionaries> - Vim native dat
 
 =head1 AUTHOR
 
-Johan Lindström, C<< <johanl[ÄT]DarSerMan.com> >>
+Johan Lindström, C<< <johanl buzzwordninja.com> >>
 
-=head1 BUGS AND CAVEATS
+=head1 CONTRIBUTIONS, BUGS, AND CAVEATS
+
+=head2 CONTRIBUTIONS
+
+If you want to hack on PerlySense, fork the project at GitHub:
+L<https://github.com/jplindstrom/p5-Devel-PerlySense>
+
 
 =head2 BUG REPORTS
 
