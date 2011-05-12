@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0190 -- 2011-05-12 21:12:24 UTC
+
 * #68144: Unable to install PerlySense-0.0189
   Thanks to David McWilliams for a quick bug report.
 
