@@ -28,7 +28,7 @@ our $VERSION = '0.01';
 use Carp;
 use Data::Dumper;
 use File::Basename;
-use Path::Class;
+use Path::Class 0.11;
 use File::Spec::Functions qw/ splitdir /;
 
 

@@ -41,7 +41,7 @@ our $VERSION = '0.01';
 use Spiffy -Base;
 use Carp;
 use Data::Dumper;
-use PPI;
+use PPI 1.003;
 use File::Basename;
 use List::MoreUtils qw/ uniq /;
 
