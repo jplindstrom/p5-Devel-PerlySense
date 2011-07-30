@@ -64,7 +64,12 @@ Return the output of running 'command', or nil on error."
         (sleep-for 0 100)))
 
     (with-current-buffer scp/buffer-command-running
-      (let ((output (buffer-string)))
+      (let* (
+            (raw-output (buffer-string))
+            (output
+             ; Added by some Emacs call-process apparently
+             (replace-regexp-in-string "\nProcess perly_sense --stdin finished\n" "" raw-output))
+;;        (message "Pool output: (%s)" output)
         (kill-buffer scp/buffer-command-running)
         (setq scp/buffer-command-running nil)
 
