@@ -24,6 +24,7 @@ use Devel::PerlySense::Editor::Emacs;
 use Devel::PerlySense::Editor::Vim;
 use Time::HiRes qw/time/;
 use YAML::Tiny;
+use Cwd;
 
 use Data::Dumper;
 use Devel::TimeThis;
@@ -71,7 +72,7 @@ sub main_perly_sense {
 
     my ($dirOrigin, $fileOrigin, $module, $dir, $file, $row, $col, $sub, $nameClass, $nameMethod, $clearCache, $widthDisplay, $typeIo);
     my @aShow;
-    debug("ARGV: (" . join(" ", map { "|$_|" } ("perly_sense",  @ARGV)) . ")");
+    debug("CWD: (" . getcwd() . "), ARGV: (" . join(" ", map { "|$_|" } ("perly_sense",  @ARGV)) . ")");
 
     GetOptions(
         "module:s"        => \$module,
