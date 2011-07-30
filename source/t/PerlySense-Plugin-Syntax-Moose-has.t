@@ -31,7 +31,8 @@ ok($oDocument->parse(file => $fileOrigin), "Parsed file ok");
 
 
 $oMeta = $oDocument->oMeta;
-eq_or_diff(
+# eq_or_diff
+is_deeply(
     [ @{$oMeta->raLocationSub} ],
     [
         Devel::PerlySense::Document::Location->new(
