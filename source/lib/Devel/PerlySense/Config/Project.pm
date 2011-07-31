@@ -331,10 +331,10 @@ current time.
 Return 1, or die on errors.
 
 =cut
-sub createFileConfigDefault {
-    my ($dirRoot) = Devel::PerlySense::Util::aNamedArg(["dirRoot"], @_);
 
-    my $fileConfig = file($dirRoot, $self->nameFileConfig);
+sub _createFileDefault {
+    my ($fileConfig, $text) = Devel::PerlySense::Util::aNamedArg(["file", "text"], @_);
+
     my $dirConfig = dirname($fileConfig);
     mkpath($dirConfig);
     -d $dirConfig or die("Could not create config directory ($dirConfig)\n");
@@ -348,8 +348,19 @@ sub createFileConfigDefault {
                 or die("Could not rename ($fileConfig) -> ($fileConfigBackup)\n");
     }
 
-    spew($fileConfig, $self->textConfigDefault) or
+    spew($fileConfig, $text) or
             die("Could not create config file ($fileConfig)\n");
+
+    return 1;
+}
+
+sub createFileConfigDefault {
+    my ($dirRoot) = Devel::PerlySense::Util::aNamedArg(["dirRoot"], @_);
+
+    $self->_createFileDefault(
+        file => file($dirRoot, $self->nameFileConfig),
+        text => $self->textConfigDefault,
+    );
 
     $self->loadConfig(dirRoot => $dirRoot);
 
@@ -374,22 +385,10 @@ Return 1, or die on errors.
 sub createFileCriticDefault {
     my ($dirRoot) = Devel::PerlySense::Util::aNamedArg(["dirRoot"], @_);
 
-    my $fileConfig = file($dirRoot, $self->nameFileCritic);
-    my $dirConfig = dirname($fileConfig);
-    mkpath($dirConfig);
-    -d $dirConfig or die("Could not create config directory ($dirConfig)\n");
-
-    if(-e $fileConfig) {
-        my $textTime = time2iso( time() );
-        $textTime =~ s/\W+/_/g;
-        my $fileConfigBackup = $fileConfig . "." . $textTime;
-
-        rename($fileConfig, $fileConfigBackup)
-                or die("Could not rename ($fileConfig) -> ($fileConfigBackup)\n");
-    }
-
-    spew($fileConfig, $self->textCriticDefault) or
-            die("Could not create config file ($fileConfig)\n");
+    $self->_createFileDefault(
+        file => file($dirRoot, $self->nameFileCritic),
+        text => $self->textCriticDefault,
+    );
 
     return 1;
 }
