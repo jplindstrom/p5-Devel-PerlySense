@@ -26,8 +26,12 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
         my $nameModule = "Game::Event::Timed";
         my $fileModuleTarget = catfile("Game", "Event", "Timed.pm");
 
-        like($oPs->fileFindModule(nameModule => $nameModule, dirOrigin => $dirOrigin), qr/ \Q$fileModuleTarget\E $/x, "Found file downwards before \@INC ok");
-    }   
+        like(
+            $oPs->fileFindModule(nameModule => $nameModule, dirOrigin => $dirOrigin),
+            qr/ \Q$fileModuleTarget\E $/x,
+            "Found file downwards before \@INC ok",
+        );
+    }
 
 
     {
@@ -36,9 +40,12 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
         my $nameModule = "Game::Event::Timed";
         my $fileModuleTarget = catfile($dirData, "Game", "Event", "Timed.pm");
 
-        like($oPs->fileFindModule(nameModule => $nameModule, dirOrigin => $dirOrigin), qr/ \Q$fileModuleTarget\E $/x, "Found file in inc ok");
-    }   
-
+        like(
+            $oPs->fileFindModule(nameModule => $nameModule, dirOrigin => $dirOrigin),
+            qr/ \Q$fileModuleTarget\E $/x,
+            "Found file in inc ok",
+        );
+    }
 }
 
 

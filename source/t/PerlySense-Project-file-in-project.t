@@ -1,10 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 11;
+use Test::More tests => 14;
 use Test::Exception;
 
+use Cwd;
 use Data::Dumper;
+use Path::Class;
 
 use lib ("lib", "../lib");
 
@@ -31,16 +33,19 @@ my $dirProject = "$dirBase/source";
 my $dirTest = "$dirProject/bogus/lib/Game";
 my $fileTest = "$dirTest/Lawn.pm";
 
+my @aDirTest = (
+    "glib/perl5lib",
+    "deps/perl5lib",
+    "../../with-dir/source/lib",
+);
+
+
 ok($oPerlySense->setFindProject(file => $fileTest), "Found Project");
 my $oProject = $oPerlySense->oProject;
 like($oProject->dirProject, qr/with-perlysenseproject.source$/, "Got good project root dir");
 is_deeply(
     $oPerlySense->rhConfig->{project}->{inc_dir},
-    [
-        "glib/perl5lib",
-        "deps/perl5lib",
-        "../../with-dir/source/lib",
-    ],
+    [ @aDirTest ],
 );
 
 
@@ -63,6 +68,16 @@ ok(
 ) or warn( Devel::PerlySense::Util::Log->_textTailDebug() . "\n\nTEST FAILED, THIS ABOVE TEXT IS THE RECENT DEBUG LOG FOR DIAGNOSTICS PURPOSES.\nSORRY ABOUT SPAMMING LIKE THIS, BUT I NEED THE OUTPUT TO FIGURE OUT WHAT'S WRONG\n" );
 
 
+
+
+note("inc_dir");
+my $dirBaseAbs = dir(cwd(), $dirProject);
+my %hIncDirAbsolute = map { $_ => 1 } $oProject->aDirIncAbsolute;
+
+for my $dir (@aDirTest) {
+    my $dirAbs = dir($dirBaseAbs, $dir );
+    ok( $hIncDirAbsolute{$dirAbs}, "Found absolute dir for ($dir) ($dirAbs)");
+}
 
 
 

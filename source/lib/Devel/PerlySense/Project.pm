@@ -442,7 +442,32 @@ sub aDirIncProject {
             map { dir($dirProjectRelativeTo, $_) . "" }
             @aDirInc;
 
-    return(@aDirIncRelative);
+    return @aDirIncRelative;
+}
+
+
+
+
+
+=head2 aDirIncAbsolute()
+
+Return array with absolute dir objects which are the inc_dir
+directories in the config, plus the usual inc directories.
+
+=cut
+sub aDirIncAbsolute {
+    my $dirProject = dir($self->dirProject)->absolute;
+
+    ###TODO: extract method for the inc_dir config entry aIncDirConfig
+    my @aDirIncProject = @{
+        $self->oPerlySense->rhConfig->{project}->{inc_dir} || []
+    };
+    my @aDirInc = (@aDirIncProject, ".", "lib");
+
+    my @aDirIncAbsolute =
+        map { dir($dirProject, $_)->absolute . "" }
+            @aDirInc;
+    return @aDirIncAbsolute;
 }
 
 

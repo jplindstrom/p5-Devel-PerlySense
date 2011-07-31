@@ -1617,6 +1617,7 @@ use Pod::Text;
 use IO::String;
 use Cache::Cache;
 use Storable qw/freeze thaw/;
+use List::MoreUtils qw/ uniq /;
 
 use Devel::TimeThis;
 
@@ -2336,6 +2337,10 @@ errors.
 =cut
 sub fileFindModule {
     my ($nameModule, $dirOrigin) = Devel::PerlySense::Util::aNamedArg(["nameModule", "dirOrigin"], @_);
+
+    # TODO: Move this into fileFindLookingInInc and pass in the dir
+    $self->setFindProject(dir => $dirOrigin);
+    
 #my $tt = Devel::TimeThis->new("fileFindModule");
     my $fileModuleBase = $self->fileFromModule($nameModule);
     $dirOrigin = dir($dirOrigin)->absolute;
@@ -2470,16 +2475,19 @@ sub dirFindLookingAround {
 
 =head2 fileFindLookingInInc($fileModuleBase)
 
-Find the file containing the $nameModule in @INC.
+Find the file containing the $nameModule in config:project/extra_inc,
+and @INC.
 
 Return the absolute file name, or undef if none could be found. Die on
 errors.
 
 =cut
+
 sub fileFindLookingInInc {
 	my ($fileModuleBase) = @_;
 
-    for my $dirCur (@INC) {
+    my @aDirInc = uniq( $self->oProject->aDirIncAbsolute(), @INC );
+    for my $dirCur (@aDirInc) {
         if(my $fileFound = $self->fileFoundInDir($dirCur, $fileModuleBase)) {
             return($fileFound);
         }
