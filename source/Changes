@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0191 -- 2011-07-31 21:07:42 UTC
+
 * Config project/inc_dir now used not only to set @INC when running
   programs, but also to find files and modules.
 
