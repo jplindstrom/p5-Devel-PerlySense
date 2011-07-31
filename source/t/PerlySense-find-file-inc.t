@@ -31,7 +31,7 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
             qr/ \Q$fileModuleTarget\E $/x,
             "Found file downwards before \@INC ok",
         );
-    }   
+    }
 
 
     {
@@ -45,7 +45,7 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
             qr/ \Q$fileModuleTarget\E $/x,
             "Found file in inc ok",
         );
-    }   
+    }
 }
 
 
