@@ -4,6 +4,14 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Config project/inc_dir now used not only to set @INC when running
+  programs, but also to find files and modules.
+
+* Running programs using the prepared shell commands now more solid
+  across various Emacs versions / platforms.
+
+
+
 0.0190 -- 2011-05-12 21:12:24 UTC
 
 * #68144: Unable to install PerlySense-0.0189
