@@ -10,6 +10,10 @@ Feature oriented Revision history for Devel-PerlySense
 * Running programs using the prepared shell commands now more solid
   across various Emacs versions / platforms.
 
+* Provide a default .PerlySenseProject/.perlcritic file when running
+  perly_sense create_project. (If you run this again, the existing project.yml
+  will be backed up.)
+
 
 
 0.0190 -- 2011-05-12 21:12:24 UTC
