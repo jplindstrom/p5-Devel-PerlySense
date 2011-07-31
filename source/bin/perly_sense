@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 $|++;
-use lib q|c:/Dokument/Project/Dev/CPAN/Devel-PerlySense/trunk/source/lib|;
-use lib "c:/Dokument/Project/Dev/CPAN/Devel-CoverX-Covered/trunk/source/lib";
+use lib q|/Users/johanl/Documents/Projects/Dev/CPAN2/Devel-PerlySense/source/lib|;
+use lib "/Users/johanl/Documents/Projects/Dev/CPAN2/Devel-CoverX-Covered/trunk/source/lib";
 
 use strict;
 

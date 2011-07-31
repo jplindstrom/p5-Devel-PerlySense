@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 24;
+use Test::More tests => 28;
 use Test::Exception;
 
 use File::Path;
@@ -80,23 +80,30 @@ is(
 );
 
 
+ok(
+    $oConfig->createFileCriticDefault(dirRoot => $dirTemp),
+    "Created new project Perl::Critic config",
+);
+ok(-e "$dirTemp/.PerlySenseProject/.perlcritic", "Perl::Critic config file created");
+
+
 
 
 
 diag("Re-create, rename file");
-my $globBackup = file("$dirTemp/.PerlySenseProject/project.yml") . ".*";
+my $globBackupProject = file("$dirTemp/.PerlySenseProject/project.yml") . ".*";
 
 ok($oConfig->rhConfig->{run_file}->[0]->{moniker} = "Blah", "Changed moniker");
 ok(
     $oConfig->createFileConfigDefault(dirRoot => $dirTemp),
     "Created new project config",
 );
-my @aFileBackup = glob($globBackup);
+my @aFileBackup = glob($globBackupProject);
 is(
     scalar @aFileBackup,
     1,
     "Original Project config file renamed",
-) or warn("GLOB ($globBackup)\n");
+) or warn("GLOB ($globBackupProject)\n");
 like(
     $oConfig->dirRoot,
     qr/t.data.config.temp$/,
@@ -107,6 +114,21 @@ is(
     "Test",
     "Sample key in structure is correct",
 );
+
+
+
+my $globBackupCritic = file("$dirTemp/.PerlySenseProject/.perlcritic") . ".*";
+
+ok(
+    $oConfig->createFileCriticDefault(dirRoot => $dirTemp),
+    "Created new Critic config",
+);
+my @aFileBackupCritic = glob($globBackupCritic);
+is(
+    scalar @aFileBackupCritic,
+    1,
+    "Original Critic config file renamed",
+) or warn("GLOB ($globBackupCritic)\n");
 
 
 

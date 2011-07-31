@@ -117,11 +117,10 @@ external:
         syntax: 0
 
         #Perl Critic
-        #PerlySense will point Critic to a .perlcritic file in this
+        #PerlySense will point Critic to a .perlcritic file in this (the .PerlySense)
         #directory. A default config file with fairly lenient rules is
         #provided.
         critic: 0
-
 
 
 #These are evaluated in order to find a way to run a file. First
@@ -183,6 +182,63 @@ debug_file:
 
 
 #EOF
+};
+
+
+
+
+
+=head2 nameFileCritic
+
+The Perl::Critic config file name relative to the root dir.
+
+Default: ./PerlySenseProject/.perlcritic
+
+=cut
+field "nameFileCritic" => ".PerlySenseProject/.perlcritic";
+
+
+
+
+
+
+=head2 textCriticDefault
+
+The default contents of the Perl::Critic config file
+
+=cut
+field "textCriticDefault" => q{#Default Perl Critic config file
+#
+#To enable Perl::Critic highlighting in your source code,
+#edit .PerlysenseProject/project.yml and set flymake/critic: 1
+#
+#Make sure you read the documentation for Perl::Critic, and especially
+#the config docs.
+#http://search.cpan.org/dist/Perl-Critic/lib/Perl/Critic.pm#CONFIGURATION
+#http://search.cpan.org/dist/Perl-Critic/lib/Perl/Critic/Config.pm
+#
+#You can obviously replace this file with your own Perl::Critic config
+#file, or a symlink to it.
+#
+
+severity  = 5
+
+theme = bugs + maintenance + security + complexity
+
+
+
+#This one must be disabled, since flymake will create temp files which
+#by definition never match the specified package name
+[-Modules::RequireFilenameMatchesPackage]
+
+
+
+[-Subroutines::ProhibitSubroutinePrototypes]
+[-Subroutines::ProhibitExplicitReturnUndef]
+
+
+
+#END
 };
 
 
@@ -275,10 +331,10 @@ current time.
 Return 1, or die on errors.
 
 =cut
-sub createFileConfigDefault {
-    my ($dirRoot) = Devel::PerlySense::Util::aNamedArg(["dirRoot"], @_);
 
-    my $fileConfig = file($dirRoot, $self->nameFileConfig);
+sub _createFileDefault {
+    my ($fileConfig, $text) = Devel::PerlySense::Util::aNamedArg(["file", "text"], @_);
+
     my $dirConfig = dirname($fileConfig);
     mkpath($dirConfig);
     -d $dirConfig or die("Could not create config directory ($dirConfig)\n");
@@ -292,10 +348,47 @@ sub createFileConfigDefault {
                 or die("Could not rename ($fileConfig) -> ($fileConfigBackup)\n");
     }
 
-    spew($fileConfig, $self->textConfigDefault) or
+    spew($fileConfig, $text) or
             die("Could not create config file ($fileConfig)\n");
 
+    return 1;
+}
+
+sub createFileConfigDefault {
+    my ($dirRoot) = Devel::PerlySense::Util::aNamedArg(["dirRoot"], @_);
+
+    $self->_createFileDefault(
+        file => file($dirRoot, $self->nameFileConfig),
+        text => $self->textConfigDefault,
+    );
+
     $self->loadConfig(dirRoot => $dirRoot);
+
+    return 1;
+}
+
+
+
+
+
+=head2 createFileCriticDefault(dirRoot => DIR)
+
+Create a Perl::Critic config file under $dirRoot with the default
+config. Create directories as needed.
+
+If there is an existing config file, rename it first to end with the
+current time.
+
+Return 1, or die on errors.
+
+=cut
+sub createFileCriticDefault {
+    my ($dirRoot) = Devel::PerlySense::Util::aNamedArg(["dirRoot"], @_);
+
+    $self->_createFileDefault(
+        file => file($dirRoot, $self->nameFileCritic),
+        text => $self->textCriticDefault,
+    );
 
     return 1;
 }

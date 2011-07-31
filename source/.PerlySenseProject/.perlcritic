@@ -3,7 +3,7 @@
 #Make sure you read the documentation for Perl::Critic, and especially
 #the config docs.
 #
-#http://search.cpan.org/dist/Perl-Critic/lib/Perl/Critic.pm
+#http://search.cpan.org/dist/Perl-Critic/lib/Perl/Critic.pm#CONFIGURATION
 #http://search.cpan.org/dist/Perl-Critic/lib/Perl/Critic/Config.pm
 
 
