@@ -2240,6 +2240,7 @@ sub createProject {
 
     my $oConfig = Devel::PerlySense::Config::Project->new();
     $oConfig->createFileConfigDefault(dirRoot => $dir);
+    $oConfig->createFileCriticDefault(dirRoot => $dir);
 
     ###TODO: assign the config to $self->oConfigProject
 
