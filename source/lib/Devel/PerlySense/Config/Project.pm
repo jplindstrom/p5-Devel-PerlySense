@@ -122,6 +122,7 @@ external:
         #provided.
         critic: 0
 
+        run_from: file_directory
 
 #These are evaluated in order to find a way to run a file. First
 #match is used.
