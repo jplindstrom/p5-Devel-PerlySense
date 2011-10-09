@@ -522,11 +522,12 @@ failed flymake run).
 
 =cut
 sub flymakeFile {
-    my ($file)   = Devel::PerlySense::Util::aNamedArg(["file"], @_);
-    my $run_from = $self->oPerlySense->rhConfig->{external}{editor}{emacs}{flymake}{run_from}
-        || 'file_directory';
+    my ($file) = Devel::PerlySense::Util::aNamedArg(["file"], @_);
 
-    if($self->oPerlySense->rhConfig->{external}{editor}{emacs}{flymake}{syntax}) {
+    my $flymakeConfig = $self->oPerlySense->rhConfig->{external}{editor}{emacs}{flymake} || {};
+    if($flymakeConfig->{syntax}) {
+        my $run_from = $flymakeConfig->{run_from} || 'file_directory';
+
         my $rhConfigRun = $self->rhRunFile(
             file => $file,
             rhConfigType =>  {
@@ -541,7 +542,7 @@ sub flymakeFile {
         system( $rhConfigRun->{command_run} );
     }
 
-    if($self->oPerlySense->rhConfig->{external}{editor}{emacs}{flymake}{critic}) {
+    if($flymakeConfig->{critic}) {
         ###TODO: don't run if syntax errors found
 
         my $fileConfigCritic = file(
