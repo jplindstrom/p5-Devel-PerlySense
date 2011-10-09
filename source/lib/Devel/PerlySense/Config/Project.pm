@@ -122,6 +122,9 @@ external:
         #provided.
         critic: 0
 
+        #Run Flymake from:
+        # * file_directory: the directory in which the file is located (default)
+        # * source_root_directory (the PerlySense project root dir)
         run_from: file_directory
 
 #These are evaluated in order to find a way to run a file. First
