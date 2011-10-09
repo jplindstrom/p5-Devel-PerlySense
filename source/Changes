@@ -4,6 +4,11 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Make the run directory for Flymake configurable. Thanks to Jan
+  Tatarik for the patch!
+
+
+
 0.0191 -- 2011-07-31 21:07:42 UTC
 
 * Config project/inc_dir now used not only to set @INC when running
