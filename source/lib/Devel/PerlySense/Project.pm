@@ -531,7 +531,8 @@ sub flymakeFile {
         my $rhConfigRun = $self->rhRunFile(
             file => $file,
             rhConfigType =>  {
-                command => q{perl -c ${INC} "${SOURCE_FILE}" 2>&1 | perl -ne " /Subroutine [\\w:]+ redefined at/ or print"},
+                command => q{perl -c ${INC} "${SOURCE_FILE}" 2>&1 | perl -ne " /Subroutine [\\w:]+ redefined at/ or print"}
+                     . q{| perl -pe 's|(at ).*?([^/]* line \d+)|\1\2|'},
                 moniker => "Flymake",
                 rex => "",
                 run_from => $run_from,
