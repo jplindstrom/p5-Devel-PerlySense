@@ -41,7 +41,7 @@
 
 (defun scp/shell-command-to-string (dir command stdin-args)
   "Run 'command' using a possibly already prepared shell and
-print 'stdin-args' to it. Prepare for the next calll.
+print 'stdin-args' to it. Prepare for the next call.
 
 Return the output of running 'command', or nil on error."
   (let ((abs-dir (expand-file-name dir)))
@@ -65,10 +65,11 @@ Return the output of running 'command', or nil on error."
 
     (with-current-buffer scp/buffer-command-running
       (let* (
-            (raw-output (buffer-string))
-            (output
+             (raw-output (buffer-string))
+             (output
              ; Added by some Emacs call-process apparently
-             (replace-regexp-in-string "\nProcess perly_sense --stdin finished\n" "" raw-output))
+              (replace-regexp-in-string "\nProcess perly_sense --stdin finished\n" "" raw-output))
+             )
 ;;        (message "Pool output: (%s)" output)
         (kill-buffer scp/buffer-command-running)
         (setq scp/buffer-command-running nil)
