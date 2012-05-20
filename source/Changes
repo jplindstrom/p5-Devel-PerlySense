@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0193 -- 2012-05-20 18:09:05 UTC
+
 * Catch exceptions during flymake and log them to avoid returning a
   positive error code that flymake will interpret as "Configuration
   error has occurred while running" etc.
