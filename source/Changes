@@ -4,6 +4,10 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Catch exceptions during flymake and log them to avoid returning a
+  positive error code that flymake will interpret as "Configuration
+  error has occurred while running" etc.
+
 * Improve error reporting for badly formed YAML config files.
 
 

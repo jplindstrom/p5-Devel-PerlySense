@@ -500,7 +500,12 @@ sub main_perly_sense {
     } elsif($command eq "flymake_file") {
         $file or syntax("Missing option --file");
 
-        $oPs->flymakeFile(file => $file);
+        eval { $oPs->flymakeFile(file => $file) };
+        if(my $err = $@) {
+            chomp($err);
+            debug($err);
+            print $err;
+        }
 
     } elsif($command eq "create_project") {
         $dir ||= ".";
