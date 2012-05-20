@@ -202,7 +202,7 @@ Default: ./PerlySenseProject/.perlcritic
 field "nameFileCritic" => ".PerlySenseProject/.perlcritic";
 
 
-
+use LWP::UserAgent;
 
 
 
