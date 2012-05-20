@@ -4,6 +4,10 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Improve error reporting for badly formed YAML config files.
+
+
+
 * #70203: Missing close paren in emacs lisp
   _Finally_ fixed pathetic elisp syntax error w/ missing closing paren.
 

@@ -1,11 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Test::Exception;
 
 use File::Path;
 use Path::Class;
+use File::Slurp qw/ write_file /;
 
 use Data::Dumper;
 
@@ -147,12 +148,16 @@ is(
 
 
 
+#parse config file with syntax error
+my $fileConfig = file($dirTemp, $oConfig->nameFileConfig) . "";
+write_file($fileConfig, "lskdjf  sdf this isn't YAML at all\n\n");
+throws_ok(
+    sub { $oConfig->loadConfig(dirRoot => $dirTemp); },
+    qr/Could not read \.PerlySense Project config file \(.+?\): YAML::Tiny /,
+    "Died correctly on invalid YAML",
+);
 
 
-#parse file with syntax error
-
-
-                            
 
 
 __END__

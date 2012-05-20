@@ -307,8 +307,8 @@ sub loadConfig {
     my $fileConfig = file($dirRoot, $self->nameFileConfig);
     my $sourceConfig = slurp($fileConfig) or
             die("Could not open config file ($fileConfig)\n");
-    my ($rhConfig) = YAML::Tiny::Load($sourceConfig);
-    $rhConfig or die($YAML::Tiny::errstr);
+    my ($rhConfig) = eval { YAML::Tiny::Load($sourceConfig) };
+    $rhConfig or die("Could not read .PerlySense Project config file ($fileConfig): " . $YAML::Tiny::errstr . "\n");
 
     $self->dirRoot($dirRoot);
     $self->rhConfig($rhConfig);
