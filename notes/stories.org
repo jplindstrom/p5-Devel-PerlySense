@@ -1822,7 +1822,7 @@ Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Docum
 **** Mark method to be current, or toggle if already current
 **** Set whatever var
 ** Mark many methods to be run in Test::Class
-** TODO Assist with test count for Test::Class
+** Assist with test count for Test::Class
 *** Not as important, use no_plan instead anyway
 *** prove output
 
