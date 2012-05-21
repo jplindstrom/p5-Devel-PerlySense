@@ -449,7 +449,7 @@ See the POD docs for how to enable flymake."
                     (if ps/tc/current-method
                         (format "^%s$" ps/tc/current-method)
                       nil))
-              
+
             (ps/run-file-run-command
              ;;             (ps/run-file-get-command command-run type-source-file)
              command-run
@@ -653,7 +653,6 @@ project was found"
     (if (string= project-dir "")
         nil
       project-dir)))
-
 
 
 (defmacro ps/with-project-dir (&rest body)
