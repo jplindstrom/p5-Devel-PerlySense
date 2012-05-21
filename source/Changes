@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0194 -- 2012-05-21 12:58:40 UTC
+
 * Fixed dzil config re: $VERSION variable
 
 
