@@ -13,7 +13,7 @@
 
 (require 'pc-select)  ;; next-line-nomark
 (require 'gud)        ;; perldb
-
+(require 'grep)       ;; grep-find (or rather grep-host-defaults-alist)
 
 
 

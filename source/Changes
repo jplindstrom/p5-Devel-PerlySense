@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Fixed problem during startup where C-o f a won't work until the
+  "grep" package is loaded (it's autoloaded during normal interactive
+  use).
+
+
+
 0.0195 -- 2012-05-21 13:55:44 UTC
 
 * Fixed t/PerlySense-find-file-inc.t which fails if there is no
