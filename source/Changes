@@ -4,6 +4,10 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Fixed dzil config re: $VERSION variable
+
+
+
 0.0193 -- 2012-05-20 18:09:05 UTC
 
 * Catch exceptions during flymake and log them to avoid returning a
@@ -11,8 +15,6 @@ Feature oriented Revision history for Devel-PerlySense
   error has occurred while running" etc.
 
 * Improve error reporting for badly formed YAML config files.
-
-
 
 * #70203: Missing close paren in emacs lisp
   _Finally_ fixed pathetic elisp syntax error w/ missing closing paren.

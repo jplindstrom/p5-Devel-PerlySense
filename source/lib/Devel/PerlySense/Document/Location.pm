@@ -22,7 +22,6 @@ use strict;
 use warnings;
 
 package Devel::PerlySense::Document::Location;
-our $VERSION = '0.01';
 
 
 

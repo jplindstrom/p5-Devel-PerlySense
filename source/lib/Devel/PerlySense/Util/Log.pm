@@ -17,7 +17,6 @@ our @EXPORT = (
        debug
        /);
 
-our $VERSION = '0.01';
 
 
 
