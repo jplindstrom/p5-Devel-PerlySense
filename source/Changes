@@ -4,6 +4,11 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Fixed t/PerlySense-find-file-inc.t which fails if there is no
+  .PerlySenseProject in the build directory (which there typically
+  isn't).
+
+
 0.0194 -- 2012-05-21 12:58:40 UTC
 
 * Fixed dzil config re: $VERSION variable
