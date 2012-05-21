@@ -8,6 +8,10 @@ Feature oriented Revision history for Devel-PerlySense
   "grep" package is loaded (it's autoloaded during normal interactive
   use).
 
+* Changed commands that run from the Project Directory so that they
+  don't blow up if there is no Project Directory. Instead just run
+  from the current directory.
+
 
 
 0.0195 -- 2012-05-21 13:55:44 UTC

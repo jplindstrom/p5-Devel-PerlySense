@@ -660,13 +660,17 @@ project was found"
 temporarily set to the project dir of the current buffer.
 
 The value returned is the value of the last form in BODY."
-  (let ((dir (ps/project-dir)))
-    (if (not dir)
-        (message "Could not identify a Project Directory")
-      `(progn
-         (ps/with-default-directory
-          ,dir
-          ,@body)))))
+  (let ((dir
+         (or
+          (ps/project-dir)
+          (progn
+            (message "Could not identify a Project Directory, using current directory instead.")
+            default-directory
+            ))))
+    `(progn
+       (ps/with-default-directory
+        ,dir
+        ,@body))))
 
 
 
