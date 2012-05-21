@@ -593,7 +593,7 @@ calling command."
          (doc-type       (alist-value result-alist "doc_type"))
          (text           (alist-value result-alist "text"))
          )
-    (if (not (string= text ""))
+    (if (not (or (not text) (string= text "")))
         (ps/display-doc-message-or-buffer doc-type name text)
       (message "Nothing found")
       )
