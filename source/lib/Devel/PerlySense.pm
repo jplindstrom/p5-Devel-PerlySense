@@ -1662,7 +1662,7 @@ Devel::PerlySense::Project object.
 Default: A Devel::PerlySense::Project::Unknown object.
 
 =cut
-field "oProject" => Devel::PerlySense::Project::Unknown->new();
+field "oProject" => undef;
 
 
 
@@ -1732,6 +1732,7 @@ Create new PerlySense object.
 sub new() {
     my $self = bless {}, shift;
     $self->oBookmarkConfig(Devel::PerlySense::BookmarkConfig->new( oPerlySense => $self ));
+    $self->oProject(Devel::PerlySense::Project::Unknown->new( oPerlySense => $self ));
     return($self);
 }
 
