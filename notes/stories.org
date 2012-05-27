@@ -4969,7 +4969,72 @@ color: user; presence: checkin that day; height: size of commit
 
 
 
-
+* Completion
+** PerlySense
+*** Once Meta is done
+*** Queue up an Index Job
+**** Ensure Indexer is running
+** Symbol Indexer
+*** One per User
+**** Workspace in ~/.PerlySense/indexer/todo/
+***** file.job
+**** Done ones in ~/.PerlySense/indexer/done
+*** Ensured by
+**** PerlySense add an Index Job
+*** Watch Index Jobs
+*** Pick the most recent one, and work backwards
+*** Index Job
+**** file
+**** project? needed? can be deduced?
+*** Re-index Meta in the Project Repository
+**** Repository in ~/.PerlySense/repository/PATH/db/index.sqlite
+**** Replace the contents for the file
+**** If there are sub classes
+***** Re-analyze and re-index those
+*** Repository
+**** Tables
+***** file
+****** id
+****** filename
+***** symbol
+****** id
+****** name
+****** full_name ?
+****** file_id
+****** row
+****** column
+****** symbol_type_id
+****** documentation
+****** package_id NULL
+******* if known, e.g. $self, $class
+******* or datatype_id?
+***** symbol_type
+****** id
+****** name
+******* package
+******* sub
+******* method
+******* attribute
+******* variable?
+****** description
+***** package
+****** id
+****** name
+*** Once idle
+**** Watch for jobs
+**** Eventually exit, waiting to be restarted again
+*** How to handle renamed / deletions?
+**** Once indexer is idle, run through files and purge missing files from index 
+** Symbol Server
+*** Web server, accepting from localhost
+*** /symbol
+**** param
+***** name=
+***** name_starts_with=
+***** name_contains
+***** symbol_type=
+**** Returns
+***** 
 * Other
 ** Docs
 
