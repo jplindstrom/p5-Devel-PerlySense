@@ -173,7 +173,7 @@ Cache all modules in the project that --dir belongs to.
 Cache all the modules in @INC.
 
 This is a useful thing to do after installation (and after each
-upgrade), but it will take a wile so put it in the background and let
+upgrade), but it will take a while so put it in the background and let
 it churn away at those modules.
 
 =over 4
