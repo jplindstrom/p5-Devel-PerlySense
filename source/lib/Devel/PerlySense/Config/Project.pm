@@ -122,6 +122,9 @@ external:
         critic: 0
 
 
+#Run File Configuration.
+#"C-o C-r" to run "command" and "C-u C-o C-r" to run alternate_command
+#
 #These are evaluated in order to find a way to run a file. First
 #match is used.
 run_file:
@@ -154,6 +157,9 @@ run_file:
 
 
 
+#Run File in Debugger Configuration.
+#"C-o r d" to debug "command" and "C-u C-o r d" to debug alternate_command
+#
 #These are evaluated in order to find a way to debug a file. First
 #match is used.
 debug_file:
