@@ -425,9 +425,9 @@ See the POD docs for how to enable flymake."
 
 
 
-(defun ps/run-file ()
+(defun ps/run-file (&optional use-alternate-command)
   "Run the current file"
-  (interactive)
+  (interactive "P")
 
   ;;If it's the compilation buffer, recompile, else run file
   (if (string= (buffer-name) "*compilation*")
@@ -437,7 +437,11 @@ See the POD docs for how to enable flymake."
         )
     (message "Run File...")
 
-    (let* ((result-alist (ps/command-on-current-file-location "run_file"))
+    (let* ((alternate-command-option
+            (if use-alternate-command "--use_alternate_command" ""))
+           (result-alist (ps/command-on-current-file-location
+                          "run_file"
+                          alternate-command-option))
            (dir-run-from (alist-value result-alist "dir_run_from"))
            (command-run (alist-value result-alist "command_run"))
            (type-source-file (alist-value result-alist "type_source_file"))
