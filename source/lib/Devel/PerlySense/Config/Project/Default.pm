@@ -48,7 +48,7 @@ sub new(@) {
     my $pkg = shift;
 
     my $self = $pkg->SUPER::new(@_);
-    
+
     my $sourceConfig = $self->textConfigDefault;
     my ($rhConfig) = eval { YAML::Tiny::Load($sourceConfig) };
     $rhConfig or die($YAML::Tiny::errstr);
