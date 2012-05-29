@@ -772,8 +772,9 @@ Project (see below).
 
 Files can also be run using an Alternate Command using C<C-u C-o C-r>
 if you have specified one in the config file. This might be useful if
-you want to re-generate or retart something before running the file,
-but only sometimes.
+you want to re-generate or restart something before running the file,
+but only sometimes. Or, maybe you want to run some tests without the
+-v flag or something.
 
 The file is run from the Project root directory or from the file
 directory depending on the file type, and the @INC is set
@@ -788,7 +789,7 @@ with .yml acceptance test data files and a corresponding yml-runner.pl
 script. You can set up the config so you can type C<C-o C-r> while
 editing the .yaml file to run that test. And if you need to regenerate
 some fixtures or something before running the yml test, you can
-configure an Alternate Command to do that (run with C<C-u C-o
+configure the Alternate Command to do that (run with C<C-u C-o
 C-r>). Refer to the L<Devel::PerlySense::Cookbook> for details.
 
 If any warnings, errors or test failures are encountered, they are
@@ -909,8 +910,12 @@ Note that if you have spaces in your file names, this might not work
 (it's a perldb thing).
 
 The debugger is started according to the file source type, which is
-determined by the file name (see the config file). This can be
-configured similar to how files are run (see above).
+determined by the file name (see the config file). 
+
+You can also use C<C-u C-o r d> to Debug with an Alternate Command,
+just like with Run File.
+
+This can all be configured similar to how files are run (see above).
 
 Most files are run from the Project root directory by default.
 
