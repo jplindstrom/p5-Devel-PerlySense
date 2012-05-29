@@ -70,25 +70,26 @@ sub main {
 sub main_perly_sense {
     my ($oPs) = @_;
 
-    my ($dirOrigin, $fileOrigin, $module, $dir, $file, $row, $col, $sub, $nameClass, $nameMethod, $clearCache, $widthDisplay, $typeIo);
+    my ($dirOrigin, $fileOrigin, $module, $dir, $file, $row, $col, $sub, $nameClass, $nameMethod, $clearCache, $widthDisplay, $typeIo, $useAlternateCommand);
     my @aShow;
     debug("CWD: (" . getcwd() . "), ARGV: (" . join(" ", map { "|$_|" } ("perly_sense",  @ARGV)) . ")");
 
     GetOptions(
-        "module:s"        => \$module,
-        "file:s"          => \$file,
-        "dir:s"           => \$dir,
-        "row:i"           => \$row,
-        "col:i"           => \$col,
-        "sub:s"           => \$sub,
-        "file_origin:s"   => \$fileOrigin,
-        "dir_origin:s"    => \$dirOrigin,
-        "class_name:s"    => \$nameClass,
-        "method_name:s"   => \$nameMethod,
-        "show:s"          => \@aShow,
-        "clear_cache"     => \$clearCache,
-        "width_display:s" => \$widthDisplay,
-        "io_type:s"       => \$typeIo,
+        "module:s"              => \$module,
+        "file:s"                => \$file,
+        "dir:s"                 => \$dir,
+        "row:i"                 => \$row,
+        "col:i"                 => \$col,
+        "sub:s"                 => \$sub,
+        "file_origin:s"         => \$fileOrigin,
+        "dir_origin:s"          => \$dirOrigin,
+        "class_name:s"          => \$nameClass,
+        "method_name:s"         => \$nameMethod,
+        "show:s"                => \@aShow,
+        "clear_cache"           => \$clearCache,
+        "use_alternate_command" => \$useAlternateCommand,
+        "width_display:s"       => \$widthDisplay,
+        "io_type:s"             => \$typeIo,
         );
     my ($command) = @ARGV;
     $command or syntax("Missing command");
@@ -473,10 +474,12 @@ sub main_perly_sense {
 
     } elsif($command eq "run_file") {
         $file or syntax("Missing option --file");
+        my $commandKey = "command";
+        $useAlternateCommand and $commandKey = "alternate_command";
 
         eval {
             print $oEditor->formatOutputDataStructure(
-                rhData => $oPs->rhRunFile(file => $file),
+                rhData => $oPs->rhRunFile(file => $file, keyConfigCommand => $commandKey),
             );
         };
         if(my $err = $@) {
@@ -486,10 +489,12 @@ sub main_perly_sense {
 
     } elsif($command eq "debug_file") {
         $file or syntax("Missing option --file");
+        my $commandKey = "command";
+        $useAlternateCommand and $commandKey = "alternate_command";
 
         eval {
             print $oEditor->formatOutputDataStructure(
-                rhData => $oPs->rhDebugFile(file => $file),
+                rhData => $oPs->rhDebugFile(file => $file, keyConfigCommand => $commandKey),
             );
         };
         if(my $err = $@) {

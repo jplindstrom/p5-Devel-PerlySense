@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 34;
+use Test::More tests => 38;
 use Test::Exception;
 
 use Data::Dumper;
@@ -213,6 +213,36 @@ diag("Run test .pl file inside dir with config");
         $rhRun->{dir_run_from},
         qr|project.with-perlysenseproject.source.bogus.bin|,
         "    dir_run_from is file dir",
+    );
+
+}
+
+
+
+
+diag("Run Alernate Command test .pl file inside dir with config");
+{
+    my $dirBase = "data/project/with-perlysenseproject";
+    my $dirProject = "$dirBase/source";
+    my $dirBin = "$dirProject/bogus/bin";
+    my $fileBin = "$dirBin/worms.pl";
+
+    ok(
+        my $oPerlySense = Devel::PerlySense->new(),
+        "New PerlySense object ok",
+    );
+    ok(
+        my $rhRun = $oPerlySense->rhRunFile(
+            file               => $fileBin,
+            keyConfigCommand => "alternate_command",
+        ),
+        "rhRunFile returned a data structure with keyConfigCommand",
+    );
+    is($rhRun->{type_source_file}, "Script", "    type_source_file");
+    like(
+        $rhRun->{command_run},
+        qr|Alternate File|,
+        "    command_run is the alternate_command one",
     );
 
 }

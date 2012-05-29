@@ -766,9 +766,15 @@ C<C-o C-r> -- Run the file of the current buffer using the Compilation
 mode.
 
 Files are run according to the source type, which is determined by the
-file name (see the config file).  The default for .t files is to run
+file name (see the config file). The default for .t files is to run
 "prove -v", for .pm files "perl -c", etc. This can be configured per
 Project (see below).
+
+Files can also be run using an Alternate Command using C<C-u C-o C-r>
+if you have specified one in the config file. This might be useful if
+you want to re-generate or restart something before running the file,
+but only sometimes. Or, maybe you want to run some tests without the
+-v flag or something.
 
 The file is run from the Project root directory or from the file
 directory depending on the file type, and the @INC is set
@@ -781,8 +787,10 @@ not just Perl source files.
 As a taste of what's possible, imagine that you have a test framework
 with .yml acceptance test data files and a corresponding yml-runner.pl
 script. You can set up the config so you can type C<C-o C-r> while
-editing the .yaml file to run that test. Refer to the
-L<Devel::PerlySense::Cookbook> for details.
+editing the .yaml file to run that test. And if you need to regenerate
+some fixtures or something before running the yml test, you can
+configure the Alternate Command to do that (run with C<C-u C-o
+C-r>). Refer to the L<Devel::PerlySense::Cookbook> for details.
 
 If any warnings, errors or test failures are encountered, they are
 highlighted in the B<*compilation*> buffer. Press RET on a highlighted
@@ -802,6 +810,9 @@ source fixing errors and the .t file isn't visible.
 
 C<C-o r r> -- If not even the B<*compilation*> buffer is visible,
 issue Re-Run File from anywhere to bring it up and re-run.
+
+Note: this will re-run whatever is displayed in the B<*compilation*>
+buffer.
 
 
 =head3 Go to Run-buffer
@@ -899,8 +910,12 @@ Note that if you have spaces in your file names, this might not work
 (it's a perldb thing).
 
 The debugger is started according to the file source type, which is
-determined by the file name (see the config file). This can be
-configured similar to how files are run (see above).
+determined by the file name (see the config file). 
+
+You can also use C<C-u C-o r d> to Debug with an Alternate Command,
+just like with Run File.
+
+This can all be configured similar to how files are run (see above).
 
 Most files are run from the Project root directory by default.
 
@@ -2135,7 +2150,7 @@ sub raFileProjectOther {
 
 
 
-=head2 rhRunFile(file => $fileSource)
+=head2 rhRunFile(file => $fileSource, [ keyConfigCommand => "command" ])
 
 Figure out what type of source file $fileSource is, and how it should
 be run.
@@ -2159,14 +2174,14 @@ sub rhRunFile {
     $self->setFindProject(file => $file)
             or die("Could not identify any PerlySense Project\n");
 
-    return $self->oProject->rhRunFile(file => $file);
+    return $self->oProject->rhRunFile(@_);
 }
 
 
 
 
 
-=head2 rhDebugFile(file => $fileSource)
+=head2 rhDebugFile(file => $fileSource, [ keyConfigCommand => "command" ])
 
 Figure out what type of source file $fileSource is, and how it should
 be debugged.
@@ -2190,7 +2205,7 @@ sub rhDebugFile {
     $self->setFindProject(file => $file)
             or die("Could not identify any PerlySense Project\n");
 
-    return $self->oProject->rhDebugFile(file => $file);
+    return $self->oProject->rhDebugFile(@_);
 }
 
 
