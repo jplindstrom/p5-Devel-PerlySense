@@ -61,6 +61,7 @@ external:
 run_file:
   -
     command: "prove --nocolor -v ${INC} \"${SOURCE_FILE}\""
+    alternate_command: "prove --nocolor ${INC} \"${SOURCE_FILE}\""
     moniker: Test
     rex: \.t$
     run_from: source_root_directory
