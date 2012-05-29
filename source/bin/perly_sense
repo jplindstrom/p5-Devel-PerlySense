@@ -479,7 +479,7 @@ sub main_perly_sense {
 
         eval {
             print $oEditor->formatOutputDataStructure(
-                rhData => $oPs->rhRunFile(file => $file, keyConfigCommand => $commandKey ),
+                rhData => $oPs->rhRunFile(file => $file, keyConfigCommand => $commandKey),
             );
         };
         if(my $err = $@) {
@@ -489,10 +489,12 @@ sub main_perly_sense {
 
     } elsif($command eq "debug_file") {
         $file or syntax("Missing option --file");
+        my $commandKey = "command";
+        $useAlternateCommand and $commandKey = "alternate_command";
 
         eval {
             print $oEditor->formatOutputDataStructure(
-                rhData => $oPs->rhDebugFile(file => $file),
+                rhData => $oPs->rhDebugFile(file => $file, keyConfigCommand => $commandKey),
             );
         };
         if(my $err = $@) {

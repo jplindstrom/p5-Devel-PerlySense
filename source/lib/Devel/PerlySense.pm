@@ -2176,7 +2176,7 @@ sub rhRunFile {
 
 
 
-=head2 rhDebugFile(file => $fileSource)
+=head2 rhDebugFile(file => $fileSource, [ keyConfigCommand => "command" ])
 
 Figure out what type of source file $fileSource is, and how it should
 be debugged.
@@ -2200,7 +2200,7 @@ sub rhDebugFile {
     $self->setFindProject(file => $file)
             or die("Could not identify any PerlySense Project\n");
 
-    return $self->oProject->rhDebugFile(file => $file);
+    return $self->oProject->rhDebugFile(@_);
 }
 
 

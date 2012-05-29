@@ -470,14 +470,18 @@ See the POD docs for how to enable flymake."
 
 
 
-(defun ps/debug-file ()
+(defun ps/debug-file (&optional use-alternate-command)
   "Debug the current file"
-  (interactive)
+  (interactive "P")
 
   (if (not (buffer-file-name))
       (message "No file to debug")
     (message "Debug File...")
-    (let* ((result-alist (ps/command-on-current-file-location "debug_file"))
+    (let* ((alternate-command-option
+            (if use-alternate-command "--use_alternate_command" ""))
+           (result-alist (ps/command-on-current-file-location
+                          "debug_file"
+                          alternate-command-option))
            (dir-debug-from (alist-value result-alist "dir_debug_from"))
            (command-debug (alist-value result-alist "command_debug"))
            (message-string (alist-value result-alist "message")))
