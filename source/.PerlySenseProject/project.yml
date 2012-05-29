@@ -90,6 +90,7 @@ run_file:
 debug_file:
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    command: "perl -c ${INC} \"${SOURCE_FILE}\""
     moniker: Test
     rex: \.t$
     debug_from: source_root_directory
