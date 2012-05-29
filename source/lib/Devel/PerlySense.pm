@@ -579,6 +579,14 @@ you'll get to edit the command line with a sensible default chosen from:
 
 =back
 
+When editing the ack command you can use the following keys to set options
+
+  "C-c w" toggle  -w
+  "C-c q" toggle  -Q
+  "C-c a" use    --all
+  "C-c p" use    --perl
+  "C-c s" use    --sql
+
 For details, refer to the L<ack> documentation (the program was
 installed as a dependency of PerlySense).
 
@@ -1602,7 +1610,6 @@ use strict;
 use warnings;
 
 package Devel::PerlySense;
-our $VERSION = '0.0187';
 
 
 
@@ -1663,7 +1670,7 @@ Devel::PerlySense::Project object.
 Default: A Devel::PerlySense::Project::Unknown object.
 
 =cut
-field "oProject" => Devel::PerlySense::Project::Unknown->new();
+field "oProject" => undef;
 
 
 
@@ -1733,6 +1740,7 @@ Create new PerlySense object.
 sub new() {
     my $self = bless {}, shift;
     $self->oBookmarkConfig(Devel::PerlySense::BookmarkConfig->new( oPerlySense => $self ));
+    $self->oProject(Devel::PerlySense::Project::Unknown->new( oPerlySense => $self ));
     return($self);
 }
 

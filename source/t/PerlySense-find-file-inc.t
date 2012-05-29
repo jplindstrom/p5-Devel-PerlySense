@@ -1,11 +1,12 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 use File::Basename;
 use File::Spec::Functions;
+use Path::Class;
 
 use lib "../lib";
 
@@ -14,13 +15,13 @@ use_ok("Devel::PerlySense");
 BEGIN { -d "t" and chdir("t"); }
 
 
-ok(my $oPs = Devel::PerlySense->new(), "new ok");
 
 
 {
     local @INC = (@INC, "data/inc-lib");
 
     {
+        ok(my $oPs = Devel::PerlySense->new(), "new ok");
         my $dirData = "data/simple-lib/lib";
         my $dirOrigin = $dirData;
         my $nameModule = "Game::Event::Timed";
@@ -35,7 +36,8 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
 
 
     {
-        my $dirData = "data/inc-lib";
+        ok(my $oPs = Devel::PerlySense->new(), "new ok");
+        my $dirData = file("data/inc-lib")->absolute . "";
         my $dirOrigin = "/";
         my $nameModule = "Game::Event::Timed";
         my $fileModuleTarget = catfile($dirData, "Game", "Event", "Timed.pm");

@@ -20,7 +20,6 @@ our @EXPORT = (
        filePathNormalize
        /);
 
-our $VERSION = '0.01';
 
 
 
