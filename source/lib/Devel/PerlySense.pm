@@ -579,6 +579,14 @@ you'll get to edit the command line with a sensible default chosen from:
 
 =back
 
+When editing the ack command you can use the following keys to set options
+
+  "C-c w" toggle  -w
+  "C-c q" toggle  -Q
+  "C-c a" use    --all
+  "C-c p" use    --perl
+  "C-c s" use    --sql
+
 For details, refer to the L<ack> documentation (the program was
 installed as a dependency of PerlySense).
 
