@@ -142,8 +142,9 @@ sub textRenderTemplate {
     my ($template, $rhParam) = @_;
 
     my $rex = join("|", map { quotemeta } sort keys %$rhParam);
+    my $rhParamEnv = { %ENV, %$rhParam };
 
-    $template =~ s/\${($rex)}/ $rhParam->{$1} || "" /eg;  ###TODO: should be //
+    $template =~ s/\${($rex)}/ $rhParamEnv->{$1} || "" /eg;  ###TODO: should be //
 
     return $template;
 }
