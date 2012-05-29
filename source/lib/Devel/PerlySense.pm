@@ -2145,7 +2145,7 @@ sub raFileProjectOther {
 
 
 
-=head2 rhRunFile(file => $fileSource)
+=head2 rhRunFile(file => $fileSource, [ keyConfigCommand => "command" ])
 
 Figure out what type of source file $fileSource is, and how it should
 be run.
@@ -2169,7 +2169,7 @@ sub rhRunFile {
     $self->setFindProject(file => $file)
             or die("Could not identify any PerlySense Project\n");
 
-    return $self->oProject->rhRunFile(file => $file);
+    return $self->oProject->rhRunFile(@_);
 }
 
 

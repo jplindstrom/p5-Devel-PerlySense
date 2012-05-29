@@ -25,13 +25,13 @@ run_file:
     run_from: source_root_directory
   -
     command: "perl -c ${INC} \"${SOURCE_FILE}\""
-    alternate_command: ""
+    alternate_command: "Alternate Module"
     moniker: Module
     rex: \.pm$
     run_from: source_root_directory
   -
     command: "perl ${INC} \"${SOURCE_FILE}\""
-    alternate_command: ""
+    alternate_command: "Alternate File"
     moniker: Script
     rex: \.pl$
     run_from: file_directory
