@@ -127,16 +127,19 @@ external:
 run_file:
   -
     command: "prove --nocolor -v ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Test
     rex: \.t$
     run_from: source_root_directory
   -
     command: "perl -c ${INC} \"${SOURCE_FILE}\" 2>&1| perl -ne \"/Subroutine \\w+ redefined at/ or print\""
+    alternate_command: ""
     moniker: Module
     rex: \.pm$
     run_from: source_root_directory
   -
     command: "perl ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Script
     rex: \.pl$
     run_from: file_directory
@@ -144,6 +147,7 @@ run_file:
   #This is a catch-all for all other types of files
   -
     command: "perl ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: 'Script (no .pl)'
     rex: .
     run_from: file_directory
@@ -155,17 +159,20 @@ run_file:
 debug_file:
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Test
     rex: \.t$
     debug_from: source_root_directory
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Script
     rex: \.pl$
     debug_from: file_directory
 
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Module
     rex: \.pm$
     debug_from: source_root_directory
@@ -173,6 +180,7 @@ debug_file:
   #This is a catch-all for all other types of files
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: 'Script (no .pl)'
     rex: .
     debug_from: file_directory

@@ -766,9 +766,14 @@ C<C-o C-r> -- Run the file of the current buffer using the Compilation
 mode.
 
 Files are run according to the source type, which is determined by the
-file name (see the config file).  The default for .t files is to run
+file name (see the config file). The default for .t files is to run
 "prove -v", for .pm files "perl -c", etc. This can be configured per
 Project (see below).
+
+Files can also be run using an Alternate Command using C<C-u C-o C-r>
+if you have specified one in the config file. This might be useful if
+you want to re-generate or retart something before running the file,
+but only sometimes.
 
 The file is run from the Project root directory or from the file
 directory depending on the file type, and the @INC is set
@@ -781,8 +786,10 @@ not just Perl source files.
 As a taste of what's possible, imagine that you have a test framework
 with .yml acceptance test data files and a corresponding yml-runner.pl
 script. You can set up the config so you can type C<C-o C-r> while
-editing the .yaml file to run that test. Refer to the
-L<Devel::PerlySense::Cookbook> for details.
+editing the .yaml file to run that test. And if you need to regenerate
+some fixtures or something before running the yml test, you can
+configure an Alternate Command to do that (run with C<C-u C-o
+C-r>). Refer to the L<Devel::PerlySense::Cookbook> for details.
 
 If any warnings, errors or test failures are encountered, they are
 highlighted in the B<*compilation*> buffer. Press RET on a highlighted
@@ -802,6 +809,9 @@ source fixing errors and the .t file isn't visible.
 
 C<C-o r r> -- If not even the B<*compilation*> buffer is visible,
 issue Re-Run File from anywhere to bring it up and re-run.
+
+Note: this will re-run whatever is displayed in the B<*compilation*>
+buffer.
 
 
 =head3 Go to Run-buffer

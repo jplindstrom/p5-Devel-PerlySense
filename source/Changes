@@ -21,6 +21,12 @@ Feature oriented Revision history for Devel-PerlySense
   "C-c p" use    --perl
   "C-c s" use    --sql
 
+* Feature: Run File with Alternate Command using "C-u C-o C-r".  You
+  need to configure the Alternate Command to do somethign useful in
+  the PerlySenseProject config file.
+
+
+
 0.0195 -- 2012-05-21 13:55:44 UTC
 
 * Fixed t/PerlySense-find-file-inc.t which fails if there is no
