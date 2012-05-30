@@ -455,7 +455,10 @@ globally with C-x C-SPC, or locally with C-u C-SPC.
 =head3 Go to Module
 
 C<C-o g m> -- Go to Module at point. Useful if "Smart go to" can't
-identify what's at point.
+identify exactly what's at point.
+
+Default is the selected text, or the
+Module at point.
 
 
 =head3 Go to Base Class
@@ -914,7 +917,7 @@ Note that if you have spaces in your file names, this might not work
 (it's a perldb thing).
 
 The debugger is started according to the file source type, which is
-determined by the file name (see the config file). 
+determined by the file name (see the config file).
 
 You can also use C<C-u C-o r d> to Debug with an Alternate Command,
 just like with Run File.
@@ -1162,8 +1165,8 @@ I<that particular subroutine>.
 C<C-o e a u> -- Set mark and add a 'use My::Module;' statement to the
 end of the 'use Module' section at the top of the file.
 
-The default module is the module at point (point may be on a method
-call of the module).
+The default module is the selected text, or the module at point (point
+may be on a method call of the module).
 
 This is typically useful when you realize you're using a module
 already, but without a use-statement. But you don't want to leave
@@ -2385,7 +2388,7 @@ sub fileFindModule {
 
     # TODO: Move this into fileFindLookingInInc and pass in the dir
     $self->setFindProject(dir => $dirOrigin);
-    
+
 #my $tt = Devel::TimeThis->new("fileFindModule");
     my $fileModuleBase = $self->fileFromModule($nameModule);
     $dirOrigin = dir($dirOrigin)->absolute;
