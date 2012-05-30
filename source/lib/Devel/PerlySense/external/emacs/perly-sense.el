@@ -14,6 +14,7 @@
 (require 'pc-select)  ;; next-line-nomark
 (require 'gud)        ;; perldb
 (require 'grep)       ;; grep-find (or rather grep-host-defaults-alist)
+(require 'thingatpt)  ;; thing-at-point, etc.
 
 
 
@@ -1118,6 +1119,51 @@ Module' section at the top of the file."
   )
 
 
+;; Nicked from http://blog.jrock.us/posts/Learning%20Emacs%20Lisp%20has%20paid%20off.pod
+;; Thanks to Jonathan Rockway!
+(defun ps/bounds-of-module-at-point ()
+  "Determine where a module name starts for (thing-at-point 'perl-module)"
+  (save-excursion
+    (skip-chars-backward "[:alpha:]:\\->")  ; skip to F in Foo::Bar->
+    (if (looking-at "[[:alpha:]:]+")        ; then get Foo::Bar
+          (cons (point) (match-end 0))
+      nil)))
+
+;; allow (thing-at-point 'perl-module)
+(put 'perl-module 'bounds-of-thing-at-point 'ps/bounds-of-module-at-point)
+
+(defun ps/edit-add-use-statement ()
+  "Add a 'use My::Module;' statement to the end of the 'use
+ Module' section at the top of the file.
+
+The default module name is any module name at point.
+"
+  (interactive)
+  (let ((message
+         (catch 'message
+           (let* ((module-name (or
+                                (thing-at-point 'perl-module)
+                                (read-from-minibuffer "use Module: ")))
+                  (use-position (or
+                                 (ps/find-use-module-section-position)
+                                 (throw 'message "No 'use Module' section found, nowhere to put the killed use statement."))))
+             (push-mark)
+             (goto-char use-position)
+             (newline-and-indent)
+             (insert (format "use %s;" module-name))
+             (beginning-of-line)
+             (lisp-indent-line)
+             (format "Added 'use %s;'. Hit C-u C-m to return." module-name)
+             )
+           )
+         ))
+    (if message (message "%s" message))
+    )
+  )
+
+
+
+
 
 ;; Thanks to Jonathan Rockway at
 ;; http://blog.jrock.us/articles/Increment%20test%20counter.pod
@@ -1450,6 +1496,7 @@ none was chosen."
 
 
 
+;; Not used
 (defun ps/choose-class-alist-from-class-list-with-completing-read (what-text class-list)
   "Let the user choose a class-alist from the lass-list of Class
 definitions using completing read.
@@ -2200,6 +2247,7 @@ Return t if found, else nil."
 
 
 (global-set-key (format "%semu" ps/key-prefix) 'ps/edit-move-use-statement)
+(global-set-key (format "%seau" ps/key-prefix) 'ps/edit-add-use-statement)
 (global-set-key (format "%setc" ps/key-prefix) 'ps/edit-test-count)
 
 (global-set-key (format "%sat" ps/key-prefix) 'ps/assist-sync-test-count)
