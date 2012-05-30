@@ -368,7 +368,9 @@ See the POD docs for how to enable flymake."
 (defun ps/find-source-for-module-at-point ()
   "Find the source file for the module at point."
   (interactive)
-  (let ((module (cperl-word-at-point)))
+  (let ((module (or
+                 (ps/perl-module-at-point)
+                 (read-from-minibuffer "Find source file for module: "))))
     (if module
         (progn
           (message "Going to module %s..." module)
@@ -1163,7 +1165,7 @@ The default module name is any module name at point.
   (let ((message
          (catch 'message
            (let* ((module-name (or
-                                (thing-at-point 'perl-module)
+                                (ps/perl-module-at-point)
                                 (read-from-minibuffer "use Module: ")))
                   (use-position (or
                                  (ps/find-use-module-section-position)
