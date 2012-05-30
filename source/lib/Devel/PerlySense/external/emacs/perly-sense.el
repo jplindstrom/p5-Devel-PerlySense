@@ -706,12 +706,12 @@ The value returned is the value of the last form in BODY."
 (defun ps/minibuffer-ack-option-toggle-quote () (interactive) (ps/minibuffer-ack-option-toggle "-Q"))
 
 ;; This key map is used inside grep-find
-(define-key minibuffer-local-shell-command-map (kbd "C-c a") 'ps/minibuffer-ack-option-all)
-(define-key minibuffer-local-shell-command-map (kbd "C-c p") 'ps/minibuffer-ack-option-perl)
-(define-key minibuffer-local-shell-command-map (kbd "C-c s") 'ps/minibuffer-ack-option-sql)
+(define-key minibuffer-local-shell-command-map (format "%sa" ps/key-prefix) 'ps/minibuffer-ack-option-all)
+(define-key minibuffer-local-shell-command-map (format "%sp" ps/key-prefix) 'ps/minibuffer-ack-option-perl)
+(define-key minibuffer-local-shell-command-map (format "%ss" ps/key-prefix) 'ps/minibuffer-ack-option-sql)
 
-(define-key minibuffer-local-shell-command-map (kbd "C-c w") 'ps/minibuffer-ack-option-toggle-word)
-(define-key minibuffer-local-shell-command-map (kbd "C-c q") 'ps/minibuffer-ack-option-toggle-quote)
+(define-key minibuffer-local-shell-command-map (format "%sw" ps/key-prefix) 'ps/minibuffer-ack-option-toggle-word)
+(define-key minibuffer-local-shell-command-map (format "%sq" ps/key-prefix) 'ps/minibuffer-ack-option-toggle-quote)
 
 (defun ps/find-project-ack-thing-at-point ()
   "Run ack from the project dir. Default to a sensible ack command line.

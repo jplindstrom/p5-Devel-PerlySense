@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Changed Ack key bindings to use the C-o prefix instead of C-c, to
+  not risk stomping on someone's personal config more than necessary.
+  (also updated the Changes entry below to reflect the current
+  bindings)
+
+
 0.0197 -- 2012-05-29 22:39:02 UTC
 
 * Fixed problem during startup where C-o f a won't work until the
@@ -17,11 +23,11 @@ Feature oriented Revision history for Devel-PerlySense
 * Add convenience key bindings for "Find with Ack" -- "C-o f a".
 
   When editing the ack command you can use the following keys to set options
-  "C-c w" toggle  -w
-  "C-c q" toggle  -Q
-  "C-c a" use    --all
-  "C-c p" use    --perl
-  "C-c s" use    --sql
+  "C-o w" toggle  -w
+  "C-o q" toggle  -Q
+  "C-o a" use    --all
+  "C-o p" use    --perl
+  "C-o s" use    --sql
 
 * Feature: Run File with Alternate Command using "C-u C-o C-r".  You
   need to configure the Alternate Command to do somethign useful in
