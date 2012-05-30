@@ -106,6 +106,10 @@ Compilation mode and the settings appropriate for the source type
 (Test, Module, etc.). Highlight errors and jump to source with C-c
 C-c.
 
+B<Edit - Add Use Statement> -- C<C-o e a u> -- Add a 'use Module'
+statement to the 'use Module' section at the top. Default Module name
+is module at point.
+
 B<Edit - Move Use Statement> -- C<C-o e m u> -- Move the 'use Module'
 statement at point to the 'use Module' section at the top.
 
@@ -1153,15 +1157,32 @@ I<that particular subroutine>.
 =head2 Editing Code
 
 
+=head3 Edit Add 'use Module' Statement
+
+C<C-o e a u> -- Set mark and add a 'use My::Module;' statement to the
+end of the 'use Module' section at the top of the file.
+
+The default module is the module at point (point may be on a method
+call of the module).
+
+This is typically useful when you realize you're using a module
+already, but without a use-statement. But you don't want to leave
+where you are just to fiddle with adding it.
+
+So hit C<C-o e a u> to add it, see that it got added at a good place
+and hit C-u C-SPC to return to where you were, and continue doing what
+you where doing.
+
+
+
 =head3 Edit Move 'use Module' Statement
 
 C<C-o e m u> -- If point is on a line with a single 'use Module'
 statement, set mark and move that statement to the end of the 'use
 Module' section at the top of the file.
 
-This is typically useful when you realize you need a module,
-e.g. Data::Dumper, in the middle of the file, but you don't want to
-leave where you are just to fiddle with adding it.
+This is typically useful for when you encounter a stray 'use Module'
+in the middle of the file.
 
 So type the 'use Module' statement, hit C<C-o e m u> to move it, see
 that it got moved to a good place and hit C-u C-SPC to return to where

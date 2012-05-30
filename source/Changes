@@ -4,10 +4,15 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Feature: Edit - Add Use Statement using "C-o e a u". Add a 'use
+  Module' statement to the 'use Module' section at the top. Default
+  Module name is module at point.
+
 * Changed Ack key bindings to use the C-o prefix instead of C-c, to
-  not risk stomping on someone's personal config more than necessary.
+  avoid stomping on someone's personal config more than necessary.
   (also updated the Changes entry below to reflect the current
   bindings)
+
 
 
 0.0197 -- 2012-05-29 22:39:02 UTC
