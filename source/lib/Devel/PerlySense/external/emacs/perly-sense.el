@@ -56,6 +56,40 @@ The value returned is the value of the last form in BODY."
 
 
 
+
+
+;; Nicked from http://blog.jrock.us/posts/Learning%20Emacs%20Lisp%20has%20paid%20off.pod
+;; Thanks to Jonathan Rockway!
+(defun ps/bounds-of-module-at-point ()
+  "Determine where a module name starts for (thing-at-point 'perl-module)"
+  (save-excursion
+    (skip-chars-backward "[:alpha:]:\\->")  ; skip to F in Foo::Bar->
+    (if (looking-at "[[:alpha:]:]+")        ; then get Foo::Bar
+          (cons (point) (match-end 0))
+      nil)))
+
+;; allow (thing-at-point 'perl-module)
+(put 'perl-module 'bounds-of-thing-at-point 'ps/bounds-of-module-at-point)
+
+(defun ps/transient-region-as-string ()
+  "Return the text of the currently selected text (if
+transient-mark-mode is on) or nil if there is none"
+  (if (and mark-active transient-mark-mode)
+      (buffer-substring-no-properties (region-beginning) (region-end))
+    nil))
+
+(defun ps/perl-module-at-point ()
+  "Return the text of the currently selected text (if
+transient-mark-mode is on), or the Perl module at point, or nil
+if there is none"
+  (or
+   (ps/transient-region-as-string)
+   (thing-at-point 'perl-module)))
+
+
+
+
+
 (defun find-buffer-name-match (match-name)
   "Return the first buffer found matching 'string-match',
 or nil if none exists"
@@ -1118,19 +1152,6 @@ Module' section at the top of the file."
     )
   )
 
-
-;; Nicked from http://blog.jrock.us/posts/Learning%20Emacs%20Lisp%20has%20paid%20off.pod
-;; Thanks to Jonathan Rockway!
-(defun ps/bounds-of-module-at-point ()
-  "Determine where a module name starts for (thing-at-point 'perl-module)"
-  (save-excursion
-    (skip-chars-backward "[:alpha:]:\\->")  ; skip to F in Foo::Bar->
-    (if (looking-at "[[:alpha:]:]+")        ; then get Foo::Bar
-          (cons (point) (match-end 0))
-      nil)))
-
-;; allow (thing-at-point 'perl-module)
-(put 'perl-module 'bounds-of-thing-at-point 'ps/bounds-of-module-at-point)
 
 (defun ps/edit-add-use-statement ()
   "Add a 'use My::Module;' statement to the end of the 'use
