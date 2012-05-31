@@ -32,7 +32,6 @@ use strict;
 use warnings;
 
 package Devel::PerlySense::Document;
-our $VERSION = '0.01';
 
 
 

@@ -49,6 +49,7 @@ The default configuration for .t files look like this:
     run_file:
       -
         command: "prove  --norc --nocolor -v ${INC} \"${SOURCE_FILE}\""
+        alternate_command: ""
         moniker: Test
         rex: \.t$
         run_from: source_root_directory
@@ -56,8 +57,12 @@ The default configuration for .t files look like this:
 You can define what to do with tests specific to your project. Just
 put extra mappings in the list. First match is used.
 
+You can also use whatever you have configured in the
+"alternate_command" by doing calling Run File with a prefix argument,
+i.e. C<C-u C-o C-r>.
+
 You can do the same in the debug section to run the files through a
-debugged Perl.
+debugged Perl with C<C-o r d> or C<C-u C-o r d>.
 
 
 =head3 Run Test::Class classes with C-o C-r

@@ -23,7 +23,6 @@ use strict;
 use warnings;
 
 package Devel::PerlySense::Project;
-our $VERSION = '0.01';
 
 
 
@@ -300,7 +299,7 @@ sub newFindExplicit(@) {
 
 =head1 MEHTODS
 
-=head2 rhRunFile(file => $fileSource, [rhConfigType = DEDUCED_FROM_FILE])
+=head2 rhRunFile(file => $fileSource, [rhConfigType = DEDUCED_FROM_FILE], [ keyConfigCommand = "command" ])
 
 Like rhRunFile0, but with what => "run".
 
@@ -315,7 +314,7 @@ sub rhRunFile {
 
 
 
-=head2 rhDebugFile(file => $fileSource, [rhConfigType = DEDUCED_FROM_FILE])
+=head2 rhDebugFile(file => $fileSource, [rhConfigType = DEDUCED_FROM_FILE], [ keyConfigCommand = "command" ])
 
 Like rhRunFile0, but with what => "debug".
 
@@ -331,13 +330,17 @@ sub rhDebugFile {
 
 
 
-=head2 rhRunFile0(file => $fileSource, what => "run" | "debug", [rhConfigType = DEDUCED_FROM_FILE])
+=head2 rhRunFile0(file => $fileSource, what => "run" | "debug", [rhConfigType = DEDUCED_FROM_FILE], [ keyConfigCommand = "command" ])
 
 Figure out what type of source file $fileSource is, and how it should
 be run/debugged.
 
 The settings in the global config->{$what_file} is used to determine
 the details.
+
+The command to use is taken from
+config->{$what_file}->{$keyConfigCommand}, if that is specified,
+otherwise for "command".
 
 Return hash ref with (keys: "dir_$what_from", "command_$what",
 "type_source_file"), or die on errors (like if no Project could be
@@ -354,6 +357,7 @@ sub rhRunFile0 {
     my %p = @_;
     my $rhConfigType = $p{rhConfigType};
     my $what = $p{what};
+    my $keyConfigCommand = $p{keyConfigCommand} || "command";
 
     $file = file($file)->absolute;
     $rhConfigType ||= $self->rhConfigTypeForFile(
@@ -374,8 +378,13 @@ sub rhRunFile0 {
     my $optionInc = join(" ", map { qq|"-I$_"| } @aDirIncProject);
 
     my $fileSource = $file->relative($dirRunFrom);
+    my $command
+        =  $rhConfigType->{ $keyConfigCommand }
+        || $rhConfigType->{command}
+        or die("Could not find a config value for which 'command' to run\n");
     my $commandRun = textRenderTemplate(
-        $rhConfigType->{command}, {
+        $command,
+        {
             INC         => $optionInc,
             SOURCE_FILE => $fileSource . "",
         },

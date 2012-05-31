@@ -106,6 +106,10 @@ Compilation mode and the settings appropriate for the source type
 (Test, Module, etc.). Highlight errors and jump to source with C-c
 C-c.
 
+B<Edit - Add Use Statement> -- C<C-o e a u> -- Add a 'use Module'
+statement to the 'use Module' section at the top. Default Module name
+is module at point.
+
 B<Edit - Move Use Statement> -- C<C-o e m u> -- Move the 'use Module'
 statement at point to the 'use Module' section at the top.
 
@@ -451,7 +455,10 @@ globally with C-x C-SPC, or locally with C-u C-SPC.
 =head3 Go to Module
 
 C<C-o g m> -- Go to Module at point. Useful if "Smart go to" can't
-identify what's at point.
+identify exactly what's at point.
+
+Default is the selected text, or the
+Module at point.
 
 
 =head3 Go to Base Class
@@ -578,6 +585,14 @@ you'll get to edit the command line with a sensible default chosen from:
 =item * the word at point (with the C<-w> whole word option)
 
 =back
+
+When editing the ack command you can use the following keys to set options
+
+  "C-o w" toggle  -w
+  "C-o q" toggle  -Q
+  "C-o a" use    --all
+  "C-o p" use    --perl
+  "C-o s" use    --sql
 
 For details, refer to the L<ack> documentation (the program was
 installed as a dependency of PerlySense).
@@ -758,9 +773,15 @@ C<C-o C-r> -- Run the file of the current buffer using the Compilation
 mode.
 
 Files are run according to the source type, which is determined by the
-file name (see the config file).  The default for .t files is to run
+file name (see the config file). The default for .t files is to run
 "prove -v", for .pm files "perl -c", etc. This can be configured per
 Project (see below).
+
+Files can also be run using an Alternate Command using C<C-u C-o C-r>
+if you have specified one in the config file. This might be useful if
+you want to re-generate or restart something before running the file,
+but only sometimes. Or, maybe you want to run some tests without the
+-v flag or something.
 
 The file is run from the Project root directory or from the file
 directory depending on the file type, and the @INC is set
@@ -773,8 +794,10 @@ not just Perl source files.
 As a taste of what's possible, imagine that you have a test framework
 with .yml acceptance test data files and a corresponding yml-runner.pl
 script. You can set up the config so you can type C<C-o C-r> while
-editing the .yaml file to run that test. Refer to the
-L<Devel::PerlySense::Cookbook> for details.
+editing the .yaml file to run that test. And if you need to regenerate
+some fixtures or something before running the yml test, you can
+configure the Alternate Command to do that (run with C<C-u C-o
+C-r>). Refer to the L<Devel::PerlySense::Cookbook> for details.
 
 If any warnings, errors or test failures are encountered, they are
 highlighted in the B<*compilation*> buffer. Press RET on a highlighted
@@ -794,6 +817,9 @@ source fixing errors and the .t file isn't visible.
 
 C<C-o r r> -- If not even the B<*compilation*> buffer is visible,
 issue Re-Run File from anywhere to bring it up and re-run.
+
+Note: this will re-run whatever is displayed in the B<*compilation*>
+buffer.
 
 
 =head3 Go to Run-buffer
@@ -891,8 +917,12 @@ Note that if you have spaces in your file names, this might not work
 (it's a perldb thing).
 
 The debugger is started according to the file source type, which is
-determined by the file name (see the config file). This can be
-configured similar to how files are run (see above).
+determined by the file name (see the config file).
+
+You can also use C<C-u C-o r d> to Debug with an Alternate Command,
+just like with Run File.
+
+This can all be configured similar to how files are run (see above).
 
 Most files are run from the Project root directory by default.
 
@@ -1130,15 +1160,32 @@ I<that particular subroutine>.
 =head2 Editing Code
 
 
+=head3 Edit Add 'use Module' Statement
+
+C<C-o e a u> -- Set mark and add a 'use My::Module;' statement to the
+end of the 'use Module' section at the top of the file.
+
+The default module is the selected text, or the module at point (point
+may be on a method call of the module).
+
+This is typically useful when you realize you're using a module
+already, but without a use-statement. But you don't want to leave
+where you are just to fiddle with adding it.
+
+So hit C<C-o e a u> to add it, see that it got added at a good place
+and hit C-u C-SPC to return to where you were, and continue doing what
+you where doing.
+
+
+
 =head3 Edit Move 'use Module' Statement
 
 C<C-o e m u> -- If point is on a line with a single 'use Module'
 statement, set mark and move that statement to the end of the 'use
 Module' section at the top of the file.
 
-This is typically useful when you realize you need a module,
-e.g. Data::Dumper, in the middle of the file, but you don't want to
-leave where you are just to fiddle with adding it.
+This is typically useful for when you encounter a stray 'use Module'
+in the middle of the file.
 
 So type the 'use Module' statement, hit C<C-o e m u> to move it, see
 that it got moved to a good place and hit C-u C-SPC to return to where
@@ -1602,7 +1649,6 @@ use strict;
 use warnings;
 
 package Devel::PerlySense;
-our $VERSION = '0.0187';
 
 
 
@@ -1663,7 +1709,7 @@ Devel::PerlySense::Project object.
 Default: A Devel::PerlySense::Project::Unknown object.
 
 =cut
-field "oProject" => Devel::PerlySense::Project::Unknown->new();
+field "oProject" => undef;
 
 
 
@@ -1733,6 +1779,7 @@ Create new PerlySense object.
 sub new() {
     my $self = bless {}, shift;
     $self->oBookmarkConfig(Devel::PerlySense::BookmarkConfig->new( oPerlySense => $self ));
+    $self->oProject(Devel::PerlySense::Project::Unknown->new( oPerlySense => $self ));
     return($self);
 }
 
@@ -2127,7 +2174,7 @@ sub raFileProjectOther {
 
 
 
-=head2 rhRunFile(file => $fileSource)
+=head2 rhRunFile(file => $fileSource, [ keyConfigCommand => "command" ])
 
 Figure out what type of source file $fileSource is, and how it should
 be run.
@@ -2151,14 +2198,14 @@ sub rhRunFile {
     $self->setFindProject(file => $file)
             or die("Could not identify any PerlySense Project\n");
 
-    return $self->oProject->rhRunFile(file => $file);
+    return $self->oProject->rhRunFile(@_);
 }
 
 
 
 
 
-=head2 rhDebugFile(file => $fileSource)
+=head2 rhDebugFile(file => $fileSource, [ keyConfigCommand => "command" ])
 
 Figure out what type of source file $fileSource is, and how it should
 be debugged.
@@ -2182,7 +2229,7 @@ sub rhDebugFile {
     $self->setFindProject(file => $file)
             or die("Could not identify any PerlySense Project\n");
 
-    return $self->oProject->rhDebugFile(file => $file);
+    return $self->oProject->rhDebugFile(@_);
 }
 
 
@@ -2341,7 +2388,7 @@ sub fileFindModule {
 
     # TODO: Move this into fileFindLookingInInc and pass in the dir
     $self->setFindProject(dir => $dirOrigin);
-    
+
 #my $tt = Devel::TimeThis->new("fileFindModule");
     my $fileModuleBase = $self->fileFromModule($nameModule);
     $dirOrigin = dir($dirOrigin)->absolute;

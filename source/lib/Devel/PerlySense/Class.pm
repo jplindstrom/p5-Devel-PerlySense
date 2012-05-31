@@ -20,7 +20,6 @@ use strict;
 use warnings;
 
 package Devel::PerlySense::Class;
-our $VERSION = '0.01';
 
 
 

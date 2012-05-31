@@ -19,7 +19,6 @@ use warnings;
 
 package Devel::PerlySense::Config::Project::Default;
 use base "Devel::PerlySense::Config::Project";
-our $VERSION = '0.01';
 
 
 
@@ -49,7 +48,7 @@ sub new(@) {
     my $pkg = shift;
 
     my $self = $pkg->SUPER::new(@_);
-    
+
     my $sourceConfig = $self->textConfigDefault;
     my ($rhConfig) = eval { YAML::Tiny::Load($sourceConfig) };
     $rhConfig or die($YAML::Tiny::errstr);

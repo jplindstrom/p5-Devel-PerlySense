@@ -4,6 +4,59 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Feature: Edit - Add Use Statement using "C-o e a u". Add a 'use
+  Module' statement to the 'use Module' section at the top. Default
+  Module name is module at point.
+
+* Changed Ack key bindings to use the C-o prefix instead of C-c, to
+  avoid stomping on someone's personal config more than necessary.
+  (also updated the Changes entry below to reflect the current
+  bindings)
+
+
+
+0.0197 -- 2012-05-29 22:39:02 UTC
+
+* Fixed problem during startup where C-o f a won't work until the
+  "grep" package is loaded (it's autoloaded during normal interactive
+  use).
+
+* Changed commands that run from the Project Directory so that they
+  don't blow up if there is no Project Directory. Instead just run
+  from the current directory.
+
+* Add convenience key bindings for "Find with Ack" -- "C-o f a".
+
+  When editing the ack command you can use the following keys to set options
+  "C-o w" toggle  -w
+  "C-o q" toggle  -Q
+  "C-o a" use    --all
+  "C-o p" use    --perl
+  "C-o s" use    --sql
+
+* Feature: Run File with Alternate Command using "C-u C-o C-r".  You
+  need to configure the Alternate Command to do somethign useful in
+  the PerlySenseProject config file.
+
+* Feature: Debug File with Alternate Command using "C-u C-o r d".  You
+  need to configure the Alternate Command to do somethign useful in
+  the PerlySenseProject config file.
+
+
+
+0.0195 -- 2012-05-21 13:55:44 UTC
+
+* Fixed t/PerlySense-find-file-inc.t which fails if there is no
+  .PerlySenseProject in the build directory (which there typically
+  isn't).
+
+
+0.0194 -- 2012-05-21 12:58:40 UTC
+
+* Fixed dzil config re: $VERSION variable
+
+
+
 0.0193 -- 2012-05-20 18:09:05 UTC
 
 * Catch exceptions during flymake and log them to avoid returning a
@@ -11,8 +64,6 @@ Feature oriented Revision history for Devel-PerlySense
   error has occurred while running" etc.
 
 * Improve error reporting for badly formed YAML config files.
-
-
 
 * #70203: Missing close paren in emacs lisp
   _Finally_ fixed pathetic elisp syntax error w/ missing closing paren.

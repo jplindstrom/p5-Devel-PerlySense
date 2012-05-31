@@ -21,7 +21,6 @@ use strict;
 use warnings;
 
 package Devel::PerlySense::Config::Project;
-our $VERSION = '0.01';
 
 
 
@@ -123,21 +122,27 @@ external:
         critic: 0
 
 
+#Run File Configuration.
+#"C-o C-r" to run "command" and "C-u C-o C-r" to run alternate_command
+#
 #These are evaluated in order to find a way to run a file. First
 #match is used.
 run_file:
   -
     command: "prove --nocolor -v ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Test
     rex: \.t$
     run_from: source_root_directory
   -
     command: "perl -c ${INC} \"${SOURCE_FILE}\" 2>&1| perl -ne \"/Subroutine \\w+ redefined at/ or print\""
+    alternate_command: ""
     moniker: Module
     rex: \.pm$
     run_from: source_root_directory
   -
     command: "perl ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Script
     rex: \.pl$
     run_from: file_directory
@@ -145,28 +150,35 @@ run_file:
   #This is a catch-all for all other types of files
   -
     command: "perl ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: 'Script (no .pl)'
     rex: .
     run_from: file_directory
 
 
 
+#Run File in Debugger Configuration.
+#"C-o r d" to debug "command" and "C-u C-o r d" to debug alternate_command
+#
 #These are evaluated in order to find a way to debug a file. First
 #match is used.
 debug_file:
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Test
     rex: \.t$
     debug_from: source_root_directory
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Script
     rex: \.pl$
     debug_from: file_directory
 
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: Module
     rex: \.pm$
     debug_from: source_root_directory
@@ -174,6 +186,7 @@ debug_file:
   #This is a catch-all for all other types of files
   -
     command: "perl -d ${INC} \"${SOURCE_FILE}\""
+    alternate_command: ""
     moniker: 'Script (no .pl)'
     rex: .
     debug_from: file_directory
