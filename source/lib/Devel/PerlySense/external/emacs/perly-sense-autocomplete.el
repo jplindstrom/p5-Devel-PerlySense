@@ -2,27 +2,37 @@
 
 (defun ps/ac-candidates ()
   (save-excursion
-    (let* (
-           (sub-name
-            (if (search-backward-regexp "sub \\([a-zA-Z_]+\\)" nil t)
-                (match-string-no-properties 1)
-              "N/A")
-            )
-           ;; (format "buffer(%s) point(%s) prefix(%s)" ac-buffer ac-point ac-prefix)
-           )
-      (mapcar (lambda (candidate)
-                (format "%s-%s" candidate sub-name))
-              '("Foo" "Bar" "Baz" "Boo" "Boolean" "Bookshelf")
-              )
+    (goto-char (point-min))
+    (let ( (sub-names (list ) ) )
+      (while (search-forward-regexp "sub +\\([a-zA-Z_]+\\)" nil t)
+        (push (match-string-no-properties 1) sub-names)
+        )
+      sub-names
       )
     )
   )
 
 (defun ps/candidate-documentation (symbol-name)
-  (let ((symbol-name (substring-no-properties symbol-name)))
-    "textClassInheritance(oClass)
-
-Return string representing the class hierarchy of $oClass."))
+  (save-excursion
+    (goto-char (point-min))
+    (when (search-forward-regexp (format "sub +%s " symbol-name) nil t)
+      (when (search-backward-regexp "=cut\\|}" nil t)
+        (when (looking-at "=cut")
+          (previous-line)
+          (let* ((pod-end-pos (point)))
+            (when (search-backward-regexp "=head" nil t)
+              (forward-word) (forward-char)
+              (let* ((pod-docs
+                      (buffer-substring-no-properties (point) pod-end-pos)))
+                pod-docs
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
 
 (defvar ps/ac-source-method-calls
   '(
@@ -34,7 +44,7 @@ Return string representing the class hierarchy of $oClass."))
   )
 
 
-; prefix: use 
+; prefix: use
 
 
 
