@@ -739,14 +739,16 @@ The value returned is the value of the last form in BODY."
       )
     )
   )
-(defun ps/minibuffer-ack-option-toggle-word  () (interactive) (ps/minibuffer-ack-option-toggle "-w"))
-(defun ps/minibuffer-ack-option-toggle-quote () (interactive) (ps/minibuffer-ack-option-toggle "-Q"))
+(defun ps/minibuffer-ack-option-toggle-caseinsensitive () (interactive) (ps/minibuffer-ack-option-toggle "-i"))
+(defun ps/minibuffer-ack-option-toggle-word            () (interactive) (ps/minibuffer-ack-option-toggle "-w"))
+(defun ps/minibuffer-ack-option-toggle-quote           () (interactive) (ps/minibuffer-ack-option-toggle "-Q"))
 
 ;; This key map is used inside grep-find
 (define-key minibuffer-local-shell-command-map (format "%sa" ps/key-prefix) 'ps/minibuffer-ack-option-all)
 (define-key minibuffer-local-shell-command-map (format "%sp" ps/key-prefix) 'ps/minibuffer-ack-option-perl)
 (define-key minibuffer-local-shell-command-map (format "%ss" ps/key-prefix) 'ps/minibuffer-ack-option-sql)
 
+(define-key minibuffer-local-shell-command-map (format "%si" ps/key-prefix) 'ps/minibuffer-ack-option-toggle-caseinsensitive)
 (define-key minibuffer-local-shell-command-map (format "%sw" ps/key-prefix) 'ps/minibuffer-ack-option-toggle-word)
 (define-key minibuffer-local-shell-command-map (format "%sq" ps/key-prefix) 'ps/minibuffer-ack-option-toggle-quote)
 

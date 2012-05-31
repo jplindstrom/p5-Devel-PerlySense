@@ -4,6 +4,14 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Feature: Added missing -i toggle for the ack command
+
+  "C-o i" toggle  -i
+
+
+
+0.0198 -- whenever
+
 * Feature: Edit - Add Use Statement using "C-o e a u". Add a 'use
   Module' statement to the 'use Module' section at the top. Default
   Module name is module at point.
