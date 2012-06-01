@@ -547,16 +547,9 @@ See the POD docs for how to enable flymake."
 (defun ps/rerun-file ()
   "Rerun the current compilation buffer"
   (interactive)
-  (let* ((compilation-buffer (get-buffer "*compilation*")))
-    (if compilation-buffer
-        (let* ((compilation-window (get-buffer-window compilation-buffer "visible")))
-          (progn
-            (if compilation-window (select-window compilation-window))
-            (switch-to-buffer "*compilation*")
-            (recompile))
-          )
-      (message "Can't re-run: No Run File in progress.")
-      )
+  (if (ps/goto-buffer-name "*compilation*")
+      (recompile)
+    (message "Can't re-run: No Run File in progress.")
     )
   )
 
@@ -962,15 +955,30 @@ statement in the file, or nil if none was found."
 (defun ps/goto-run-buffer ()
   "Go to the current *compilation* buffer, if any."
   (interactive)
-  (let* ((compilation-buffer (get-buffer "*compilation*")))
-    (if compilation-buffer
-        (let* ((compilation-window (get-buffer-window compilation-buffer "visible")))
+  (ps/goto-buffer-name "*compilation*")
+  )
+
+
+
+(defun ps/goto-find-buffer ()
+  "Go to the current *grep* buffer, if any."
+  (interactive)
+  (ps/goto-buffer-name "*grep*")
+  )
+
+
+(defun ps/goto-buffer-name (buffer-name)
+  "Go to the currently named 'buffer-name' buffer, if any."
+  (let* ((target-buffer (get-buffer buffer-name)))
+    (if target-buffer
+        (let* ((compilation-window (get-buffer-window target-buffer "visible")))
           (progn
             (if compilation-window (select-window compilation-window))
-            (switch-to-buffer "*compilation*")
+            (switch-to-buffer buffer-name)
             )
           )
-      (message "There is no *compilation* buffer to go to.")
+      (message (format "There is no %s buffer to go to." buffer-name))
+      nil
       )
     )
   )
@@ -2289,6 +2297,7 @@ Return t if found, else nil."
 (global-set-key (format "%srr" ps/key-prefix) 'ps/rerun-file)
 (global-set-key (format "%srd" ps/key-prefix) 'ps/debug-file)
 
+(global-set-key (format "%sgf" ps/key-prefix) 'ps/goto-find-buffer)
 (global-set-key (format "%sgr" ps/key-prefix) 'ps/goto-run-buffer)
 (global-set-key (format "%sge" ps/key-prefix) 'ps/compile-goto-error-file-line)
 (global-set-key (format "%sgto" ps/key-prefix) 'ps/goto-test-other-files)

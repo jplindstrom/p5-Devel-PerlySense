@@ -8,6 +8,9 @@ Feature oriented Revision history for Devel-PerlySense
 
   "C-o i" toggle  -i
 
+* Feature: Go To Find Buffer -- "C-o g f" to go to the B<*grep*>
+  buffer.
+
 
 
 0.0198 -- whenever
