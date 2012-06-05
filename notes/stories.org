@@ -5035,6 +5035,112 @@ color: user; presence: checkin that day; height: size of commit
 ***** symbol_type=
 **** Returns
 ***** 
+** Indexing call chains
+*** Analyze call chains and root items
+
+Find all method call chains with the root item and its scope, and store all chains against it.
+
+A chain goes from the root item followed by ->
+
+**** Examples of root item:
+
+***** $self
+Type: this Package
+Home: this file
+Search Grouping: Files of this Package and ancestors
+Root item: $self
+Qualified root item: Package::$self
+Implicit declaration in class.
+
+***** my/our $file
+Type: fall back to modules mentioned in this Package or ancestors.
+Home: this file, line of declaration
+Search Grouping: File, declaration to end of block, or file. (minus masking of vars declared in inner scope)
+Root item: $file
+Qualified root item: Package::$file
+
+***** my $Package::file
+Type: fall back to modules mentioned in this file (or ancestors) or in Package (or ancestors)
+Home: file of package, declaration or first line if none. ???
+Grouping: File, declaration to end of file, and the file of Package. (masking)
+Root item: $Package::file
+Qualified root item: Package::$file
+
+***** our $Package::file
+Type: fall back to modules mentioned in this file (or ancestors) or in Package (or ancestors)
+Home: file of Package, line of declaration, or first line if none.
+Search Grouping:
+Root item: $Pakage::file
+Qualified root item: Package::$file
+
+***** file(), file
+Type: fall back to modules mentioned in the Home file (or ancestors)
+Home: declaration in this or exporting package
+Search Grouping: this file and all files using the module where declared and importing the sub name.
+Root item: file()
+Qualified root item: Package::file()
+
+***** Package:file(), Package::file
+Type: fall back to modules mentioned in the Home file (or ancestors)
+Home: file of Package, line of sub declaration.
+Search Grouping: all files with this root item.
+Root item: Package::file()
+Qualified root item: Package::file()
+
+
+*** Alalyze chains
+Collapse method args into ()
+Normalise ref lookups to always use ->
+Keep hash keys that are strings or bare-words, normalise into 'string'.
+Collapse other hash keys into "", assuming they all of the same type _if_ there is a following method call
+Collapse array indexes into "", assuming they're of uniform type (more common case than not).
+
+**** Example
+$self->{dbh}{$type}->[$pool_index]->{ "schema" }->resultset("File")->search({ name => "..." })
+
+$self->{'dbh'}->{}->[]->{'schema'}->resultset()->search()
+
+
+*** Complete method
+
+Calculate the call chain.
+
+chain->item->|
+
+Find out possible types of item:
+Find all instances that starts with the chain in its Search Grouping, and note all following method call names
+Ask the repo for all types that have all of these methods
+
+If none found, shift off the leftmost item and check again (this time without a root item) until a type is identified.
+
+If none found, match all types.
+
+Candidates are all methods of all these types.
+
+*** Work plan
+
+Server
+
+/complete_method
+
+Return hard coded list of methods and docs. Is it quick enough?
+
+Repo tables for CPAN and Project dbs.
+
+Test data for a few tables
+
+Query to return methods
+
+Indexer
+
+Parser for
+- $self
+- my
+
+
+*** responsiveness
+
+Can the chains and types of chains and methods of chains be pre-cached and stored in-buffer? Asynchronous call after save.
 * Other
 ** Docs
 
