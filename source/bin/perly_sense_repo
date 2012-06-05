@@ -1,0 +1,88 @@
+#!/usr/bin/env perl
+use Mojolicious::Lite;
+use Devel::PerlySense;
+use Devel::PerlySense::Editor::Emacs;
+use Cache::FileCache;
+
+
+###TODO: copy pasted from perly_sense
+sub createPerlySense {
+
+    my $oPs = Devel::PerlySense->new();
+
+    my $oHome = $oPs->oHome;
+    my $dirHomeCache = $oHome->dirHomeCache
+            or die(
+                "Could not create cache dir in either of:\n",
+                join(":", $oHome->aDirHomeCandidate) . "\n",
+            );
+    my $oCache = Cache::FileCache->new({cache_root => $dirHomeCache})
+            or die("Could not create cache in ($dirHomeCache)\n");
+    $oPs->oCache($oCache);
+
+    return $oPs;
+}
+
+get '/method/complete' => sub {
+    my $self = shift;
+
+    my $oPs = createPerlySense();
+    my $oEditor = Devel::PerlySense::Editor::Emacs->new(
+        oPerlySense  => $oPs,
+        widthDisplay => 80,
+    );
+
+    my $out = $oEditor->formatOutputDataStructure(
+        rhData => {
+            completions => [
+                {
+                    method_name   => 'formatOutputDataStructure',
+                    class         => 'Devel::PerlySense::Editor::Emacs',
+                    documentation => 'formatOutputDataStructure(rhData)
+
+Return stringification of $rhData suited for the Editor.',
+                },
+                {
+                    method_name   => 'formatOutputItem',
+                    class         => 'Devel::PerlySense::Editor::Emacs',
+                    documentation => 'formatOutputItem($item)
+
+Return stringification of $item suited for the Editor. $item can be a
+scalar, array ref or hash ref.',
+                },
+                {
+                    method_name   => 'escapeValue',
+                    class         => 'Devel::PerlySense::Editor::Emacs',
+                    documentation => '',
+                },
+                {
+                    method_name   => 'widthDisplay',
+                    class         => 'Devel::PerlySense::Editor',
+                    documentation => 'widthDisplay
+The width of the display in columns, or undef if N/A.',
+                },
+                {
+                    method_name   => 'textTable',
+                    class         => 'Devel::PerlySense::Editor',
+                    documentation => 'textTable($raItem, $columnWidthMax, [$rsRenderItem = string-as-is])
+
+Return string with the items in $raItem rendered as a table, with as
+few columns as possible.
+
+If the $rsRenderItem sub ref is passed, it is called for each item to
+be rendered:
+
+  $rsRenderItem->($stringItem, $rsItemColumn)
+
+where $stringItem is each individual item, and $rsItemColumn is the
+items in the current column. The default is to just pass through the
+$stringItem text.',
+                },
+            ],
+        },
+    );    
+    
+    $self->render(text => $out);
+};
+
+app->start;
