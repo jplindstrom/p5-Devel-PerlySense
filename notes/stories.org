@@ -5000,9 +5000,9 @@ color: user; presence: checkin that day; height: size of commit
 ****** id
 ****** name
 ****** full_name ?
-****** file_id
-****** row
-****** column
+****** declaration_file_id
+****** declaration_row
+****** declaration_column
 ****** symbol_type_id
 ****** documentation
 ****** package_id NULL
@@ -5017,6 +5017,10 @@ color: user; presence: checkin that day; height: size of commit
 ******* attribute
 ******* variable?
 ****** description
+***** chain
+****** id
+****** symbol_name
+****** symbol_id
 ***** package
 ****** id
 ****** name
@@ -5096,44 +5100,75 @@ Collapse other hash keys into "", assuming they all of the same type _if_ there 
 Collapse array indexes into "", assuming they're of uniform type (more common case than not).
 
 **** Example
-$self->{dbh}{$type}->[$pool_index]->{ "schema" }->resultset("File")->search({ name => "..." })
 
-$self->{'dbh'}->{}->[]->{'schema'}->resultset()->search()
-
-
+***** $self->{dbh}{$type}->[$pool_index]->{ "schema" }->resultset("File")->search({ name => "..." })
+****** $self->{'dbh'}->{}->[]->{'schema'}->resultset()->search()
+***** $self->book->author->publisher
+****** 1
+******* symbol: book
+******* chain: $self
+******* package: Package
+******* root item: $self
+****** 2
+******* symbol: publisher
+******* chain: ->book->author
+******* package:
+******* root item:
+****** 3
+******* symbol: author
+******* chain: ->book
+******* package:
+******* root item:
 *** Complete method
 
-Calculate the call chain.
+Calculate the call chain, except the part about to be completed
 
-chain->item->|
+chain->|item
 
-Find out possible types of item:
-Find all instances that starts with the chain in its Search Grouping, and note all following method call names
-Ask the repo for all types that have all of these methods
+**** Find out possible types of item:
+***** Find all instances that starts with the chain in its Search Grouping,
+****** and note all following method call names
+***** Ask the repo for all types that have all of these methods
+***** If none found, shift off the leftmost item and check again
+****** this time without a root item
+****** until a type is identified.
+***** If none found,
+****** Match all modules mentioned in the current file or ancestors
+****** Match all modules mentioned in the current Project
+****** match all known modules in the current Project or CPAN dirs.
+**** Candidates are all methods of all these types.
 
-If none found, shift off the leftmost item and check again (this time without a root item) until a type is identified.
-
-If none found, match all types.
-
-Candidates are all methods of all these types.
-
+*** Prototype Repo tables
+**** method
+***** id
+***** package
+***** name
+***** documentation
+***** file
+**** symbol
+***** symbol_type
+***** package
+***** documentation
+***** declaration_file
+***** declaration_line
 *** Work plan
 
-Server
+**** DONE Server
 
-/complete_method
+**** DONE /complete_method
 
-Return hard coded list of methods and docs. Is it quick enough?
+**** DONE Return hard coded list of methods and docs. Is it quick enough?
+***** Yes
 
-Repo tables for CPAN and Project dbs.
+**** Repo tables for CPAN and Project dbs.
 
-Test data for a few tables
+**** Test data for a few tables
 
-Query to return methods
+**** Query to return methods
 
-Indexer
+**** Indexer
 
-Parser for
+**** Parser for
 - $self
 - my
 
@@ -5141,6 +5176,7 @@ Parser for
 *** responsiveness
 
 Can the chains and types of chains and methods of chains be pre-cached and stored in-buffer? Asynchronous call after save.
+
 * Other
 ** Docs
 
