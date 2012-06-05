@@ -642,12 +642,17 @@ sub processFilesInDirs {
         no_chdir => 1,
     }, @$raDir);
 
+    require "Devel::PerlySense::Repository"; # Don't load this unless necessary
+    my $oRepository = Devel::PerlySense::Repository->new( oPerlySense => $oPs );
+
     my %hFileTime;
     for my $file (@aFile) {
         debug("Processing file ($file)");
         my $timeStart = time();
         eval {
-            $oPs->oDocumentParseFile($file);
+            my $oDocument = $oPs->oDocumentParseFile($file);
+            $oRepository->index($oDocument);
+            
             $oPs->clearInMemoryDocumentCache();
         };
         $@ and debug($@);
