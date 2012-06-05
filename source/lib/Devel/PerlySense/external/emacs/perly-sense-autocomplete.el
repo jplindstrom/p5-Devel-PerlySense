@@ -1,29 +1,53 @@
 
 
 (defun ps/ac-candidates ()
-  (let (
-        (sub-name (save-excursion
-                    (if (search-backward "sub +\\([_a-z0-9]+\\)" nil t)
-                        (match-string 1)
-                      "N/A")
-                    )
-                  )
+  (save-excursion
+    (goto-char (point-min))
+    (let ( (sub-names (list ) ) )
+      (while (search-forward-regexp "sub +\\([a-zA-Z_]+\\)" nil t)
+        (push (match-string-no-properties 1) sub-names)
         )
-    (mapcar (lambda (candidate)
-              (format "%s-%s" candidate sub-name))
-            '("Foo" "Bar" "Baz" "Boo" "Boolean" "Bookshelf")
+      sub-names
+      )
+    )
+  )
+
+(defun ps/candidate-documentation (symbol-name)
+  (save-excursion
+    (goto-char (point-min))
+    (when (search-forward-regexp (format "sub +%s " symbol-name) nil t)
+      (when (search-backward-regexp "=cut\\|}" nil t)
+        (when (looking-at "=cut")
+          (previous-line)
+          (let* ((pod-end-pos (point)))
+            (when (search-backward-regexp "=head" nil t)
+              (forward-word) (forward-char)
+              (let* ((pod-docs
+                      (buffer-substring-no-properties (point) pod-end-pos)))
+                pod-docs
+                )
+              )
             )
+          )
+        )
+      )
     )
   )
 
-(defvar ps/ac-source
+(defvar ps/ac-source-method-calls
   '(
+    (prefix . "->\\(.*\\)")
     (candidates . ps/ac-candidates)
+    (summary . (lambda () "Help text"))
+    (document . ps/candidate-documentation)
     )
   )
 
 
+; prefix: use
 
-(setq ac-sources '(ps/ac-source))
+
+
+(setq ac-sources '(ps/ac-source-method-calls))
 
 
