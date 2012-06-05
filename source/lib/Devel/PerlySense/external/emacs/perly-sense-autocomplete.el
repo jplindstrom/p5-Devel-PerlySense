@@ -1,16 +1,38 @@
 
 
 (defun ps/ac-candidates ()
-  (save-excursion
-    (goto-char (point-min))
-    (let ( (sub-names (list ) ) )
-      (while (search-forward-regexp "sub +\\([a-zA-Z_]+\\)" nil t)
-        (push (match-string-no-properties 1) sub-names)
+  (interactive) ;; JPL
+  (let* (
+        (sub-names (list ) )
+        (response-buffer
+         (url-retrieve-synchronously "http://localhost:3496/method/complete")
+         )
         )
-      sub-names
+    (if response-buffer
+        (let* (
+               (response-text
+                (with-current-buffer response-buffer
+                  (goto-char (point-min))
+                  (if (search-forward-regexp "\n\n" nil t)
+                      (delete-region (point-min) (point))
+                    )
+                  (buffer-string)))
+               (result-alist (ps/parse-sexp response-text))
+               (completions-list (alist-value result-alist "completions"))
+               )
+          (mapcar
+           (lambda (completion-alist)
+             (push (alist-value completion-alist "method_name") sub-names)
+             )
+           completions-list)
+          )
+      (message "Could not call PerlySense Repository Server")
       )
+    sub-names
     )
   )
+
+(ps/ac-candidates)
 
 (defun ps/candidate-documentation (symbol-name)
   (save-excursion
