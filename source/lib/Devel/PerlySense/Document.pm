@@ -724,6 +724,28 @@ sub oLocationPod {
 
 
 
+=head2 textDocumentation(nameMethod => $nameMethod)
+
+Return the doc string (from POD) for $nameMethod in this Document, or
+undef if none found.
+
+=cut
+sub textDocumentation {
+    my ($nameMethod) = @_;
+
+    my $oLocationPod = $self->oLocationPod(
+        name    => $nameMethod,
+        lookFor => "method",
+    ) or return "";
+
+    $self->oPerlySense->oLocationRenderPodToText($oLocationPod);
+    return $oLocationPod->rhProperty->{text};
+}
+
+
+
+
+
 =head2 aMethodCallOf(nameObject => $nameObject, oLocationWithin => $oLocationWithin)
 
 Find all the method calls of $nameObject in the $oLocationWithin.
