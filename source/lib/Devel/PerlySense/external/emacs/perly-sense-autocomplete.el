@@ -1,5 +1,4 @@
 
-
 (defun ps/ac-candidates ()
   (save-excursion
     (goto-char (point-min))
@@ -48,6 +47,7 @@
 
 
 
-(setq ac-sources '(ps/ac-source-method-calls))
+; (setq ac-sources '(ps/ac-source-method-calls))
 
+(provide 'perly-sense-autocomplete)
 
