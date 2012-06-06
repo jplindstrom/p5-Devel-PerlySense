@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+*
+
+
+
+0.0201 -- 2012-06-06 21:32:57 UTC
+
 * Fixed deep recursion bug when finding a Module file, where
   e.g. Bar::Baz would be shadowed by Foo::Bar::Baz.
 
