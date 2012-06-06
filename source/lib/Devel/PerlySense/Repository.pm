@@ -52,7 +52,7 @@ method index( :$oDocument ) {
                 name          => $name,
                 package       => $package,
                 documentation => $oDocument->textDocumentation($name) || "",
-                file          => $oLocation->file,
+                file          => $oDocument->file,
             );
         }
     }
