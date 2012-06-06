@@ -10,28 +10,26 @@ has oPerlySense => (is => "ro", isa => "Devel::PerlySense");
 sub BUILD {
     my $self = shift;
     my $file  = $self->oPerlySense->oHome->dirHomeRepository . "/proto.db";
-    warn "JPL: file is in (" . $file . ")\n";
 
-
-    # my $create = q{
-    #};
+    my $create = q{
+        sub {
+            my $dbh = shift;
+            $dbh->do('
+            CREATE TABLE method (
+                id            INTEGER PRIMARY KEY,
+                name          TEXT NOT NULL,
+                package       TEXT NOT NULL,
+                documentation TEXT NOT NULL,
+                file          TEXT NOT NULL
+            )');
+        },
+    };
     ## no critic
     eval qq{
         use ORLite( {
             package => "Devel::PerlySense::Repository::DB",
-            file    => "\$ENV{HOME}/.PerlySense/repository/proto.db",
-            create  => sub {
-                my \$dbh = shift;
-                \$dbh->do('
-                CREATE TABLE method (
-                    id INTEGER PRIMARY KEY,
-                    name TEXT NOT NULL,
-                    package TEXT NOT NULL,
-                    documentation TEXT NOT NULL,
-                    file TEXT NOT NULL
-                )');
-            },
-            tables  => [ "method" ],
+            file    => "$file",
+            create  => $create
         } );
         1;
     } or die;
