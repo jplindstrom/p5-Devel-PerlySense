@@ -861,15 +861,15 @@ sub determineLikelyApi0 {
     for my $nameBase ($self->aNameBase) {
         my $oDocumentBase = $self->oPerlySense->oDocumentFindModule(
             nameModule => $nameBase,
-            dirOrigin => dirname($self->file),
+            dirOrigin  => dirname($self->file),
         ) or next;
 
         $oDocumentBase->determineLikelyApi(nameModule => $nameBase);
 
         $self->mergePackageApiWithBase(
-            nameModule => $nameModule,
-            rhPackageApi => $rhPackageApi,
-            nameModuleBase => $nameBase,
+            nameModule       => $nameModule,
+            rhPackageApi     => $rhPackageApi,
+            nameModuleBase   => $nameBase,
             rhPackageApiBase => $oDocumentBase->rhPackageApiLikely,
         );
 

@@ -2417,7 +2417,7 @@ sub oDocumentFindModule {
 
     my $fileModule = $self->fileFindModule(
         nameModule => $nameModule,
-        dirOrigin => $dirOrigin,
+        dirOrigin  => $dirOrigin,
     ) or return(undef);
 
     my $oDocument = $self->oDocumentParseFile($fileModule) or return(undef);
