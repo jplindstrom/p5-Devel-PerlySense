@@ -46,7 +46,26 @@ method index( :$oDocument ) {
     );
     for my $package (keys %{$oDocument->rhPackageApiLikely}) {
         my $oApi = $oDocument->rhPackageApiLikely->{$package};
+        for my $name (keys %{$oApi->rhSub}) {
+            my $oLocation = $oApi->rhSub->{$name};
 
+            my $pod = "";
+            my $oLocationPod = $oDocument->oLocationPod(
+                name    => $name,
+                lookFor => "method",
+            );
+            if($oLocationPod) {
+                $self->oPerlySense->oLocationRenderPodToText($oLocationPod);
+                $pod = $oLocationPod->rhProperty->{text} || "";
+            }
+
+            Devel::PerlySense::Repository::DB::Method->create(
+                name          => $name,
+                package       => $package,
+                documentation => $pod,
+                file          => $oLocation->file,
+            );
+        }
     }
 
     Devel::PerlySense::Repository::DB->commit();
