@@ -549,6 +549,11 @@ sub main_perly_sense {
         $oPs->setFindProject(dir => $dir || ".");
         processFilesInDirs($oPs, [ $oPs->oProject->dirProject ]);
 
+    } elsif($command eq "process_file") {
+        $file or syntax("Missing option --file");
+        $oPs->setFindProject(file => $file || ".");
+        processFiles($oPs, [ $file ]);
+
     } elsif($command eq "regex") {
         $file or syntax("Missing option --file");
         $row or syntax("Missing option --row");
@@ -642,11 +647,27 @@ sub processFilesInDirs {
         no_chdir => 1,
     }, @$raDir);
 
+    my %hFileTime;
+    processFiles($oPs, \@aFile, \%hFileTime);
+
+    debug("REPORT");
+    for my $file (
+        sort { $hFileTime{$a} <=> $hFileTime{$b} }
+                keys %hFileTime) {
+        debug(sprintf("%0.6f : $file", $hFileTime{$file}));
+    }
+}
+
+
+
+sub processFiles {
+    my ($oPs, $raFile, $rhFileTime) = @_;
+    $rhFileTime ||= {};
+
     eval "use Devel::PerlySense::Repository; 1;" or die; # Don't load this unless necessary
     my $oRepository = Devel::PerlySense::Repository->new( oPerlySense => $oPs );
 
-    my %hFileTime;
-    for my $file (@aFile) {
+    for my $file (@$raFile) {
         debug("Processing file ($file)");
         my $timeStart = time();
         eval {
@@ -657,17 +678,9 @@ sub processFilesInDirs {
         };
         $@ and debug($@);
         my $timeDuration = time() - $timeStart;
-        $hFileTime{$file} = $timeDuration;
+        $rhFileTime->{$file} = $timeDuration;
         debug(sprintf("  %0.6fs", $timeDuration));
     }
-
-    debug("REPORT");
-    for my $file (
-        sort { $hFileTime{$a} <=> $hFileTime{$b} }
-                keys %hFileTime) {
-        debug(sprintf("%0.6f : $file", $hFileTime{$file}));
-    }
-
 }
 
 
