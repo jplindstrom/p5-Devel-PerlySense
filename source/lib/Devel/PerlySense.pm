@@ -2813,7 +2813,7 @@ sub cacheKeyTotal {
     $self->oCache or return(undef);
 
     my $timestamp = (stat($file))[9] or die("Could not read timestamp for file ($file)\n");
-    my $keyTotal = join("\t", $file, $timestamp, $key, $self->VERSION);
+    my $keyTotal = join("\t", $file, $timestamp, $key, $self->VERSION || 1);
 
     return($keyTotal);
 }
