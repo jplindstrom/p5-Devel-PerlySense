@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 
 use File::Basename;
@@ -33,7 +33,17 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
     is($oPs->fileFindModule(nameModule => "FLorjsdkdj", dirOrigin => $dirOrigin), undef, "Didn't find file ok");
 
     like($oPs->fileFindModule(nameModule => $nameModule, dirOrigin => $dirOrigin), qr/ \Q$fileModuleTarget\E $/x, "Found file downwards ok");
-}   
+
+
+    diag("Check that the file without the prefix of the main file is found and not shadowed by it");
+    my $nameModuleShadowed = "Word::Writer";
+    my $fileModuleShadowedTarget = catfile("lib", "Word", "Writer.pm");
+    like(
+        $oPs->fileFindModule(nameModule => $nameModuleShadowed, dirOrigin => $dirOrigin),
+        qr/ \Q$fileModuleShadowedTarget\E $/x,
+        "Found file downwards ok even though it might have been shadowed by the longer name",
+    );
+}
 
 
 {

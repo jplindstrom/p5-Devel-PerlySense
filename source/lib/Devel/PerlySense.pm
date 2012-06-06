@@ -1673,6 +1673,7 @@ use Pod::Text;
 use IO::String;
 use Cache::Cache;
 use Storable qw/freeze thaw/;
+use List::Util qw/ first /;
 use List::MoreUtils qw/ uniq /;
 
 use Devel::TimeThis;
@@ -2404,7 +2405,7 @@ sub fileFindModule {
     $dirOrigin = dir($dirOrigin)->absolute;
 
     return(
-        $self->fileFindLookingAround($fileModuleBase, $dirOrigin) ||
+        $self->fileFindLookingAround($fileModuleBase, $dirOrigin, $nameModule) ||
         $self->fileFindLookingInInc($fileModuleBase) ||
         undef
     );
@@ -2465,22 +2466,42 @@ sub isFileInProject {
 
 =head1 IMPLEMENTATION METHODS
 
-=head2 fileFindLookingAround($fileModuleBase, $dirOrigin)
+=head2 fileFindLookingAround($fileModuleBase, $dirOrigin, $nameModule?)
 
-Find the file containing the $fileModuleBase given the $dirOrigin.
+Find the file containing the $fileModuleBase given the $dirOrigin. If
+$nameModule is specified, the file must either be in the inc_dir, or
+contain a package declaration for $nameModule.
 
 Return the file name relative to $dirOrigin, or undef if none could be
 found. Die on errors.
 
 =cut
 sub fileFindLookingAround {
-	my ($fileModuleBase, $dirOrigin) = @_;
+	my ($fileModuleBase, $dirOrigin, $nameModule) = @_;
+
+    my @aDirIncProject = map { dir($_)->absolute . "" }
+        $self->oProject->aDirIncProject(
+            dirRelativeTo => $self->oProject->dirProject,
+        );
 
     my $dir = dir($dirOrigin);
     while(1) {
         for my $dirCur (map { dir($dir, $_) } qw/. bin lib/) {
             if(my $fileFound = $self->fileFoundInDir($dirCur, $fileModuleBase)) {
-                return(file($fileFound)->absolute . "");
+                # is it in a local inc_dir?
+                if( first { $_ eq $dir } @aDirIncProject) {
+                    return(file($fileFound)->absolute . "");
+                }
+
+                # Are we expecting a module name? If not, it's a match.
+                $nameModule or return(file($fileFound)->absolute . "");
+
+                # Does the file contain a Package declaration for the
+                # module name?
+                my $oDocumentFound = $self->oDocumentParseFile($fileFound) or next;
+                if( first { $_ eq $nameModule } $oDocumentFound->aNamePackage) {
+                    return(file($fileFound)->absolute . "");
+                }
             }
         }
 
