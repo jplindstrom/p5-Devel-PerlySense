@@ -123,6 +123,21 @@ sub dirHomeLog {
 
 
 
+=head2 dirHomeRepository
+
+The User Home repository dir, or "" if no home dir could be identified.
+
+Readonly.
+
+=cut
+sub dirHomeRepository {
+    $self->_dirSubHomeCreate("repository");
+}
+
+
+
+
+
 1;
 
 
