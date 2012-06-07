@@ -514,7 +514,7 @@ Die if $file doesn't exist, or on other errors.
 =cut
 sub rhRegexExample {
     my ($row, $col) = Devel::PerlySense::Util::aNamedArg(["row", "col"], @_);
-    
+
     return { regex => "", example => "" };
 }
 
@@ -577,7 +577,7 @@ sub oLocationSubAt {
             return($oLocation->clone);
         }
     }
-    
+
     return(undef);
 }
 
@@ -629,7 +629,7 @@ sub oLocationSubDefinition {
         my $oDocumentBase = $self->oPerlySense->oDocumentFindModule(
             nameModule => $moduleBase,
             dirOrigin => dirname($self->file),
-        ) or debug("Could not find module ($moduleBase)\n"), next;
+        ) or debug("Could not find module ($moduleBase)"), next;
         $oLocation = $oDocumentBase->oLocationSubDefinition(name => $name, package => $moduleBase);
         $oLocation and return($oLocation);
     }
