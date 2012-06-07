@@ -53,7 +53,7 @@ method index( :$oDocument ) {
             Devel::PerlySense::Repository::DB::Method->create(
                 name          => $name,
                 package       => $package,
-                documentation => $oDocument->textDocumentation($name) || "",
+                documentation => "", # $oDocument->textDocumentation($name) || "",
                 file          => $oDocument->file,
             );
         }
