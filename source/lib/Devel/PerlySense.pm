@@ -2429,7 +2429,7 @@ sub oDocumentFindModule {
         dirOrigin  => $dirOrigin,
     ) or return(undef);
 
-    my $oDocument = eval { $self->oDocumentParseFile($fileModule) } or return(undef);
+    my $oDocument = $self->oDocumentParseFile($fileModule) or return(undef);
 
     return($oDocument);
 }
