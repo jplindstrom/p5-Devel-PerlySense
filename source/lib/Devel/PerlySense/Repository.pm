@@ -5,6 +5,8 @@ package Devel::PerlySense::Repository;
 use Moose;
 use Method::Signatures;
 
+use Devel::PerlySense::Util::Log;
+
 has oPerlySense => (is => "ro", isa => "Devel::PerlySense");
 
 sub BUILD {

@@ -1835,6 +1835,14 @@ Die on errors (like if the file wasn't found).
 sub oDocumentParseFile {
 	my ($file) = @_;
 
+    # Stop recursive lookups
+    if( exists $self->rhFileDocumentCache->{$file}) {
+        if(! defined $self->rhFileDocumentCache->{$file}) {
+            die("Tried to parse ($file) recursively\n");
+        }
+    }
+    $self->rhFileDocumentCache->{$file} = undef;
+
     my $oDocument = $self->rhFileDocumentCache->{$file} ||= do {
         my $oDocumentNew = Devel::PerlySense::Document->new(oPerlySense => $self);
         $oDocumentNew->parse(file => $file);
@@ -2488,7 +2496,12 @@ sub fileFindLookingAround {
 
                 # Does the file contain a Package declaration for the
                 # module name?
-                my $oDocumentFound = $self->oDocumentParseFile($fileFound) or next;
+#               look in the file for the package name, workaround!
+
+                # Check for the dir above the file, is there a package
+                # name like that in the file? If so, this one isn't
+                # it.
+                my $oDocumentFound = eval { $self->oDocumentParseFile($fileFound) } or next;
                 if( first { $_ eq $nameModule } $oDocumentFound->aNamePackage) {
                     return(file($fileFound)->absolute . "");
                 }
