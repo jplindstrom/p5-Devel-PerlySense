@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0202 -- 2012-06-07 20:09:55 UTC
+
 * Fixed deep recursion bug when a Module claims to be a base class to
   itself (still has to deal with larger circualar references)
 
