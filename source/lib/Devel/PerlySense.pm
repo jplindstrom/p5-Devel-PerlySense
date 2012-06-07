@@ -2494,15 +2494,36 @@ sub fileFindLookingAround {
                 # Are we expecting a module name? If not, it's a match.
                 $nameModule or return(file($fileFound)->absolute . "");
 
-                # Does the file contain a Package declaration for the
-                # module name?
-#               look in the file for the package name, workaround!
 
                 # Check for the dir above the file, is there a package
                 # name like that in the file? If so, this one isn't
                 # it.
-                my $oDocumentFound = eval { $self->oDocumentParseFile($fileFound) } or next;
-                if( first { $_ eq $nameModule } $oDocumentFound->aNamePackage) {
+                # If I do this, the next one might not even be needed
+
+
+                # Does the file contain a Package declaration for the
+                # module name? This is a manual and cheap workaround
+                # to avoid recursive and slow parse
+                my $textFile = file($fileFound)->slurp();
+                if($textFile =~ m|
+                    package          # package declaration
+                    \s+
+                    [^;]*?           # up until until the next
+                                     # statement separator (fragile,
+                                     # could well be in comments or a
+                                     # block)
+                    (?<!::)          # Not preceeded by a module
+                                     # separator, i.e. it's not a
+                                     # module shadowing the shorter
+                                     # name
+                    $nameModule
+                    \b
+                    (?!::)           # Not followed by a module
+                                     # separator, i.e. it's not a
+                                     # longer, other module
+                |xsm) {
+                    ###TODO: possibly check using parse here, now that
+                    ###we know the package name is in there.
                     return(file($fileFound)->absolute . "");
                 }
             }
