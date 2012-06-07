@@ -803,12 +803,16 @@ Cached on the usual + $nameModule.
 =cut
 sub determineLikelyApi {
     my ($nameModule) = Devel::PerlySense::Util::aNamedArg(["nameModule"], @_);
+    my %args = @_;
 
     my $keyCache = "likelyApi\t$nameModule";
     if(my $rhPackageApi = $self->cacheGet($keyCache, $self->file)) {
         $self->rhPackageApiLikely($rhPackageApi);
     } else {
-        $self->determineLikelyApi0(nameModule => $nameModule);
+        $self->determineLikelyApi0(
+            nameModule       => $nameModule,
+            rhSeenNameModule => $args{rhSeenNameModule},
+        );
        $self->cacheSet($keyCache, $self->file, $self->rhPackageApiLikely);
    }
 
@@ -826,7 +830,10 @@ Implementation for determineLikelyApi()
 =cut
 sub determineLikelyApi0 {
     my ($nameModule) = Devel::PerlySense::Util::aNamedArg(["nameModule"], @_);
+    my %args = @_;
 
+    my $rhSeenNameModule = $args{rhSeenNameModule} || {};
+    local $rhSeenNameModule->{$nameModule} = 1;
 
     my $rhPackageApi = {};
 
@@ -859,16 +866,21 @@ sub determineLikelyApi0 {
 
     #Look in base classes
     for my $nameBase ($self->aNameBase) {
+        debug("($nameModule) looking in base class ($nameBase)");
+        if($rhSeenNameModule->{$nameBase}) {
+            debug("($nameModule) looking at ($nameBase), but it's already seen in the inheritance tree, skipping");
+            next;
+        }
+
         my $oDocumentBase = $self->oPerlySense->oDocumentFindModule(
             nameModule => $nameBase,
             dirOrigin  => dirname($self->file),
         ) or next;
 
-        debug("($nameModule) looking in base class ($nameBase)");
-        $nameModule eq $nameBase and next;
-        ###TODO: look for longer recursive chains
-
-        $oDocumentBase->determineLikelyApi(nameModule => $nameBase);
+        $oDocumentBase->determineLikelyApi(
+            nameModule       => $nameBase,
+            rhSeenNameModule => $rhSeenNameModule,
+        );
 
         $self->mergePackageApiWithBase(
             nameModule       => $nameModule,
