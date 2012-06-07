@@ -842,6 +842,10 @@ sub determineLikelyApi0 {
             dirOrigin => dirname($self->file),
         ) or next;
 
+        debug("($nameModule) looking in base class ($nameBase)");
+        $nameModule eq $nameBase and next;
+        ###TODO: look for longer recursive chains
+
         $oDocumentBase->determineLikelyApi(nameModule => $nameBase);
 
         $self->mergePackageApiWithBase(
