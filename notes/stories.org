@@ -1380,13 +1380,13 @@ POD ERRORS
 **** (scp/prepare-shell-command command)
 **** (scp/shell-command-to-string command stdin-args)
 ***** If no prepared, setup one first
-***** Run command in prepared process and send stdin-args to it. 
+***** Run command in prepared process and send stdin-args to it.
 ***** Wait for process termination and return the output
 ***** cleanup-shell-commands
 ***** Setup idle timer (2s?) to check if a new shell-command needs preparing
 ****** If a new was created, setup new idle timer again, so that one at a time is spawned
 **** (scp/cleanup-shell-command command)
-***** 
+*****
 **** Stories
 ***** I
 ****** DONE Setup
@@ -1402,7 +1402,7 @@ POD ERRORS
 ****** stress test it
 ******* make it robust so it restarts and  can recover from being out of sync
 ****** bug with method docs from overview?
-****** 
+******
 ***** Refactor elisp to use ps/command
 ***** Time/benchmark ps/command
 ***** Switch over to shell-command-prepared
@@ -1815,7 +1815,7 @@ Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Docum
 
 
 
-** Docs 
+** Docs
 *** declarations
 ** DONE Run current Test::Class method only
 *** C-o r m
@@ -2174,7 +2174,7 @@ Goto ->new found "setup_new" docs
 Search for data_collection finds create_data_collection
 
 Don't match if there's a leading sigil, e.g. $oLocation
-      
+
 ** Refactor: Remove duplication in Project, for calling covered
 ** Goto Other Test file - reuse window
 
@@ -5028,7 +5028,7 @@ color: user; presence: checkin that day; height: size of commit
 **** Watch for jobs
 **** Eventually exit, waiting to be restarted again
 *** How to handle renamed / deletions?
-**** Once indexer is idle, run through files and purge missing files from index 
+**** Once indexer is idle, run through files and purge missing files from index
 ** Symbol Server
 *** Web server, accepting from localhost
 *** /symbol
@@ -5038,7 +5038,7 @@ color: user; presence: checkin that day; height: size of commit
 ***** name_contains
 ***** symbol_type=
 **** Returns
-***** 
+*****
 ** Indexing call chains
 *** Analyze call chains and root items
 
@@ -5092,7 +5092,7 @@ Root item: Package::file()
 Qualified root item: Package::file()
 
 
-*** Alalyze chains
+*** Analyze chains
 Collapse method args into ()
 Normalise ref lookups to always use ->
 Keep hash keys that are strings or bare-words, normalise into 'string'.
@@ -5138,6 +5138,13 @@ chain->|item
 ****** match all known modules in the current Project or CPAN dirs.
 **** Candidates are all methods of all these types.
 
+*** Complete method 2
+**** Simple
+tip->|
+Find all tip and look for tip->*
+match that
+***** 
+**** Longer
 *** Prototype Repo tables
 **** method
 ***** id
@@ -5160,11 +5167,17 @@ chain->|item
 **** DONE Return hard coded list of methods and docs. Is it quick enough?
 ***** Yes
 
-**** Repo tables for CPAN and Project dbs.
+**** DONE Repo tables for CPAN and Project dbs.
 
-**** Test data for a few tables
+**** DONE Test data for a few tables
 
 **** Query to return methods
+
+***** $self->
+
+***** tip
+
+***** chain
 
 **** Indexer
 
