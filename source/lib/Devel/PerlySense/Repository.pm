@@ -62,5 +62,20 @@ method index( :$oDocument ) {
     Devel::PerlySense::Repository::DB->commit();
 }
 
+method raMethodByClass($nameClass) {
+    return [
+        map {
+            +{
+                method_name   => $_->name,
+                package       => $_->package,
+                documentation => $_->documentation,
+            };
+        }
+        Devel::PerlySense::Repository::DB::Method->select(
+            "where package = ?",
+            $nameClass,
+        ),
+    ];
+}
 
 1;

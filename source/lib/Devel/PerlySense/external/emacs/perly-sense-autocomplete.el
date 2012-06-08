@@ -1,10 +1,24 @@
 
+(defun ps/ac-get-current-class-name ()
+  (save-excursion
+    (if (search-backward-regexp "package +[^;]*?\\([:a-zA-Z0-0]+\\)")
+        (match-string 1)
+      nil
+      )
+    )
+  )
+
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
   (let* (
         (sub-names (list ) )
+        (current-class-name (ps/ac-get-current-class-name))
         (response-buffer
-         (url-retrieve-synchronously "http://localhost:3496/method/complete")
+         (and current-class-name
+              (url-retrieve-synchronously
+               (format "http://localhost:3496/method/complete?class_name=%s" current-class-name)
+               )
+              )
          )
         )
     (if response-buffer

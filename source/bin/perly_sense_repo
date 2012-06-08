@@ -1,8 +1,11 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite;
+
+use Cache::FileCache;
+
 use Devel::PerlySense;
 use Devel::PerlySense::Editor::Emacs;
-use Cache::FileCache;
+use Devel::PerlySense::Repository;
 
 
 ###TODO: copy pasted from perly_sense
@@ -31,6 +34,28 @@ get '/method/complete' => sub {
         oPerlySense  => $oPs,
         widthDisplay => 80,
     );
+
+    my $oRepository = Devel::PerlySense::Repository->new(oPerlySense => $oPs);
+
+    my $rhResponse = { };
+    if(my $nameClass = $self->param("class_name")) {
+        $rhResponse = {
+            completions => $oRepository->raMethodByClass($nameClass),
+        };
+    }
+
+    my $out = $oEditor->formatOutputDataStructure(
+        rhData => $rhResponse,
+    );
+    $self->render(text => $out);
+};
+
+app->start;
+
+
+
+
+__DATA__
 
     my $out = $oEditor->formatOutputDataStructure(
         rhData => {
@@ -80,9 +105,4 @@ $stringItem text.',
                 },
             ],
         },
-    );    
-    
-    $self->render(text => $out);
-};
-
-app->start;
+    );
