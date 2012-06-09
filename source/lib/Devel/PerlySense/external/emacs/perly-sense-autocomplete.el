@@ -1,11 +1,16 @@
 
 (defun ps/ac-get-current-class-name ()
   (save-excursion
-    (if (search-backward-regexp "package +[^;]*?\\([:a-zA-Z0-0]+\\)")
+    (if (search-backward-regexp "package +[^;]*?\\([:a-zA-Z0-0]+\\)" nil t)
         (match-string 1)
       nil
       )
     )
+  )
+
+(defun ps/call-repository-server (url args)
+
+
   )
 
 (defun ps/ac-candidates ()
@@ -51,8 +56,6 @@
     )
   )
 
-
-
 (defun ps/candidate-documentation (symbol-name)
   (save-excursion
     (goto-char (point-min))
@@ -75,13 +78,33 @@
     )
   )
 
+;; when calling the GET
+  ;; (let ((buf (get-buffer-create "*clang-output*"))
+  ;;       res)
+  ;;   (with-current-buffer buf (erase-buffer))
+
+
+;; When parsing strings, attach the doc string to the candidate
+                ;; (setq match (propertize match
+                ;;                         'ac-clang-help
+                ;;                         (concat
+                ;;                          (get-text-property 0 'ac-clang-help (car lines))
+                ;;                          "\n"
+                ;;                          detailed_info)))
+
+
+;; (defun ac-clang-document (item)
+;;   (if (stringp item)
+;;       (let (s)
+;;         (setq s (get-text-property 0 'ac-clang-help item))
+;;         (ac-clang-clean-document s)))
+;;   )
+
 (defvar ps/ac-source-method-calls
   '(
     ;; init to ensure server is started and indexer is started
     (prefix . "->\\(.*\\)")
-    (requires . 0)
     (candidates . ps/ac-candidates)
-    (summary . (lambda () "Help text"))
     (document . ps/candidate-documentation)
     )
   )
