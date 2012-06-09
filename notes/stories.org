@@ -2033,41 +2033,41 @@ Put it under the synopsis as HTML only
 
 New synopsis
 
-|---------------------------+-----------+-----|
-| Feature                   | Emacs     | Vim |
-|---------------------------+-----------+-----|
-| ** OVERVIEW **            |           |     |
-| Overview                  | C-o C-o   |     |
-|                           |           |     |
-| ** DOCS **                |           |     |
-| Docs                      | C-o C-d   |     |
-| Document Inheritance      | C-o d i   |     |
-| Document 'use' statements | C-o d u   |     |
-|                           |           |     |
-| ** GO TO **               |           |     |
-| Go To                     | C-o C-g   |     |
-| Go To 'new'               | C-o g n   |     |
-| Go To Module              | C-o g m   |     |
-| Go To Base Class          | C-o g b   |     |
-| Go To Use section         | C-o g u   |     |
-| Go To Version Control     | C-o g v   |     |
-|                           |           |     |
-| ** Find **                |           |     |
-| Find with Ack             | C-o f a   |     |
-| Find Sub Declarations     | C-o f s   |     |
-| Find Method Calls         | C-o f c   |     |
-|                           |           |     |
-| ** RUN **                 |           |     |
-| Run file                  | C-o C-r   |     |
-| Re-run file               | C-o r r   |     |
-|                           |           |     |
-| ** EDIT **                |           |     |
-| Edit - Move Use Statement | C-o e m u |     |
-| Edit Test Count           | C-o e t c |     |
-|                           |           |     |
-| ** ASSIST **              |           |     |
-| Assist With Test Count    |           |     |
-|---------------------------+-----------+-----|
+|---------------------------+-----------+-----+--------------|
+| Feature                   | Emacs     | Vim | Command line |
+|---------------------------+-----------+-----+--------------|
+| ** OVERVIEW **            |           |     |              |
+| Overview                  | C-o C-o   |     |              |
+|                           |           |     |              |
+| ** DOCS **                |           |     |              |
+| Docs                      | C-o C-d   |     |              |
+| Document Inheritance      | C-o d i   |     |              |
+| Document 'use' statements | C-o d u   |     |              |
+|                           |           |     |              |
+| ** GO TO **               |           |     |              |
+| Go To                     | C-o C-g   |     |              |
+| Go To 'new'               | C-o g n   |     |              |
+| Go To Module              | C-o g m   |     |              |
+| Go To Base Class          | C-o g b   |     |              |
+| Go To Use section         | C-o g u   |     |              |
+| Go To Version Control     | C-o g v   |     |              |
+|                           |           |     |              |
+| ** Find **                |           |     |              |
+| Find with Ack             | C-o f a   |     |              |
+| Find Sub Declarations     | C-o f s   |     |              |
+| Find Method Calls         | C-o f c   |     |              |
+|                           |           |     |              |
+| ** RUN **                 |           |     |              |
+| Run file                  | C-o C-r   |     |              |
+| Re-run file               | C-o r r   |     |              |
+|                           |           |     |              |
+| ** EDIT **                |           |     |              |
+| Edit - Move Use Statement | C-o e m u |     |              |
+| Edit Test Count           | C-o e t c |     |              |
+|                           |           |     |              |
+| ** ASSIST **              |           |     |              |
+| Assist With Test Count    |           |     |              |
+|---------------------------+-----------+-----+--------------|
 
 
 
