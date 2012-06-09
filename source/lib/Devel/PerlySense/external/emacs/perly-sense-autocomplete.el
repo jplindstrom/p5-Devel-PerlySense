@@ -31,11 +31,17 @@
                     )
                   (buffer-string)))
                (result-alist (ps/parse-sexp response-text))
+               ;; (dummy (prin1 result-alist))
                (completions-list (alist-value result-alist "completions"))
                )
           (mapcar
            (lambda (completion-alist)
-             (push (alist-value completion-alist "method_name") sub-names)
+             (let (
+                   (sub-name (alist-value completion-alist "method_name"))
+                   (package-name (alist-value completion-alist "package"))
+                   )
+               (push (propertize sub-name 'summary package-name) sub-names)
+               )
              )
            completions-list)
           )
