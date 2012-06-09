@@ -64,6 +64,10 @@ method index( :$oDocument ) {
 
 method raMethodByClass($nameClass) {
     return [
+        sort {
+               $a->{package}     cmp $b->{package}
+            || $a->{method_name} cmp $b->{method_name}
+        }
         map {
             +{
                 method_name   => $_->name,
