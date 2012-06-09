@@ -1750,7 +1750,7 @@ classes, and for not looking at base classes when listing methods.
 
 
 
-** TODO Bug: Infinite base class loop
+** DOING Bug: Infinite base class loop
 
 File::Spec
 my $module = $module{$^O} || 'Unix';
@@ -1814,9 +1814,19 @@ Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Docum
 
 
 
-
+** Find docs: find cleverer amongst multiple
+*** ->method
+*** $something->metod
+*** method()
+*** earliest mention on the line
+*** not if $method or %method or @method
+** Overview: indicate whether there's docs for an API item
+** Overview: Show tooltip for API items
+** Identify methods/attributes: ignore SUPER
+*** ->SUPER
+**** not if it's called like SUPER::something
 ** Docs
-*** declarations
+*** declarations / signature
 ** DONE Run current Test::Class method only
 *** C-o r m
 **** Mark method to be current, or toggle if already current
