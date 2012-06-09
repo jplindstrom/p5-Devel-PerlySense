@@ -45,7 +45,7 @@
     )
   )
 
-(ps/ac-candidates)
+
 
 (defun ps/candidate-documentation (symbol-name)
   (save-excursion
@@ -71,12 +71,20 @@
 
 (defvar ps/ac-source-method-calls
   '(
+    ;; init to ensure server is started and indexer is started
     (prefix . "->\\(.*\\)")
+    (requires . 0)
     (candidates . ps/ac-candidates)
     (summary . (lambda () "Help text"))
     (document . ps/candidate-documentation)
     )
   )
+
+(defun ps/smart-complete-at-point ()
+  (interactive)
+  (auto-complete '(ps/ac-source-method-calls)) ;; For now
+  )
+(global-set-key (format "%s\C-c" ps/key-prefix) 'ps/smart-complete-at-point)
 
 
 ; prefix: use
