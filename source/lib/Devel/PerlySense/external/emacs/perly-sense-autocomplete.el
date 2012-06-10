@@ -8,9 +8,22 @@
     )
   )
 
-(defun ps/call-repository-server (url args)
-
-
+(defun ps/call-repository-server (path args)
+  (let (
+        (response-buffer
+         (url-retrieve-synchronously (format "http://localhost:3496%s?%s" path args)))
+        )
+    (if response-buffer
+        (with-current-buffer response-buffer
+          (goto-char (point-min))
+          (if (search-forward-regexp "\n\n" nil t)
+              (delete-region (point-min) (point))
+            )
+          (buffer-string))
+      (message "Could not call PerlySense Repository Server")
+      nil
+      )
+    )
   )
 
 (defun ps/ac-candidates ()
@@ -18,39 +31,28 @@
   (let* (
         (sub-names (list ) )
         (current-class-name (ps/ac-get-current-class-name))
-        (response-buffer
-         (and current-class-name
-              (url-retrieve-synchronously
-               (format "http://localhost:3496/method/complete?class_name=%s" current-class-name)
-               )
-              )
-         )
         )
-    (if response-buffer
+    (if current-class-name
         (let* (
-               (response-text
-                (with-current-buffer response-buffer
-                  (goto-char (point-min))
-                  (if (search-forward-regexp "\n\n" nil t)
-                      (delete-region (point-min) (point))
-                    )
-                  (buffer-string)))
-               (result-alist (ps/parse-sexp response-text))
+               (response-text (ps/call-repository-server
+                               "/method/complete"
+                               (format "class_name=%s" current-class-name)))
+               (result-alist (and response-text (ps/parse-sexp response-text)))
                ;; (dummy (prin1 result-alist))
-               (completions-list (alist-value result-alist "completions"))
+               (completions-list (and result-alist (alist-value result-alist "completions")))
                )
           (mapcar
            (lambda (completion-alist)
              (let (
                    (sub-name (alist-value completion-alist "method_name"))
-                   (package-name (alist-value completion-alist "declaration_package"))
+                   (package-name (alist-value completion-alist "api_package"))
                    )
                (push (propertize sub-name 'summary package-name) sub-names)
                )
              )
            completions-list)
           )
-      (message "Could not call PerlySense Repository Server")
+      (message "Could not find package declaration")
       )
     sub-names
     )
