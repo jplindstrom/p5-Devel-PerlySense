@@ -66,6 +66,9 @@ method index( :$oDocument ) {
 }
 
 method raResponseFromResultset($raRow) {
+    ###JPL: if the class isn't known, order them so any likely classes
+    ###are displayed earlier. e..g package name mentioned in the
+    ###vincinity.
     return [
         sort {
                $a->{api_package} cmp $b->{api_package}
