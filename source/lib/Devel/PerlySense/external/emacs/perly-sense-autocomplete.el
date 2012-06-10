@@ -51,27 +51,27 @@
     )
   )
 
+(defun ps/ac-candidates-from-completions-list (completions-list)
+  (mapcar
+   (lambda (completion-alist)
+     (let ((sub-name     (alist-value completion-alist "method_name"))
+           (package-name (alist-value completion-alist "api_package")))
+       (propertize sub-name 'summary package-name)
+       )
+     )
+   completions-list))
+
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
-  (let ((completions-list
-         (or
-          (progn
-            (when (looking-back "$self->\\(.*\\)")
-              (ps/completions-list-for-self)
-              )
-            )
-          '()
-          ))
+  (ps/ac-candidates-from-completions-list
+   (or
+    (progn
+      (when (looking-back "$self->\\(.*\\)")
+        (ps/completions-list-for-self)
         )
-    (mapcar (lambda (completion-alist)
-              (let ((sub-name (alist-value completion-alist "method_name"))
-                    (package-name (alist-value completion-alist "api_package")))
-                (propertize sub-name 'summary package-name)
-                )
-              )
-            completions-list)
-    )
-  )
+      )
+    '()
+    )))
 
 (defun ps/candidate-documentation (symbol-name)
   (save-excursion
