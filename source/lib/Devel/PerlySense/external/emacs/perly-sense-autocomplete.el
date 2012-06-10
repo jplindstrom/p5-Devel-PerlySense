@@ -38,26 +38,38 @@
     (alist-value response-alist key)
     ))
 
-(defun ps/ac-candidates ()
-  (interactive) ;; JPL
+(defun ps/completions-list-for-self ()
   (let ((current-class-name (ps/ac-get-current-class-name)))
     (if current-class-name
-        (let ((completions-list
-               (ps/call-repository-server-parse-sexp-get-key
-                "/method/complete"
-                (format "class_name=%s" current-class-name)
-                "completions")))
-          (mapcar (lambda (completion-alist)
-                    (let ((sub-name (alist-value completion-alist "method_name"))
-                          (package-name (alist-value completion-alist "api_package")))
-                      (propertize sub-name 'summary package-name)
-                      )
-                    )
-                  completions-list)
-          )
+        (ps/call-repository-server-parse-sexp-get-key
+         "/method/complete"
+         (format "class_name=%s" current-class-name)
+         "completions")
       (message "Could not find package declaration")
       '()
       )
+    )
+  )
+
+(defun ps/ac-candidates ()
+  (interactive) ;; JPL
+  (let ((completions-list
+         (or
+          (progn
+            (when (looking-back "$self->\\(.*\\)")
+              (ps/completions-list-for-self)
+              )
+            )
+          '()
+          ))
+        )
+    (mapcar (lambda (completion-alist)
+              (let ((sub-name (alist-value completion-alist "method_name"))
+                    (package-name (alist-value completion-alist "api_package")))
+                (propertize sub-name 'summary package-name)
+                )
+              )
+            completions-list)
     )
   )
 
