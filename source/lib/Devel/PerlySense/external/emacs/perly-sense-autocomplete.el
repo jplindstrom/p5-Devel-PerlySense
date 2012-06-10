@@ -33,6 +33,11 @@
       '()
       )))
 
+(defun ps/call-repository-server-parse-sexp-get-key (path args key)
+  (let ((response-alist (ps/call-repository-server-parse-sexp path args)))
+    (alist-value response-alist key)
+    ))
+
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
   (let* (
@@ -41,12 +46,11 @@
         )
     (if current-class-name
         (let* (
-               (result-alist (ps/call-repository-server-parse-sexp
-                               "/method/complete"
-                               (format "class_name=%s" current-class-name)))
-               ;; (dummy (prin1 result-alist))
-               (completions-list (and result-alist (alist-value result-alist "completions")))
-               )
+               (completions-list
+                (ps/call-repository-server-parse-sexp-get-key
+                 "/method/complete"
+                 (format "class_name=%s" current-class-name)
+                 "completions")))
           (mapcar
            (lambda (completion-alist)
              (let (
