@@ -40,31 +40,24 @@
 
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
-  (let* (
-        (sub-names (list ) )
-        (current-class-name (ps/ac-get-current-class-name))
-        )
+  (let ((current-class-name (ps/ac-get-current-class-name)))
     (if current-class-name
-        (let* (
-               (completions-list
-                (ps/call-repository-server-parse-sexp-get-key
-                 "/method/complete"
-                 (format "class_name=%s" current-class-name)
-                 "completions")))
-          (mapcar
-           (lambda (completion-alist)
-             (let (
-                   (sub-name (alist-value completion-alist "method_name"))
-                   (package-name (alist-value completion-alist "api_package"))
-                   )
-               (push (propertize sub-name 'summary package-name) sub-names)
-               )
-             )
-           completions-list)
+        (let ((completions-list
+               (ps/call-repository-server-parse-sexp-get-key
+                "/method/complete"
+                (format "class_name=%s" current-class-name)
+                "completions")))
+          (mapcar (lambda (completion-alist)
+                    (let ((sub-name (alist-value completion-alist "method_name"))
+                          (package-name (alist-value completion-alist "api_package")))
+                      (propertize sub-name 'summary package-name)
+                      )
+                    )
+                  completions-list)
           )
       (message "Could not find package declaration")
+      '()
       )
-    sub-names
     )
   )
 
