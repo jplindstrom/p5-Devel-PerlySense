@@ -175,6 +175,7 @@ regardless of the scope of the $tip or $chain_root."
     ;; init to ensure server is started and indexer is started
     (prefix . "->\\(.*\\)")
     (candidates . ps/ac-candidates)
+    (requires . 0)
     (document . ps/candidate-documentation)
     )
   )
