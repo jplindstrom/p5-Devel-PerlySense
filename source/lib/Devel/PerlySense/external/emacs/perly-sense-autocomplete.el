@@ -84,11 +84,10 @@ regardless of the scope of the $tip or $chain_root."
          (format
           "method_call_starts_with=%s&%s"
           current-completion-string
-          (mapconcat (lambda
-                       (class-name)
+          (mapconcat (lambda (class-name)
                        (format "method_call=%s" class-name))
-                     "&"
-                     tip-method-calls)
+                     tip-method-calls
+                     "&")
           )
          "completions"
          )
