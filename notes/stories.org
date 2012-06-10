@@ -1,11 +1,9 @@
 #+Seq_TODO: TODO DOING DONE
 * User Stories
 ** DONE Bug: Build.pl
-
 Fix Build.PM to refer to the file with / not \\
 
 ** DONE Recompile -- reuse visible *compiation* buffer
-
 If the *compiation* buffer is already visible in any frame, switch to
 that first, so we don't get to see two *compiation* buffers next to
 each other. That just looks silly.
@@ -13,10 +11,7 @@ each other. That just looks silly.
 select-window
 get-buffer-window
 
-
-
 ** DONE Flymake
-
 Call perly_sense which in turn does the right thing, e.g.
 
 Configurable
@@ -5048,7 +5043,7 @@ color: user; presence: checkin that day; height: size of commit
 ***** name_contains
 ***** symbol_type=
 **** Returns
-*****
+***** 
 ** Indexing call chains
 *** Analyze call chains and root items
 
@@ -5168,35 +5163,34 @@ match that
 ***** documentation
 ***** declaration_file
 ***** declaration_line
-*** Work plan
+** Work plan
+*** DONE Server
 
-**** DONE Server
+*** DONE /complete_method
 
-**** DONE /complete_method
+*** DONE Return hard coded list of methods and docs. Is it quick enough?
+**** Yes
 
-**** DONE Return hard coded list of methods and docs. Is it quick enough?
-***** Yes
+*** DONE Repo tables for CPAN and Project dbs.
 
-**** DONE Repo tables for CPAN and Project dbs.
+*** DONE Test data for a few tables
 
-**** DONE Test data for a few tables
+*** Query to return methods
 
-**** Query to return methods
+**** DONE $self->
 
-***** $self->
+**** tip
 
-***** tip
+**** chain
 
-***** chain
+*** Indexer
 
-**** Indexer
-
-**** Parser for
+*** Parser for
 - $self
 - my
 
 
-*** responsiveness
+** responsiveness
 
 Can the chains and types of chains and methods of chains be pre-cached and stored in-buffer? Asynchronous call after save.
 
