@@ -140,6 +140,7 @@ select api_package, name from method where api_package in (
             )
         group by api_package having count(*) >= 2
     ) as packages
+    where api_package in (select api_package from method where name like 'rhInsertedBy%')
 );
 
 
