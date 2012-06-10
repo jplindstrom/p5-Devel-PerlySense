@@ -79,7 +79,6 @@ $chain_root->'tip'->abc, i.e. the last piece of a call chain.
 This is a very naivielme match to start with, assuming anything that
 is called from the tip can be used to distinguish the type,
 regardless of the scope of the $tip or $chain_root."
-  (message "in ps/completions-list-for-chain-tip (%s) (%s)" tip-string current-completion-string)
   (let ((tip-method-calls (ps/find-tip-method-calls-list tip-string current-completion-string)))
     (if tip-method-calls
         (ps/call-repository-server-parse-sexp-get-key
