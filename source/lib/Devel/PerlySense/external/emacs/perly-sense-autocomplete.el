@@ -10,6 +10,7 @@
 
 (defun ps/call-repository-server (path args)
   (let (
+        ;; (dummy (message "Calling with (%s) (%s)" path args))
         (response-buffer
          (url-retrieve-synchronously (format "http://localhost:3496%s?%s" path args)))
         )
@@ -51,6 +52,8 @@
     )
   )
 
+;; Needs to be run on symbol_server
+;; Needs to look in base classes too
 (defun ps/find-tip-method-calls-list (tip-string current-completion-string)
   (save-excursion
     (goto-char (point-min))
@@ -111,7 +114,7 @@ regardless of the scope of the $tip or $chain_root."
   (interactive) ;; JPL
   (ps/ac-candidates-from-completions-list
    (cond
-    ((looking-back "$self->\\(.*\\)")
+    ((looking-back "$self->\\(\\w*\\)")
      (ps/completions-list-for-self)
      )
     ((looking-back "\\($?\\w+\\)->\\(.*\\)" nil t)
