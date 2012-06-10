@@ -43,6 +43,16 @@ get '/method/complete' => sub {
             completions => $oRepository->raMethodByClass($nameClass),
         };
     }
+    if(my @aNameMethod = $self->param("method_call")) {
+warn Dumper([@aNameMethod]); use Data::Dumper;
+        my $nameMethodStartsWith = $self->param("method_call_starts_with");
+        $rhResponse = {
+            completions => $oRepository->raMethodByNames(
+                \@aNameMethod,
+                $nameMethodStartsWith,
+            ),
+        };
+    }
 
     my $out = $oEditor->formatOutputDataStructure(
         rhData => $rhResponse,

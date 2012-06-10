@@ -65,7 +65,7 @@ method index( :$oDocument ) {
     Devel::PerlySense::Repository::DB->commit();
 }
 
-method raMethodByClass($nameClass) {
+method raResponseFromResultset($raRow) {
     return [
         sort {
                $a->{api_package} cmp $b->{api_package}
@@ -79,11 +79,64 @@ method raMethodByClass($nameClass) {
                 documentation       => $_->documentation,
             };
         }
+        @$raRow
+    ];
+}
+
+method raMethodByClass($nameClass) {
+    return $self->raResponseFromResultset([
         Devel::PerlySense::Repository::DB::Method->select(
             "where api_package = ?",
             $nameClass,
         ),
-    ];
+    ]);
+}
+
+method raMethodByNames($raNameMethod, $nameMethodStartsWith) {
+
+    use Data::Dumper; warn "JPL: " . Dumper([$raNameMethod, $nameMethodStartsWith]);
+    my $nameMethodCount = scalar @$raNameMethod;
+    my $nameMethodPlaceholders = join(", ", map { "?" } 1..$nameMethodCount);
+
+    my @raRow = Devel::PerlySense::Repository::DB::Method->select(
+        # Can't use placeholder for $nameMethodCount for some reason,
+        # it' safe to interpolate anyway
+        qq| where api_package in (
+                select api_package from (
+                    select api_package, count(*) from method where
+                        name in ($nameMethodPlaceholders)
+                    group by api_package having count(*) >= $nameMethodCount
+                ) as packages
+            )
+            |,
+        @$raNameMethod,
+    );
+
+    ###JPL: Filter out classes that doesn't have $nameMethodStartsWith
+
+    return $self->raResponseFromResultset(\@raRow);
 }
 
 1;
+
+__END__
+
+Foo abc
+Foo def
+Foo ghi
+Bar abc
+Bar def
+Baz def
+
+select api_package, name from method where api_package in (
+    select api_package from (
+        select api_package, count(*) from method where
+            name in (
+                "fileHtml",
+                "oNotes"
+            )
+        group by api_package having count(*) >= 2
+    ) as packages
+);
+
+
