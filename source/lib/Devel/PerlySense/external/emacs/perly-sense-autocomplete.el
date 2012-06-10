@@ -64,13 +64,12 @@
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
   (ps/ac-candidates-from-completions-list
-   (or
-    (progn
-      (when (looking-back "$self->\\(.*\\)")
-        (ps/completions-list-for-self)
-        )
-      )
-    '()
+   (cond
+    ((looking-back "$self->\\(.*\\)")
+     (ps/completions-list-for-self))
+    (t
+     '()
+     )
     )))
 
 (defun ps/candidate-documentation (symbol-name)
