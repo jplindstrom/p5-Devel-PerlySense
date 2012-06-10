@@ -26,6 +26,13 @@
     )
   )
 
+(defun ps/call-repository-server-parse-sexp (path args)
+  (let ((response-text (ps/call-repository-server path args)))
+    (if response-text
+        (ps/parse-sexp response-text)
+      '()
+      )))
+
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
   (let* (
@@ -34,10 +41,9 @@
         )
     (if current-class-name
         (let* (
-               (response-text (ps/call-repository-server
+               (result-alist (ps/call-repository-server-parse-sexp
                                "/method/complete"
                                (format "class_name=%s" current-class-name)))
-               (result-alist (and response-text (ps/parse-sexp response-text)))
                ;; (dummy (prin1 result-alist))
                (completions-list (and result-alist (alist-value result-alist "completions")))
                )
