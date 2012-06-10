@@ -18,11 +18,12 @@ sub BUILD {
             my $dbh = shift;
             $dbh->do('
             CREATE TABLE method (
-                id            INTEGER PRIMARY KEY,
-                name          TEXT NOT NULL,
-                package       TEXT NOT NULL,
-                documentation TEXT NOT NULL,
-                file          TEXT NOT NULL
+                id                  INTEGER PRIMARY KEY,
+                name                TEXT NOT NULL,
+                api_package         TEXT NOT NULL,
+                declaration_package TEXT NOT NULL,
+                documentation       TEXT NOT NULL,
+                file                TEXT NOT NULL
             )');
         },
     };
@@ -50,11 +51,13 @@ method index( :$oDocument ) {
         my $oApi = $oDocument->rhPackageApiLikely->{$package};
         for my $name (keys %{$oApi->rhSub}) {
             my $oLocation = $oApi->rhSub->{$name};
+# debug("JPL: got thingy " . Dumper($oLocation)); use Data::Dumper;
             Devel::PerlySense::Repository::DB::Method->create(
-                name          => $name,
-                package       => $package,
-                documentation => "", # $oDocument->textDocumentation($name) || "",
-                file          => $oDocument->file,
+                name                => $name,
+                api_package         => $package,
+                declaration_package => $oLocation->{package} || "",
+                documentation       => "", # $oDocument->textDocumentation($name) || "",
+                file                => $oDocument->file,
             );
         }
     }
@@ -65,18 +68,19 @@ method index( :$oDocument ) {
 method raMethodByClass($nameClass) {
     return [
         sort {
-               $a->{package}     cmp $b->{package}
+               $a->{api_package} cmp $b->{api_package}
             || $a->{method_name} cmp $b->{method_name}
         }
         map {
             +{
-                method_name   => $_->name,
-                package       => $_->package,
-                documentation => $_->documentation,
+                method_name         => $_->name,
+                api_package         => $_->api_package,
+                declaration_package => $_->declaration_package,
+                documentation       => $_->documentation,
             };
         }
         Devel::PerlySense::Repository::DB::Method->select(
-            "where package = ?",
+            "where api_package = ?",
             $nameClass,
         ),
     ];

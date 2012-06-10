@@ -43,7 +43,7 @@
            (lambda (completion-alist)
              (let (
                    (sub-name (alist-value completion-alist "method_name"))
-                   (package-name (alist-value completion-alist "package"))
+                   (package-name (alist-value completion-alist "declaration_package"))
                    )
                (push (propertize sub-name 'summary package-name) sub-names)
                )
