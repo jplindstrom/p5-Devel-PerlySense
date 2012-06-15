@@ -10,9 +10,11 @@
 
 (defun ps/call-repository-server (path args)
   (let (
-        ;; (dummy (message "Calling with (%s) (%s)" path args))
+        ;; (dummy (message "Calling with (%s) (%s)" args path))
         (response-buffer
-         (url-retrieve-synchronously (format "http://localhost:3496%s?%s" path args)))
+         (flet ((message (arg &rest) nil)) ;; Supress (message) in the web request
+           (url-retrieve-synchronously (format "http://localhost:3496%s?%s" path args)))
+         )
         )
     (if response-buffer
         (with-current-buffer response-buffer
