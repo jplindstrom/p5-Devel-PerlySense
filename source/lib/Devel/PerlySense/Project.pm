@@ -648,9 +648,11 @@ sub raFileTestOther {
 
     my $db = Devel::CoverX::Covered::Db->new();
 
-    my $method = ($file =~ /\.pm$/)
-            ? "test_files_covering"
-            : "source_files_covered_by";
+    my $method = "source_files_covered_by";                    # Default to test file
+    $file =~ m|\.pm$| and $method = "test_files_covering";     # If a module, it's source
+    $file =~ m|/t/|   and $method = "source_files_covered_by"; # If it's in /t/, it's a test
+    $file =~ m|\.t$|  and $method = "source_files_covered_by"; # If it's a .t file, it's a test
+
     my $fileRelative = file($file)->relative( $self->dirProject );
     my $raFileTestOther = [ $db->$method($fileRelative, $sub) ];
 
