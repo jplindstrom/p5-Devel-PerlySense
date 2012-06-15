@@ -1668,6 +1668,7 @@ t on success, else nil"
 (defun ps/parse-sexp (result)
 ;;  (message "RESPONSE AS TEXT |%s|" result)
   ;; TODO: check for "Error: " and display the error message
+  ;; (message "result |%s|" result)
   (if (string= result "")
       '()
     (let ((response-alist (eval (car (read-from-string result)))))

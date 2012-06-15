@@ -40,6 +40,7 @@
     ))
 
 (defun ps/completions-list-for-self ()
+  ;; (message "JPL: In ps/completions-list-for-self")
   (let ((current-class-name (ps/ac-get-current-class-name)))
     (if current-class-name
         (ps/call-repository-server-parse-sexp-get-key
@@ -79,6 +80,7 @@ $chain_root->'tip'->abc, i.e. the last piece of a call chain.
 This is a very naivielme match to start with, assuming anything that
 is called from the tip can be used to distinguish the type,
 regardless of the scope of the $tip or $chain_root."
+  ;; (message "JPL: ps/completions-list-for-chain-tip")
   (let ((tip-method-calls (ps/find-tip-method-calls-list tip-string current-completion-string)))
     (if tip-method-calls
         (ps/call-repository-server-parse-sexp-get-key
@@ -100,6 +102,7 @@ regardless of the scope of the $tip or $chain_root."
   )
 
 (defun ps/ac-candidates-from-completions-list (completions-list)
+  ;; (message "JPL: completions: %s" (prin1-to-string completions-list))
   (mapcar
    (lambda (completion-alist)
      (let ((sub-name     (alist-value completion-alist "method_name"))
@@ -111,9 +114,10 @@ regardless of the scope of the $tip or $chain_root."
 
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
+  ;; (message "JPL: ps/ac-candidates")
   (ps/ac-candidates-from-completions-list
    (cond
-    ((looking-back "$self->\\(\\w*\\)")
+    ((looking-back "$self->\\([a-zA-Z0-9_]+\\)")
      (ps/completions-list-for-self)
      )
     ((looking-back "\\($?\\w+\\)->\\(.*\\)" nil t)
