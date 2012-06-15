@@ -70,7 +70,7 @@ method/sub declaration for the symbol (module/method/sub) at point. If
 no sub declaration is available (like for generated getters/setters),
 any appropriate POD is used instead.
 
-B<Go to Use> -- C<C-o g u> -- Go to the 'use Module' section of the current buffer.
+B<Go To Use> -- C<C-o g u> -- Go to the 'use Module' section of the current buffer.
 
 B<Go To 'new'> -- C<C-o g n> -- Go to the 'new' method of the current
 class.
@@ -100,6 +100,8 @@ of the method name, or word at point.
 
 B<Find method calls> -- C<C-o f c> -- Search for method calls of the
 method name, or word at point.
+
+B<Go To Find Buffer> -- C<C-o g f> to go to the B<*grep*> buffer.
 
 B<Run file> -- C<C-o C-r> -- Run the current file using the
 Compilation mode and the settings appropriate for the source type
@@ -588,11 +590,14 @@ you'll get to edit the command line with a sensible default chosen from:
 
 When editing the ack command you can use the following keys to set options
 
-  "C-o w" toggle  -w
-  "C-o q" toggle  -Q
-  "C-o a" use    --all
-  "C-o p" use    --perl
-  "C-o s" use    --sql
+ |---------+--------+--------+------------------------------------------|
+ | "C-o w" | toggle | -w     | Whole word                               |
+ | "C-o q" | toggle | -Q     | Quote metacharacters, pattern is literal |
+ | "C-o i" | toggle | -i     | Ignore case                              |
+ | "C-o a" | use    | --all  |                                          |
+ | "C-o p" | use    | --perl |                                          |
+ | "C-o s" | use    | --sql  |                                          |
+ |---------+--------+--------+------------------------------------------|
 
 For details, refer to the L<ack> documentation (the program was
 installed as a dependency of PerlySense).
@@ -633,6 +638,11 @@ C<C-o f c> -- Ack the Project for I<method calls> to the method, or
 word at point.
 
 I.e. look for lines with C<-E<gt>NAME>.
+
+
+=head3 Go to Find-buffer
+
+Invoke C<C-o g f> to go to the B<*grep*> buffer.
 
 
 
