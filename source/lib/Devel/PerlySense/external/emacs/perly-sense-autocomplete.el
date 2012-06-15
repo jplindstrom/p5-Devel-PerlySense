@@ -62,14 +62,15 @@
     (goto-char (point-min))
     (let ((calls-list))
       (while (search-forward-regexp
-              (format "%s->\\(\\w+\\)" (regexp-quote tip-string))
+              (format "%s->\\([a-zA-Z0-9_]+\\)" (regexp-quote tip-string))
               nil
               t)
         (let ((current-call (match-string-no-properties 1)))
           (unless (string= current-call current-completion-string)
             (push current-call calls-list)))
         )
-      (delete-dups calls-list)
+      (setq calls-list (delete-dups calls-list))
+      ;; (message "JPL: Methods: %s" (prin1-to-string calls-list))
       calls-list
       )
     )
@@ -122,7 +123,7 @@ regardless of the scope of the $tip or $chain_root."
     ((looking-back "$self->\\([a-zA-Z0-9_]+\\)")
      (ps/completions-list-for-self)
      )
-    ((looking-back "\\($?\\w+\\)->\\(.*\\)" nil t)
+    ((looking-back "\\($?[a-zA-Z0-9_]+\\)->\\([a-zA-Z0-9_]+\\)" nil t)
      (ps/completions-list-for-chain-tip (match-string-no-properties 1) (match-string-no-properties 2))
      )
     (t
@@ -178,9 +179,10 @@ regardless of the scope of the $tip or $chain_root."
 (defvar ps/ac-source-method-calls
   '(
     ;; init to ensure server is started and indexer is started
-    (prefix . "->\\(.*\\)")
+    (prefix . "->\\([a-zA-Z0-9_]+\\)")
     (candidates . ps/ac-candidates)
     (requires . 0)
+    (limit . 100) ;; JPL
     (document . ps/candidate-documentation)
     )
   )
