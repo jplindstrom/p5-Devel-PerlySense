@@ -2,6 +2,7 @@
 $|++;
 use lib q|/Users/johanl/Documents/Projects/Dev/CPAN2/Devel-PerlySense/source/lib|;
 use lib "/Users/johanl/Documents/Projects/Dev/CPAN2/Devel-CoverX-Covered/trunk/source/lib";
+use lib "/home/j.lindstrom/dev/personal/p5-Devel-PerlySense/source/lib";
 
 use strict;
 

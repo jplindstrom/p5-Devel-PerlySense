@@ -304,7 +304,7 @@ sub parse {
 
                 # use base
                 if($pkgNode eq "PPI::Statement::Include") {
-                    if($oNode =~ /^ use \s+ base \s+ (?:qw)? \s* (.+);$/xs) {
+                    if($oNode =~ /^ use \s+ (?:base|parent) \s+ (?:qw)? \s* (.+);$/xs) {
                         my $modules = $1;
                         for my $module (grep { $_ ne "qw" } $modules =~ /([\w:]+)/gs) {
                             $hNameModuleBase{$module}++ ;
