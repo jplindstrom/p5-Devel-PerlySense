@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 13;
+use Test::More tests => 16;
 use Test::Exception;
 
 use Data::Dumper;
@@ -28,20 +28,26 @@ is($oDocument->aNameBase() + 0, 0, "No base classes ok");
 
 
 
+sub test_inheritance_mechanism {
+    my ($file, $raBaseExpected, $mechanism) = @_;
+    diag("Checking that inheritance via ($mechanism) works");
 
+    ok($oDocument = Devel::PerlySense::Document->new(oPerlySense => Devel::PerlySense->new()), "new ok");
 
-ok($oDocument = Devel::PerlySense::Document->new(oPerlySense => Devel::PerlySense->new()), "new ok");
+    $dirData = "data/project-lib";
+    $fileOrigin = "$dirData/$file";
 
-$dirData = "data/project-lib";
-$fileOrigin = "$dirData/Game/Object/Worm/Bot.pm";
+    ok($oDocument->parse(file => $fileOrigin), "Parsed file ($fileOrigin) ok");
 
-ok($oDocument->parse(file => $fileOrigin), "Parsed file ok");
+    is_deeply(
+        [ sort $oDocument->aNameBase() ],
+        $raBaseExpected,
+        "One base class ($mechanism) ok",
+    );
+}
 
-is_deeply(
-    [ $oDocument->aNameBase() ],
-    ["Game::Object::Worm"],
-    "One base class (use base) ok",
-);
+test_inheritance_mechanism("Game/Object/Worm/Bot.pm", ["Game::Object::Worm"], "use base");
+test_inheritance_mechanism("Game/Object/Worm.pm",     ["Game::Object"],       "use parent");
 
 
 
@@ -58,7 +64,7 @@ ok($oDocument->parse(file => $fileOrigin), "Parsed file ok");
 #print Dumper($oDocument->raToken);
 
 ok(
-    eq_set([ $oDocument->aNameBase() ], ["Game::Object::Worm", "Game::Lawn"]),
+    eq_set([ sort $oDocument->aNameBase() ], [ sort "Game::Object::Worm", "Game::Lawn"]),
     'Two base classes (@ISA = ...) ok',
 );
 
