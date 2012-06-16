@@ -4,6 +4,11 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* 
+
+
+0.0203 -- 2012-06-16 17:18:13 UTC
+
 * Feature: identify base classes via "use parent".
 
 * Correctly identify Test::Class .pm files as tests if they're below
