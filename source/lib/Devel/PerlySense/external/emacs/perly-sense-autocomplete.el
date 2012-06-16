@@ -197,6 +197,9 @@ regardless of the scope of the $tip or $chain_root."
 ; prefix: use
 
 
+;; For well-behaved (save-buffer-excursion) in a live buffer
+;; (let ((inhibit-point-motion-hooks t))) ;; if there are point-entered hooks
+
 
 ; (setq ac-sources '(ps/ac-source-method-calls))
 
