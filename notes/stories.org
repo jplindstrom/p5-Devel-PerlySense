@@ -5176,19 +5176,13 @@ match that
 *** DONE Test data for a few tables
 
 *** Query to return methods
-
 **** DONE $self->
-
 **** tip
-
 **** chain
-
 *** Indexer
-
 *** Parser for
 - $self
 - my
-
 
 ** responsiveness
 
