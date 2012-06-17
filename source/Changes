@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0204 -- 2012-06-17 12:52:45 UTC
+
 * Bug #77711: Run ack with --nopager
 
 
