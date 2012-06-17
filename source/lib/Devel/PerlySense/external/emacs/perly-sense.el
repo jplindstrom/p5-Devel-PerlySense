@@ -771,7 +771,7 @@ If not, search for an empty string.
           ;; quote, else at the start of the string
           (quote-offset (if (string-match "^[\"']" escaped-search-term) 1 0))
 
-          (ack-base-command (format "ack --nogroup --nocolor --perl %s-Q -- " word-only-flag))
+          (ack-base-command (format "ack --nopager --nogroup --nocolor --perl %s-Q -- " word-only-flag))
           (ack-command (format "%s%s" ack-base-command escaped-search-term))
           (grep-find-command   ;; For Emacs <= 22
            (cons               ;; Second item sets the initial position
@@ -819,7 +819,7 @@ If not, search for the word at point.
                         (ps/method-of-method-or-object-at-point)
                         (find-tag-default)
                         ""))
-          (ack-base-command (format "ack --nogroup --nocolor --perl -- "))
+          (ack-base-command (format "ack --nopager --nogroup --nocolor --perl -- "))
           (search-term (shell-quote-argument (format regex_template method-name)))
           (ack-command (format "%s%s" ack-base-command search-term))
           )

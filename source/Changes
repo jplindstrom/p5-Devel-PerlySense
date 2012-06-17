@@ -4,7 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-* 
+* Bug #77711: Run ack with --nopager
+
 
 
 0.0203 -- 2012-06-16 17:18:13 UTC
@@ -19,7 +20,7 @@ Feature oriented Revision history for Devel-PerlySense
 0.0202 -- 2012-06-07 20:09:55 UTC
 
 * Fixed deep recursion bug when a Module claims to be a base class to
-  itself (still has to deal with larger circualar references)
+  itself
 
 
 
