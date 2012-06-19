@@ -115,21 +115,25 @@ regardless of the scope of the $tip or $chain_root."
      )
    completions-list))
 
+(defun ps/completions-list-for-thing-at-point ()
+  (cond
+   ((looking-back "$self->\\([a-zA-Z0-9_]+\\)")
+    (ps/completions-list-for-self)
+    )
+   ((looking-back "\\($?[a-zA-Z0-9_]+\\)->\\([a-zA-Z0-9_]+\\)" nil t)
+    (ps/completions-list-for-chain-tip (match-string-no-properties 1) (match-string-no-properties 2))
+    )
+   (t
+    '()
+    )
+   )
+  )
+
 (defun ps/ac-candidates ()
   (interactive) ;; JPL
   ;; (message "JPL: ps/ac-candidates")
   (ps/ac-candidates-from-completions-list
-   (cond
-    ((looking-back "$self->\\([a-zA-Z0-9_]+\\)")
-     (ps/completions-list-for-self)
-     )
-    ((looking-back "\\($?[a-zA-Z0-9_]+\\)->\\([a-zA-Z0-9_]+\\)" nil t)
-     (ps/completions-list-for-chain-tip (match-string-no-properties 1) (match-string-no-properties 2))
-     )
-    (t
-     '()
-     )
-    )))
+   (ps/completions-list-for-thing-at-point)))
 
 (defun ps/candidate-documentation (symbol-name)
   ;; (save-excursion
