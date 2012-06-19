@@ -198,6 +198,26 @@ regardless of the scope of the $tip or $chain_root."
 (global-set-key (format "%s\C-c" ps/key-prefix) 'ps/smart-complete-at-point)
 
 
+(defun ps/package-names-from-completions-list (completions-list)
+  (delete-dups
+   (mapcar
+    (lambda (completion-alist)
+      (alist-value completion-alist "api_package")
+      )
+    completions-list))
+  )
+
+(defun ps/document-class-of-thing-at-point ()
+  (interactive)
+  (prin1
+   (ps/package-names-from-completions-list
+    (ps/completions-list-for-thing-at-point)
+    )
+   )
+  )
+(global-set-key (format "%sdc" ps/key-prefix) 'ps/document-class-of-thing-at-point)
+
+
 ; prefix: use
 
 
