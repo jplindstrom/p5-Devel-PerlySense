@@ -1758,6 +1758,20 @@ sub rhConfig {
 
 
 
+=head2 VERSION
+
+The $VERSION of this module.
+
+=cut
+sub VERSION {
+    # This variable is created by Dist::Zilla during release
+    return $Devel::PerlySense::VERSION || "0.0001DEV";
+}
+
+
+
+
+
 =head2 oBookmarkConfig
 
 Devel::PerlySense::BookmarkConfig object.
@@ -2882,10 +2896,6 @@ sub cacheKeyTotal {
 
     return($keyTotal);
 }
-
-
-
-
 
 1;
 
