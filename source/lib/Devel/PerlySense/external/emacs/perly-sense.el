@@ -63,8 +63,8 @@ The value returned is the value of the last form in BODY."
 (defun ps/bounds-of-module-at-point ()
   "Determine where a module name starts for (thing-at-point 'perl-module)"
   (save-excursion
-    (skip-chars-backward "[:alpha:]:\\->")  ; skip to F in Foo::Bar->
-    (if (looking-at "[[:alpha:]:]+")        ; then get Foo::Bar
+    (skip-chars-backward "[:alnum:]:\\->")  ; skip to F in Foo::Bar->
+    (if (looking-at "[[:alnum:]:]+")        ; then get Foo::Bar
           (cons (point) (match-end 0))
       nil)))
 
@@ -940,7 +940,7 @@ the the user choose a Class."
 statement in the file, or nil if none was found."
   (save-excursion
     (goto-char (point-max))
-    (if (search-backward-regexp "^ *use +[a-zA-Z][^;]+;" nil t)
+    (if (search-backward-regexp "^ *use +[a-zA-Z0-9][^;]+;" nil t)
         (progn
           (search-forward-regexp ";")
           (point))
@@ -1140,7 +1140,7 @@ Module' section at the top of the file."
          (catch 'message
            (save-excursion
              (end-of-line)
-             (if (not (search-backward-regexp "^ *use +[a-zA-Z][^\n]*?; *?$" (point-at-bol) t))
+             (if (not (search-backward-regexp "^ *use +[a-zA-Z0-9][^\n]*?; *?$" (point-at-bol) t))
                  (throw 'message "No 'use Module' statement on this line.")
                (kill-region (match-beginning 0) (match-end 0))
                (delete-char 1)
