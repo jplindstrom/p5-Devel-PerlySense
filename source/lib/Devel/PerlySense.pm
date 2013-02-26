@@ -1169,8 +1169,11 @@ I<that particular subroutine>.
 
 =head2 Editing Code
 
+Editing code includes both smaller editing tasks and refactorings to
+restucture the code.
 
-=head3 Edit Add 'use Module' Statement
+
+=head3 Edit - Add 'use Module' Statement
 
 C<C-o e a u> -- Set mark and add a 'use My::Module;' statement to the
 end of the 'use Module' section at the top of the file.
@@ -1188,7 +1191,7 @@ you where doing.
 
 
 
-=head3 Edit Move 'use Module' Statement
+=head3 Edit - Move 'use Module' Statement
 
 C<C-o e m u> -- If point is on a line with a single 'use Module'
 statement, set mark and move that statement to the end of the 'use
@@ -1493,15 +1496,10 @@ Bring up an overview of things.
 Reformat source.
 
 
-=item * e -- Edit
+=item * e -- Edit & Refactor
 
-Perform smaller convenience editing task.
-
-
-=item * E -- rEfactor
-
-Perform restructuring edits that don't impact functionality/behaviour.
-
+Perform smaller convenience editing task, as well as refactorings --
+restructuring edits that don't impact functionality/behaviour.
 
 =item * A -- Assist
 
