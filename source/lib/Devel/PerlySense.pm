@@ -1232,7 +1232,7 @@ earliest usage.
     my $critic = $flymake->{critic};
 
 Before the edit, the C<mark> was pushed at the location where you
-started, so you can hit C<C-u SPC> to jump back.
+started, so you can hit C<C-u C-SPC> to jump back.
 
 After the edit, the point is left at the new variable declaration so
 you can ensure that it is in a reasonable location. It's not unusual
