@@ -4,7 +4,11 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-* 
+* Feature: Refactoring - Extract Variable -- "C-o e e v". This uses
+  the lang-refactor-perl elisp library.
+
+  See also Refactoring - Highlight Remove - "C-o e h" to remove any
+  highlights remaining after Extract Variable.
 
 
 

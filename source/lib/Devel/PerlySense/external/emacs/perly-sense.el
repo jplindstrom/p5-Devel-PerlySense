@@ -142,6 +142,16 @@ region is active"
 (load "dropdown-list" nil t)
 
 
+;; lang-refactor-perl
+(setq
+ load-path
+ (cons
+  (expand-file-name
+   (format "%s/%s" ps/external-dir "emacs/lib")
+   ) load-path))
+(load "lang-refactor-perl" nil t)
+
+
 
 ;; Test::Class specific stuff
 (load "perly-sense-test-class" nil t)
@@ -2282,6 +2292,8 @@ Return t if found, else nil."
 (global-set-key (format "%semu" ps/key-prefix) 'ps/edit-move-use-statement)
 (global-set-key (format "%seau" ps/key-prefix) 'ps/edit-add-use-statement)
 (global-set-key (format "%setc" ps/key-prefix) 'ps/edit-test-count)
+(global-set-key (format "%seev" ps/key-prefix) 'lr-extract-variable)
+(global-set-key (format "%seh"  ps/key-prefix) 'lr-remove-highlights)
 
 (global-set-key (format "%sat" ps/key-prefix) 'ps/assist-sync-test-count)
 

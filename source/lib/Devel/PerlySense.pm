@@ -1205,6 +1205,85 @@ that it got moved to a good place and hit C-u C-SPC to return to where
 you were, and continue doing what you where doing.
 
 
+=head3 Edit/Refactor - Extract Variable
+
+C<C-o e e v> -- Do the refactoring Extract Variable of the active region.
+
+For example, in this piece of code:
+
+    my $syntax = $self->perlysense->config->{external}->{editor}->{emacs}->{flymake}->{syntax};
+    my $critic = $self->perlysense->config->{external}->{editor}->{emacs}->{flymake}->{critic};
+
+Select a piece of code (on either of the lines) that is duplicated a
+lot and hit C<C-o e e v>. In this case this seems to be the common
+part:
+
+    $self->perlysense->config->{external}->{editor}->{emacs}->{flymake}
+
+You will be asked for a variable name to put this in. The default is
+the last word in the selected code ($flymake).
+
+All occurrences of the selection will now be replaced with $flymake,
+and the new variable $flymake will be declared just before the
+earliest usage.
+
+    my $flymake = $self->perlysense->config->{external}->{editor}->{emacs}->{flymake};
+    my $syntax = $flymake->{syntax};
+    my $critic = $flymake->{critic};
+
+Before the edit, the C<mark> was pushed at the location where you
+started, so you can hit C<C-u SPC> to jump back.
+
+After the edit, the point is left at the new variable declaration so
+you can ensure that it is in a reasonable location. It's not unusual
+to need to move it to an outer scope in order for all the usages to be
+covered by the declaration.
+
+Now you need to ensure this edit makes sense. Both replacements and
+the declaration are highlighted, so it's easy to see what was
+changed.
+
+Once you've eye-balled the edits, hit C<C-o e h> to remove the
+Highlights.
+
+Note that the replacement is syntax unaware, so you'll have to ensure
+it's syntactically correct yourself (althugh most of the time it works
+just fine).
+
+In this particular example, had there been no arrows between the hash
+keys, the final code would have looked like this:
+
+    my $flymake = $self->perlysense->config->{external}{editor}{emacs}{flymake};
+    my $syntax = $flymake{syntax};
+    my $critic = $flymake{critic};
+
+and that clearly isn't equivalent Perl code, the flymake hashref
+having been converted to a hash. This is probably the most common
+failure mode though, and shouldn't happen that often. Now you know.
+
+By default, only the current subroutine is changed. Invoke with the
+prefix arg to change the entire buffer: C<C-u C-o e e v>.
+
+Cool usages for Extract Variable:
+
+=over 4
+
+=item * Remove duplicated code (duh), beause duplication is just shoddy.
+
+=item * Rename variable - Extract Varable, then just delete the declaration.
+
+=item * C<print "So, you want to make a $object-E<gt>method_call inside a string\n";>
+
+But that doesn't work obviously. So you mark C<$object-E<gt>method_call>
+and extract it, and end up with this:
+
+    my $method_call = $object->method_call;
+    print "So, you want to make a $method_call inside a string\n";
+
+Nice!
+
+=back
+
 
 =head3 Assist With -- Regex
 
