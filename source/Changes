@@ -4,7 +4,9 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* When acking for sub/method declarations, also look for Moose has declarations
+
+  (This is a quickie which doesn't account for quoting etc.)
 
 
 

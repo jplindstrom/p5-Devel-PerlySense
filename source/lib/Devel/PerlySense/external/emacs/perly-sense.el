@@ -796,9 +796,11 @@ If not, search for an empty string.
 (defun ps/find-project-sub-declaration-at-point ()
   "Run ack from the project dir, looking for the method/word/sub
 at point. Default to a sensible ack command line.
+
+Look for 'method', 'sub', 'has' (somehwat simplistic atm).
 "
   (interactive)
-  (ps/find-project-method-regex-at-point "^\\s*(sub|method)\\s+%s\\b")
+  (ps/find-project-method-regex-at-point "^\\s*(sub|method|has)\\s+%s\\b")
 )
 
 
