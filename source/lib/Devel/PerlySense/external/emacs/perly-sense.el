@@ -798,7 +798,7 @@ If not, search for an empty string.
 at point. Default to a sensible ack command line.
 "
   (interactive)
-  (ps/find-project-method-regex-at-point "^\\s*sub\\s+%s\\b")
+  (ps/find-project-method-regex-at-point "^\\s*(sub|method)\\s+%s\\b")
 )
 
 
