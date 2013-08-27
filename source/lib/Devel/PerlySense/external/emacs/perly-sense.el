@@ -1898,7 +1898,7 @@ point, or an empty list () if none was found."
     (push-mark)
     (beginning-of-line)
     (if (search-forward-regexp
-         "\\(file +`\\|at +\\)\\([/a-zA-Z0-9._ ]+\\)'? +line +\\([0-9]+\\)[.,]"
+         "\\(file +`\\|at +\\)\\([/a-zA-Z0-9._ ]+\\)'? +line +\\([0-9]+\\)"
          (region-end) t)
         (let* ((file (match-string 2))
                (row (match-string 3)))
