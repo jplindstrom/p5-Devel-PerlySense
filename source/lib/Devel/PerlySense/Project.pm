@@ -653,6 +653,8 @@ sub raFileTestOther {
     $file =~ m|\.pm$| and $method = "test_files_covering";     # If a module, it's source
     $file =~ m|/t/|   and $method = "source_files_covered_by"; # If it's in /t/, it's a test
     $file =~ m|\.t$|  and $method = "source_files_covered_by"; # If it's a .t file, it's a test
+    ### TODO: config with list of lib dirs and list of test dirs
+    debug("raFileTestOther with method ($method)");
 
     my $fileRelative = file($file)->relative( $self->dirProject );
     my $raFileTestOther = [ $db->$method($fileRelative, $sub) ];

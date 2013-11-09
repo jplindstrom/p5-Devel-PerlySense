@@ -796,9 +796,11 @@ If not, search for an empty string.
 (defun ps/find-project-sub-declaration-at-point ()
   "Run ack from the project dir, looking for the method/word/sub
 at point. Default to a sensible ack command line.
+
+Look for 'method', 'sub', 'has' (somehwat simplistic atm).
 "
   (interactive)
-  (ps/find-project-method-regex-at-point "^\\s*sub\\s+%s\\b")
+  (ps/find-project-method-regex-at-point "^\\s*(sub|method|has)\\s+%s\\b")
 )
 
 
@@ -1893,12 +1895,14 @@ returns."
 (defun ps/compile-get-file-line-from-buffer ()
   "Return a two item list with (file . row) specified on the row at
 point, or an empty list () if none was found."
+  ;; e.g.
+  ;;  at t/unit-tests/classes/Test/App/Foo/Bar.pm line 169
   (save-excursion
     (end-of-line)
     (push-mark)
     (beginning-of-line)
     (if (search-forward-regexp
-         "\\(file +`\\|at +\\)\\([/a-zA-Z0-9._ ]+\\)'? +line +\\([0-9]+\\)[.,]"
+         "\\(file +`\\|at +\\)\\([/a-zA-Z0-9._ -]+\\)'? +line +\\([0-9]+\\)"
          (region-end) t)
         (let* ((file (match-string 2))
                (row (match-string 3)))
