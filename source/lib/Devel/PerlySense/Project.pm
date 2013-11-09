@@ -530,6 +530,7 @@ Return 1 or die on errors (but that will look like the result of a
 failed flymake run).
 
 =cut
+
 sub flymakeFile {
     my ($file) = Devel::PerlySense::Util::aNamedArg(["file"], @_);
 
