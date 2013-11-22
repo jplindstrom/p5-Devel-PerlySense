@@ -30,6 +30,7 @@ no good way to expire obsolete files.
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Document;
 

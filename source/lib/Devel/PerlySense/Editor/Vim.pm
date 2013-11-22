@@ -13,6 +13,7 @@ Devel::PerlySense::Editor::Vim - Integration with Vim
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Editor::Vim;
 use base "Devel::PerlySense::Editor";

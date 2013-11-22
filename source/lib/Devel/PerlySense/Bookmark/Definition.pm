@@ -13,6 +13,7 @@ Devel::PerlySense::Bookmark::Definition - A Bookmark definition
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Bookmark::Definition;
 

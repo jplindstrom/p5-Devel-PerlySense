@@ -14,6 +14,7 @@ A Bookmark definition, and a list of matching Bookmark::Match objects
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Bookmark::MatchResult;
 

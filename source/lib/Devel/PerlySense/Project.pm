@@ -21,6 +21,7 @@ A Project has configuration settings.
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Project;
 

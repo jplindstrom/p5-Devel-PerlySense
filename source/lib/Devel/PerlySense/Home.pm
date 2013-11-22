@@ -16,6 +16,7 @@ etc. are kept.
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Home;
 

@@ -19,6 +19,7 @@ Configuration can be Project level, stored in .../.PerlySense/project.cfg
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Config::Project;
 

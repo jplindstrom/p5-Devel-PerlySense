@@ -29,6 +29,7 @@ use strict;
 use warnings;
 use Carp;
 use Data::Dumper;
+use utf8;
 
 
 

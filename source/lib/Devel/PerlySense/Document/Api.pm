@@ -16,6 +16,7 @@ _may_ support).
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Document::Api;
 

@@ -13,6 +13,7 @@ Devel::PerlySense::Editor - Integration with editors
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Editor;
 

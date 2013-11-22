@@ -1734,6 +1734,7 @@ under the same terms as Perl itself.
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense;
 

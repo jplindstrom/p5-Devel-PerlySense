@@ -18,6 +18,7 @@ A Perl Class is a Perl Package with an OO interface.
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Class;
 

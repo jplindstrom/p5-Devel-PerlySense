@@ -17,6 +17,7 @@ The Method has a documentation string and possibly POD.
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Document::Api::Method;
 

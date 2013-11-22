@@ -20,6 +20,7 @@ scope
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::TimeThis;
 

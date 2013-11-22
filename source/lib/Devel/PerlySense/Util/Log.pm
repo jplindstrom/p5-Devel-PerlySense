@@ -8,6 +8,7 @@ Devel::PerlySense::Util::Log - Log routines
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Util::Log;
 use base "Exporter";

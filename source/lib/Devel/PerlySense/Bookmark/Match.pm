@@ -15,6 +15,7 @@ that caused it to match.
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Bookmark::Match;
 

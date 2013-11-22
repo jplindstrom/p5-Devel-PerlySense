@@ -13,6 +13,7 @@ Devel::PerlySense::Editor::Emacs - Integration with Emacs
 
 use strict;
 use warnings;
+use utf8;
 
 package Devel::PerlySense::Editor::Emacs;
 use base "Devel::PerlySense::Editor";
