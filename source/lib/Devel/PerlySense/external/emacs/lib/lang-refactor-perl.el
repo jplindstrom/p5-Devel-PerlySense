@@ -4,7 +4,7 @@
 ;;
 ;; Author: Johan Lindstrom <buzzwordninja not_this_bit@googlemail.com>
 ;; URL: https://github.com/jplindstrom/emacs-lang-refactor-perl
-;; Version: 0.1.3
+;; Version: 0.1.5
 ;; Keywords: languages, refactoring, perl
 
 ;; This program is free software: you can redistribute it and/or modify
@@ -32,35 +32,115 @@
 ;;
 ;;; Installation:
 ;;
-;; Put in load-path and require.
+;; Put in load-path and initialize with:
+;;    (require 'lang-refactor-perl)
 ;;
-
+;;    ;; Suggested key bindings
+;;    (global-set-key (kbd "\C-c r e v") 'lr-extract-variable)
+;;    (global-set-key (kbd "\C-c r h r") 'lr-remove-highlights)
+;;
+;; Note: This code is also part of Devel::PerlySense (install from
+;; CPAN), so if you're already using that, you won't need to install
+;; this package. In that case the key bindings will be slightly
+;; different.
+;;
 ;;
 ;;; Usage:
 ;;
-;; Mark a region of code you want to extract and then
-;;     M-x lr-extract-variable
+;; Let's say you have a block of code with annoying small-scale duplication:
+;;
+;;     # Perl
+;;     sub customer_example {
+;;         my $self = shift;
+;;         my @customers = $self->schema->resultset("Customer")->all;
+;;         my $customer_row = $self->schema->resultset("Customer")->find($cust_id);
+;;     }
+;;
+;; Mark a region of code you want to extract, in this case
+;;
+;;     $self->schema
+;;
+;; and then type
+;;     C-c r e v (bound to M-x lr-extract-variable)
+;;
+;;
+;; You'll be asked for a variable name, with a suitable default (in
+;; this case "$schema").
+;;
+;; Hit return and all occurrences of $self->schema is replaced with
+;; $schema. Like this:
+;;
+;;     # Perl
+;;     sub customer_example {
+;;         my $self = shift;
+;;         my $schema = $self->schema;
+;;         my @customers = $schema->resultset("Customer")->all;
+;;         my $customer_row = $schema->resultset("Customer")->find($cust_id);
+;;     }
+;;
+;; The new variable "$schema" is declared and initialized before the
+;; first use, but you may well need to move it around to a more
+;; suitable space.
 ;;
 ;; All edits are highlighted. Once you've eye-balled the refactoring,
 ;; run
 ;;     M-x lr-remove-highlights
-;; to remove them.
+;; to remove them. If you're not happy, just undo the edit.
+;;
+;; The mark was set, so you can jump back with "C-u C-SPC".
+;;
+;; In this example, there's still duplication, so let's extract the
+;; resultset as well. Mark
+;;
+;;     $schema->resultset("Customer")
+;;
+;; and hit "C-c r e v" again. Edit the suggestion to "$customer_rs",
+;; and hit return. You'll end up with:
+;;
+;;     # Perl
+;;     sub customer_example {
+;;         my $self = shift;
+;;         my $schema = $self->schema;
+;;         my $customer_rs = $schema->resultset("Customer");
+;;         my @customers = $customer_rs->all;
+;;         my $customer_row = $customer_rs->find($cust_id);
+;;     }
+;;
+;; It's up to you to mark syntactically relevant portions of the
+;; code.
+;;
+;;
 ;;
 ;; For more details, see the function documentation:
-;;     M-h f lr-extract-variable
+;;     C-c r e v (bound to M-h f lr-extract-variable)
 ;;
 ;;
 ;; Suggested key bindings, forwards compatible with future
-;; refactorings and other features:
-;;    (global-set-key (kbd "\C-c e e v") 'lr-extract-variable)
-;;    (global-set-key (kbd "\C-c e h r") 'lr-remove-highlights)
+;; refactorings and other features (like "Toggle Highlight"):
+;;    (global-set-key (kbd "\C-c r e v") 'lr-extract-variable)
+;;    (global-set-key (kbd "\C-c r h r") 'lr-remove-highlights)
 ;;
+;;
+;;; Changes
+;;
+;; 2013-11-22 - 0.1.5
+;;
+;; * No really, fixed word boundaries properly
+;;
+;;
+;; 2013-11-09 - 0.1.4
+;;
+;; * Fixed matching to look at word boundaries
 ;;
 
 
 
 ;;; Code:
 
+(defun lr/debug (value &optional mess)
+  (prin1 value)
+  (message "^^ JPL %s" (or mess ""))
+  )
 
 ;; TODO: defcustom
 (defvar lr-extract-variable-face
@@ -75,6 +155,15 @@
 ;; (setq lr/extract-variable-restore-face
 ;;   '(:background "red"))
 
+
+(defun lr/regex-end-word-boundary (str end-word-boundary)
+  "Append a \\b to STR to make it match a word boundary if
+END-WORD-BOUNDARY is true"
+  (if end-word-boundary
+      (concat str "\\b")
+    str
+    )
+  )
 
 (defun lr/open-line-above ()
   "Insert a newline above the current line and put point at beginning."
@@ -94,20 +183,33 @@
 
 (defun lr/replace-all-buffer (search-for replace-with)
   (goto-char (point-min))
-  ;; TODO: match word boundary to avoid substring matches
-  (while (search-forward search-for nil t)
-    (replace-match replace-with nil nil))
+  (let* ((quoted-search-for (regexp-quote search-for))
+         (ends-at-word-boundary (string-match "[a-zA-Z0-9_]$" search-for 1))
+         (search-for-rex (lr/regex-end-word-boundary quoted-search-for ends-at-word-boundary))
+         )
+    ;; (lr/debug quoted-search-for)
+    ;; (lr/debug ends-at-word-boundary "ends-at-word-boundary")
+    ;; (lr/debug search-for-rex "search-for-rex")
+    (while (search-forward-regexp
+            search-for-rex nil t)
+      (replace-match replace-with nil nil))
+    )
   )
 
 (defun lr/goto-earliest-usage (variable-name)
   (goto-char (point-min))
-  ;; TODO: match word boundary to avoid substring matches
-  (search-forward variable-name nil t)
+  (search-forward-regexp
+   (lr/regex-end-word-boundary variable-name t) nil t)
 
-  ;; if possible, find previous statement terminator ; or closing block }
+  ;; if possible, find previous statement terminator ; or closing
+  ;; block }
   (when (search-backward-regexp "[;}]" nil t)
       (forward-line)
-      ;; TODO: skip forward over empty lines
+      ;; If possible, go down past blank lines
+      (while (and
+              (looking-at "\n")
+              (not (eobp)))
+        (forward-line))
       )
   )
 
@@ -119,7 +221,7 @@
   )
 
 ;;;###autoload
-(defun lr-extract-variable (beg end)
+(defun lr-extract-variable (beg end &optional arg-variable-name)
   "Do refactoring 'extract Perl variable' of active region.
 
 Ask the user for a variable name to extract the active region
@@ -137,8 +239,6 @@ prefix arg to change the entire buffer.
 
 Both replacements and the declaration are highlighted."
   (interactive "r")
-  ;; TODO: timer to remove highlighting after x seconds
-  ;; TODO:     using a nice fade
   (unless (and transient-mark-mode mark-active)
     (error "Select a self-contained piece of code to extract"))
   (set-mark-command nil)
@@ -146,14 +246,17 @@ Both replacements and the declaration are highlighted."
       ((should-narrow-to-defun (not current-prefix-arg))
        (expression (buffer-substring-no-properties beg end))
        (variable-name-suggestion (lr/get-variable-name expression))
-       (variable-name (read-string
-                       (format "Extract (%s) to variable: " expression)
-                       variable-name-suggestion nil))
-       (formatted-variable-name (propertize variable-name
-                                            ;; 'font-lock-face lr-extract-variable-face
-                                            'category 'lr-edit
-                                            ))
-       (variable-declaration (format "my %s = %s;" formatted-variable-name expression))
+       (variable-name (or arg-variable-name
+                          (read-string
+                           (format "Extract (%s) to variable: " expression)
+                           variable-name-suggestion nil)))
+       (formatted-variable-name
+        (propertize variable-name
+                    ;; 'font-lock-face lr-extract-variable-face
+                    'category 'lr-edit
+                    ))
+       (variable-declaration
+        (format "my %s = %s;" formatted-variable-name expression))
        )
     (save-restriction
       (when should-narrow-to-defun
@@ -209,21 +312,21 @@ Both replacements and the declaration are highlighted."
   (save-excursion
     (goto-char (point-min))
     (while
-        (progn ;; JPL not needed
-          (let* (
-                 (begin (text-property-any (point) (point-max) 'category category))
-                 (safe-begin (or begin (point-max)))
-                 (end (or ;; End of section, or end of buffer
-                       (text-property-not-all safe-begin (point-max) 'category category)
-                       (point-max)))
-                 )
-            (if (and begin (not (eq begin (point-max))))
-                (progn
-                  (funcall do-fn begin end)
-                  (goto-char (+ 1 end))
-                  )
-              nil
-              )))
+        (let*
+            (
+             (begin (text-property-any (point) (point-max) 'category category))
+             (safe-begin (or begin (point-max)))
+             (end (or ;; End of section, or end of buffer
+                   (text-property-not-all safe-begin (point-max) 'category category)
+                   (point-max)))
+             )
+          (if (and begin (not (eq begin (point-max))))
+              (progn
+                (funcall do-fn begin end)
+                (goto-char (+ 1 end))
+                )
+            nil
+            ))
       )
     ))
 

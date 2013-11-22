@@ -4,7 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* Upgrade lang-refactor-perl to 0.1.5 with proper word boundary
+  matching.
 
 
 
