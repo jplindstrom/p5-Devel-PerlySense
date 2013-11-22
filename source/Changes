@@ -4,8 +4,6 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-* Upgrade lang-refactor-perl.el
-
 * When acking for sub/method declarations, also look for Moose has declarations
   (This is a quickie which doesn't account for quoting etc.)
 
