@@ -128,6 +128,8 @@ sub textRenderTemplate {
 
 __END__
 
+=encoding utf8
+
 =head1 AUTHOR
 
 Johan Lindström, C<< <johanl[ÄT]DarSerMan.com> >>

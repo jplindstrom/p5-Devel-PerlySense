@@ -625,6 +625,8 @@ Surveys. Introduced in this article about Software Archeology
 
 
 
+=encoding utf8
+
 =head1 AUTHOR
 
 Johan Lindström, C<< <johanl[ÄT]DarSerMan.com> >>

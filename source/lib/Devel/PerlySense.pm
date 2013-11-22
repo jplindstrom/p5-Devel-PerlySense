@@ -1667,6 +1667,8 @@ L<http://vimdoc.sourceforge.net/htmldoc/eval.html#Dictionaries> - Vim native dat
 
 
 
+=encoding utf8
+
 =head1 AUTHOR
 
 Johan Lindström, C<< <johanl buzzwordninja.com> >>
