@@ -11,6 +11,8 @@ Feature oriented Revision history for Devel-PerlySense
 * Improve the regex for files in error message for "C-o g e" to
   include "-".
 
+* Fix failing test because the inheritance diagram is non-deterministic.
+
 
 
 0.0207 -- 2013-02-26 23:09:26 UTC
