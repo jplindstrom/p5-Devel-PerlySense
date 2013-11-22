@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::Exception;
 use Test::Differences;
 
@@ -160,9 +160,29 @@ ShaiHulud.pm:96:         #XXX fix before checkin
 [ Game::Object::Wall        ] [<Game::Object::Worm::ShaiHulud>]
 [ Game::Object::Worm        ] [ Game::Object::Worm::Shaitan   ]
 [ Game::Object::WormVisible ]/;
-    eq_or_diff
-#    is
-            ($textShai, $textExpected, "  And got correct output");
+
+    # The inheritance diagram is a bit flaky, test it separetly from
+    # the rest of the output
+    my ($expectedInheritance, $expectedRest) = split(/\Q* API */, $textExpected);
+    my ($shaiInheritance, $shaiRest) = split(/\Q* API */, $textShai);
+    eq_or_diff(
+        $shaiRest,
+        $expectedRest,
+        "  And got correct overview output",
+    );
+
+    note "Don't compare the exact diagram, it's not deterministic.";
+    note "Just make sure all the classes are on there";
+    sub get_classes {
+        my ($text) = @_;
+        return sort ( $text =~ / \[ \s+ ([\w:]+) /xgsm );
+    }
+    eq_or_diff(
+        [ get_classes($shaiInheritance) ],
+        [ get_classes($expectedInheritance) ],
+        "  And got correct inheritance output",
+    );
+
 
 # * Structure *
 # ==;"";;;;===;==S{;;;;";;;;}=S{;;{;'{;;";};}";}=S{;{";";";;'
@@ -251,7 +271,7 @@ $textNeighbourHood/;
         );
         eq_or_diff($textRendered, $rhTest->{$show}, "  And got correct output for ($show)");
     }
-    
+
 }
 
 
@@ -294,8 +314,3 @@ __END__
 .................................     ..............
 : Game::Object::Worm::ShaiHulud : --> : Game::Lawn :
 :...............................:     :............:
-
-
-
-
-
