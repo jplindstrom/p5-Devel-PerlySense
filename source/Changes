@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+*
+
+
+
+0.0208 -- 2013-11-22 18:20:03 UTC
+
 * When acking for sub/method declarations, also look for Moose has declarations
   (This is a quickie which doesn't account for quoting etc.)
 
