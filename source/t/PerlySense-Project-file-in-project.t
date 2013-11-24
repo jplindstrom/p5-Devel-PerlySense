@@ -60,7 +60,7 @@ ok( $oProject->isFileInProject(file => "$fileTest.missing"), "Missing file that 
 ok(!$oProject->isFileInProject(file => "data/inc-lib/Game/Object/Worm.pm"), "Existing file outside of project isn't in project");
 
 
-diag("Test inc_dir");
+note("Test inc_dir");
 #This dir is in the inc_dir according to the loaded yaml config
 ok(
     $oProject->isFileInProject(file => "data/project/with-dir/source/lib/Game/Lawn.pm"),

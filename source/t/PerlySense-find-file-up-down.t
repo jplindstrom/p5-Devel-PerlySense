@@ -35,7 +35,7 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
     like($oPs->fileFindModule(nameModule => $nameModule, dirOrigin => $dirOrigin), qr/ \Q$fileModuleTarget\E $/x, "Found file downwards ok");
 
 
-    diag("Check that the file without the prefix of the main file is found and not shadowed by it");
+    note("Check that the file without the prefix of the main file is found and not shadowed by it");
     my $nameModuleShadowed = "Word::Writer";
     my $fileModuleShadowedTarget = catfile("lib", "Word", "Writer.pm");
     like(

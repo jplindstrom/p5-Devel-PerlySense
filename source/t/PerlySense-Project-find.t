@@ -44,7 +44,7 @@ is(
 
 
 
-diag("Look for dirs that indicate a project");
+note("Look for dirs that indicate a project");
 {
 
     #This is to avoid identifying the .PerlySenseProject directory
@@ -104,7 +104,7 @@ diag("Look for dirs that indicate a project");
 
 
 
-diag("Look for the modules itself that indicate a project");
+note("Look for the modules itself that indicate a project");
 {
     #See above.
     no warnings;
@@ -141,7 +141,7 @@ diag("Look for the modules itself that indicate a project");
 
 
 
-diag("Look for a .PerlySenseProject indicate a project");
+note("Look for a .PerlySenseProject indicate a project");
 {
 
     my $dirBase = "data/project/with-perlysenseproject";

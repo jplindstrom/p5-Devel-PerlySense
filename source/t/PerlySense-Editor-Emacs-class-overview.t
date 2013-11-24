@@ -264,7 +264,7 @@ $textNeighbourHood/;
     };
 
     for my $show (sort keys %$rhTest) {
-        diag("Testing ($show)");
+        note("Testing ($show)");
         my $textRendered = $oEditor->classOverview(
             oClass => $oClassOject,
             raShow => [ $show ],

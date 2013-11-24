@@ -17,7 +17,7 @@ use_ok("Devel::PerlySense::BookmarkConfig");
 ok(my $oPerlySense = Devel::PerlySense->new(), "new PerlySense");
 
 
-diag("Bad bookmark config");
+note("Bad bookmark config");
 
 $oPerlySense->rhConfig->{bookmark} = [ {
     moniker => "",
@@ -52,7 +52,7 @@ throws_ok(
 
 
 
-diag("Proper bookmark config");
+note("Proper bookmark config");
 
 my $dirData = "t/data/project-lib";
 my $fileOrigin = "$dirData/Game/Object/Worm/ShaiHulud.pm";
@@ -90,7 +90,7 @@ is($todo_definition->moniker, "Todo", "Correct moniker");
 
 my @aMatchResult;
 
-diag("Find matches");
+note("Find matches");
 
 
 throws_ok(
@@ -106,12 +106,12 @@ is_deeply(
     [ map { $_->oDefinition->moniker } @aMatchResult ],
     [ "Todo", "Debugging" ],
     "Got correct moniker for both match results",
-) or diag Dumper(\@aMatchResult);
+) or note Dumper(\@aMatchResult);
 
 my $oMatchResultTodo = $aMatchResult[0];
 is($oMatchResultTodo->oDefinition->moniker, "Todo", "  Correct moniker");
 my @aMatch = @{$oMatchResultTodo->raMatch};
-is(scalar @aMatch, 3, "  Found the correct number of matches") or diag Dumper(\@aMatchResult);
+is(scalar @aMatch, 3, "  Found the correct number of matches") or note Dumper(\@aMatchResult);
 
 
 

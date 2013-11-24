@@ -22,7 +22,7 @@ ok(
 );
 
 
-diag("No project -- default config");
+note("No project -- default config");
 # Don't look at the entire config, it's bound to change rapidly.
 is_deeply(
     $oPerlySense->rhConfig->{project},
@@ -37,7 +37,7 @@ is_deeply(
 
 
 
-diag("Look for a .PerlySenseProject indicate a project");
+note("Look for a .PerlySenseProject indicate a project");
 {
 
     my $dirBase = "t/data/project/with-perlysenseproject";

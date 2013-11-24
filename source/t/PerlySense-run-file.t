@@ -21,7 +21,7 @@ my $up = "${dot}${dot}";
 
 
 
-diag("Identify which file type to run");
+note("Identify which file type to run");
 {
     my $dirBase = "data/project/with-perlysenseproject";
     my $dirProject = "$dirBase/source";
@@ -37,7 +37,7 @@ diag("Identify which file type to run");
     ok(my $oProject = $oPerlySense->oProject, "  got project property");
 
 
-    diag("  Bad config formats");
+    note("  Bad config formats");
     {
         local $oProject->rhConfig->{run_file}->[0]->{rex} = undef;
         
@@ -95,7 +95,7 @@ diag("Identify which file type to run");
 
 
 
-diag("Run test file inside dir");
+note("Run test file inside dir");
 {    
     #This is to avoid identifying the .PerlySenseProject directory
     #_of_the_development_project_ to interfere with the test which
@@ -135,7 +135,7 @@ diag("Run test file inside dir");
 
 
 
-diag("Run test .pm file inside dir with config");
+note("Run test .pm file inside dir with config");
 {
     my $dirBase = "data/project/with-perlysenseproject";
     my $dirProject = "$dirBase/source";
@@ -179,7 +179,7 @@ diag("Run test .pm file inside dir with config");
 
 
 
-diag("Run test .pl file inside dir with config");
+note("Run test .pl file inside dir with config");
 {
     my $dirBase = "data/project/with-perlysenseproject";
     my $dirProject = "$dirBase/source";
@@ -220,7 +220,7 @@ diag("Run test .pl file inside dir with config");
 
 
 
-diag("Run Alernate Command test .pl file inside dir with config");
+note("Run Alernate Command test .pl file inside dir with config");
 {
     my $dirBase = "data/project/with-perlysenseproject";
     my $dirProject = "$dirBase/source";

@@ -32,7 +32,7 @@ ok(
 );
 
 
-diag("Classes in ($dirOrigin)");
+note("Classes in ($dirOrigin)");
 is_deeply(
     [ sort $oClassOject->aNameClassInDir(dir => $dirOrigin) ],
     [ sort qw/
@@ -46,7 +46,7 @@ is_deeply(
 
 
 
-diag("Classes in the neighbourhood of ($fileOrigin)");
+note("Classes in the neighbourhood of ($fileOrigin)");
 
 ok(
     my $rhDirClass = $oClassOject->rhDirNameClassInNeighbourhood(),

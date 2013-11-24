@@ -21,7 +21,7 @@ my $up = "${dot}${dot}";
 
 
 
-diag("Identify which file type to debug");
+note("Identify which file type to debug");
 {
     my $dirBase = "data/project/with-perlysenseproject";
     my $dirProject = "$dirBase/source";
@@ -37,7 +37,7 @@ diag("Identify which file type to debug");
     ok(my $oProject = $oPerlySense->oProject, "  got project property");
 
 
-    diag("  Bad config formats");
+    note("  Bad config formats");
     {
         local $oProject->rhConfig->{debug_file}->[0]->{rex} = undef;
 
@@ -95,7 +95,7 @@ diag("Identify which file type to debug");
 
 
 
-diag("Debug test file inside dir");
+note("Debug test file inside dir");
 {
     #This is to avoid identifying the .PerlySenseProject directory
     #_of_the_development_project_ to interfere with the test which

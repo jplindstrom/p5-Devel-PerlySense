@@ -48,7 +48,7 @@ is($oMethod->oLocationDocumented->row, 69, "  oLocationDocumented row correct");
 
 
 
-diag("Rendering of method signature");
+note("Rendering of method signature");
 
 
 $method = "isRealPlayer";
@@ -88,7 +88,7 @@ is($oMethod->signature, 'score( ... args ... )', '  Method name with tailing ;')
 
 
 
-diag("Rendering of calling method signature");
+note("Rendering of calling method signature");
 
 $method = "score";
 my $oLocation = Devel::PerlySense::Document::Location->new();

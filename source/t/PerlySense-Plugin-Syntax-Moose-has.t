@@ -19,7 +19,7 @@ my $oMeta;
 
 
 my $file = "Has.pm";
-diag("Checking has in ($file)");
+note("Checking has in ($file)");
 
 my $fileOrigin = "t/data/plugin-moose/$file";
 ok(

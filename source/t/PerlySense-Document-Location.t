@@ -31,7 +31,7 @@ is_deeply($oLocationClone->rhProperty, $oLocation->rhProperty, " rhProperty ok")
 
 
 
-diag("As Info");
+note("As Info");
 
 ok(
     $oLocation = Devel::PerlySense::Document::Location->new(

@@ -44,7 +44,7 @@ for my $input (sort keys %identifier_input_output) {
 
 
 
-diag("Vim data structure");
+note("Vim data structure");
 
 is(
     $oEditor->formatOutputDataStructure(

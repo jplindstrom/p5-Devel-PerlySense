@@ -30,7 +30,7 @@ is($oDocument->aNameBase() + 0, 0, "No base classes ok");
 
 sub test_inheritance_mechanism {
     my ($file, $raBaseExpected, $mechanism) = @_;
-    diag("Checking that inheritance via ($mechanism) works");
+    note("Checking that inheritance via ($mechanism) works");
 
     ok($oDocument = Devel::PerlySense::Document->new(oPerlySense => Devel::PerlySense->new()), "new ok");
 

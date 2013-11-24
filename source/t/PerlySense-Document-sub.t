@@ -26,7 +26,7 @@ my $oLocation;
 
 
 
-diag("Find sub by name");
+note("Find sub by name");
 
 ok($oDocument->parse(file => $fileOrigin), "Parsed file ok");
 is(my $package = $oDocument->packageAt(row => 429), "Win32::Word::Writer", "Correct package Table ok");
@@ -51,7 +51,7 @@ is($oLocation->col, 1, "  col");
 
 
 
-diag("Find the sub at row/col");
+note("Find the sub at row/col");
 $oLocation =  $oDocument->oLocationSubAt(row => 2, col => 1);
 ok( ! $oLocation, "Missing sub returned undef") or warn(Dumper($oLocation));
 

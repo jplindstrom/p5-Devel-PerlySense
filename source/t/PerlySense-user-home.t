@@ -30,7 +30,7 @@ my $dirTempHome = "$dirTemp/.PerlySense";
 
 
 {
-    diag("Identify candidates");
+    note("Identify candidates");
     
     local %ENV = ();
     is_deeply(
@@ -49,7 +49,7 @@ my $dirTempHome = "$dirTemp/.PerlySense";
 
     
 
-    diag("Create dir");
+    note("Create dir");
     ok( ! -d $dirTemp, "No directory currently");
 
     like($oHome->dirHome, qr/test_home_temp..PerlySense/, "Got correct home dir");
