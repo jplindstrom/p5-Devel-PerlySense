@@ -2025,6 +2025,7 @@ return undef.
 Die if $file doesn't exist, or on other errors.
 
 =cut
+
 sub oLocationSmartGoTo {
     my ($file, $row, $col) = Devel::PerlySense::Util::aNamedArg(["file", "row", "col"], @_);
     debug("oLocationSmartGoTo file($file) row($row) col($col)");
@@ -2033,38 +2034,55 @@ sub oLocationSmartGoTo {
 
     {
         if(my $method = $oDocument->selfMethodCallAt(row => $row, col => $col)) {
-            my $oLocation = $oDocument->oLocationSubDefinition(row => $row, name => $method);
+            my $oLocation = $oDocument->oLocationSubDefinition(
+                row  => $row,
+                name => $method,
+            );
             $oLocation and return($oLocation);
         }
     }
 
-    my ($module, $method) = $oDocument->moduleMethodCallAt(row => $row, col => $col);
+    my ($module, $method) = $oDocument->moduleMethodCallAt(
+        row => $row,
+        col => $col,
+    );
     if($module && $method) {
-        if(my $oDocumentDest = $self->oDocumentFindModule(nameModule => $module, dirOrigin => dirname($file))) {
-            my $oLocation = $oDocumentDest->oLocationSubDefinition(row => $row, name => $method);
+        if(my $oDocumentDest = $self->oDocumentFindModule(
+            nameModule => $module,
+            dirOrigin  => dirname($file),
+        )) {
+            my $oLocation = $oDocumentDest->oLocationSubDefinition(
+                row  => $row,
+                name => $method,
+            );
             $oLocation and return($oLocation);
         }
     }
 
 
-    my ($oObject, $oMethod, $oLocationSub) = $oDocument->aObjectMethodCallAt(row => $row, col => $col);
+    my ($oObject, $oMethod, $oLocationSub) = $oDocument->aObjectMethodCallAt(
+        row => $row,
+        col => $col,
+    );
     if($oObject && $oMethod && $oLocationSub) {
         debug("Looking for $oObject->$oMethod");
         my @aMethodCall = $oDocument->aMethodCallOf(
             nameObject => "$oObject",
             oLocationWithin => $oLocationSub,
         );
-        my @aNameModuleUse = $oDocument->aNameModuleUse();  #Add all known modules, not just the ones explicitly stated
+
+        #Add all known modules, not just the ones explicitly stated
+        my @aNameModuleUse = $oDocument->aNameModuleUse();
         my @aDocumentDest = $self->aDocumentFindModuleWithInterface(
-            raNameModule => \@aNameModuleUse,
+            raNameModule     => \@aNameModuleUse,
             raMethodRequired => [ "$oMethod" ] ,
-            raMethodNice => \@aMethodCall,
-            dirOrigin => dirname($file),
+            raMethodNice     => \@aMethodCall,
+            dirOrigin        => dirname($file),
         );
         if(@aDocumentDest) {
             debug("Possible matching modules:\n" . join("\n", map { "  * $_" } map { @{$_->oMeta->raPackage} } @aDocumentDest));
             my $oLocation = $aDocumentDest[0]->oLocationSubDefinition(
-                row => $row,
+                row  => $row,
                 name => "$oMethod",
             );
             $oLocation and return($oLocation);
@@ -2073,10 +2091,16 @@ sub oLocationSmartGoTo {
 
 
     if(my $module = $oDocument->moduleAt(row => $row, col => $col)) {
-        my $file = $self->fileFindModule(nameModule => $module, dirOrigin => dirname($file))
-                or return(undef);
+        my $file = $self->fileFindModule(
+            nameModule => $module,
+            dirOrigin  => dirname($file),
+        ) or return(undef);
 
-        my $oLocation = Devel::PerlySense::Document::Location->new(file => $file, row => 1, col => 1);
+        my $oLocation = Devel::PerlySense::Document::Location->new(
+            file => $file,
+            row  => 1,
+            col  => 1,
+        );
         return($oLocation);
     }
 
