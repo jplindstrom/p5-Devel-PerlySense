@@ -44,7 +44,7 @@ ok($oLocation = $oPs->oLocationSmartGoTo(
     row  => 423,
     col  => 21,
 ), "Found source ok, on method");
-is($oLocation->file, $fileOrigin, " file same");
+is($oLocation->file, $fileOrigin, " file name");
 is($oLocation->row, 446, " row ok");
 is($oLocation->col, 1, " col ok");
 
@@ -54,7 +54,7 @@ ok($oLocation = $oPs->oLocationSmartGoTo(
     row  => 429,
     col  => 14,
 ), "Found source ok, on method");
-is($oLocation->file, $fileOrigin, " file same");
+is($oLocation->file, $fileOrigin, " file name");
 is($oLocation->row, 396, " row ok");
 is($oLocation->col, 1, " col ok");
 

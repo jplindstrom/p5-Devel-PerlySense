@@ -44,7 +44,7 @@ ok(
     ),
     "Found source ok, use module"
 );
-like($oLocation->file, qr/Writer.Table\.pm/, " file same");
+like($oLocation->file, qr/Writer.Table\.pm/, " file name");
 is($oLocation->row, 1, " row ok");
 is($oLocation->col, 1, " col ok");
 
@@ -70,7 +70,7 @@ ok(
     ),
     "Found source ok, class in string"
 );
-like($oLocation->file, qr/Writer.Table\.pm/, " file same");
+like($oLocation->file, qr/Writer.Table\.pm/, " file name");
 is($oLocation->row, 1, " row ok");
 is($oLocation->col, 1, " col ok");
 

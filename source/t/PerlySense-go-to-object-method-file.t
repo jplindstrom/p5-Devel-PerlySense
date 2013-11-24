@@ -31,7 +31,7 @@ ok($oLocation = $oPs->oLocationSmartGoTo(
     row  => 391,
     col  => 53,
 ), "Found source ok, on method");
-like($oLocation->file, $rexFile, " file same");
+like($oLocation->file, $rexFile, " file name");
 is($oLocation->row, 44, " row ok");
 is($oLocation->col, 1, " col ok");
 
