@@ -2009,6 +2009,9 @@ Devel::PerlySense::Document::Location object.
 
 Currently supported:
 
+  $scalar, $array[0], %hash{key}: Look for the variable
+  declaration.
+
   $self->method, look in current file and base classes. If no sub can
   be found, look for POD.
 
