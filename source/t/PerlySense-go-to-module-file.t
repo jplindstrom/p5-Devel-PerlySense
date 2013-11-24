@@ -26,22 +26,50 @@ my $oLocation;
 my $fileTarget = "./$dirData/lib/Win32/Word/Writer/Table.pm";
 
 
-ok(! $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 160, col => 7), "Didn't find rhConst");
+ok(
+    ! $oPs->oLocationSmartGoTo(
+        file => $fileOrigin,
+        row  => 160,
+        col  => 7,
+    ),
+    "Didn't find rhConst",
+);
 
 
-ok($oLocation = $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 157, col => 11), "Found source ok, use module");
+ok(
+    $oLocation = $oPs->oLocationSmartGoTo(
+        file => $fileOrigin,
+        row  => 157,
+        col  => 11,
+    ),
+    "Found source ok, use module"
+);
 like($oLocation->file, qr/Writer.Table\.pm/, " file same");
 is($oLocation->row, 1, " row ok");
 is($oLocation->col, 1, " col ok");
 
 
-ok($oLocation = $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 321, col => 20), "Found source ok, on module in class method call");
+ok(
+    $oLocation = $oPs->oLocationSmartGoTo(
+        file => $fileOrigin,
+        row  => 321,
+        col  => 20,
+    ),
+    "Found source ok, on module in class method call"
+);
 like($oLocation->file, qr/File.Spec\.pm$/, " file ok");
 is($oLocation->row, 1, " row ok");
 is($oLocation->col, 1, " col ok");
 
 
-ok($oLocation = $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 156, col => 15), "Found source ok, class in string");
+ok(
+    $oLocation = $oPs->oLocationSmartGoTo(
+        file => $fileOrigin,
+        row  => 156,
+        col  => 15,
+    ),
+    "Found source ok, class in string"
+);
 like($oLocation->file, qr/Writer.Table\.pm/, " file same");
 is($oLocation->row, 1, " row ok");
 is($oLocation->col, 1, " col ok");

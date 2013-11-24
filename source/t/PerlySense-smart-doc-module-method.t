@@ -33,7 +33,14 @@ $text = q{METHODS
   new([$left = 11], [$top = 12], [$direction = "left"], [$length = 3)
     Create new Bot Worm, facing in $direction ("left", "right", "up", "down"
     (only left supported right now)), with a body a total size of $length.};
-ok($oLocation = $oPs->oLocationSmartDoc(file => $fileOrigin, row => 115, col => 45), "Found POD ok");
+ok(
+    $oLocation = $oPs->oLocationSmartDoc(
+        file => $fileOrigin,
+        row  => 115,
+        col  => 45,
+    ),
+    "Found POD ok",
+);
 is($oLocation->rhProperty->{text}, $text, " Found POD text ok");
 like($oLocation->file, $rexFileDest, " In correct file");
 is($oLocation->row, 74, " row");

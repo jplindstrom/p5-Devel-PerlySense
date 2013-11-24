@@ -21,9 +21,16 @@ ok(my $oPs = Devel::PerlySense->new(), "new ok");
 my $dirData = "data/simple-lib";
 my $nameModule = "Win32::Word::Writer";
 
-ok(my $fileModule = $oPs->fileFindModule(nameModule => $nameModule, dirOrigin => $dirData), "Found file ok");
+ok(my $fileModule = $oPs->fileFindModule(
+    nameModule => $nameModule,
+    dirOrigin  => $dirData,
+), "Found file ok");
 
-like($oPs->podFromFile(file => $fileModule), qr/Win32::Word::Writer - Create Microsoft Word documents/, "Correct POD");
+like(
+    $oPs->podFromFile(file => $fileModule),
+    qr/Win32::Word::Writer - Create Microsoft Word documents/,
+    "Correct POD",
+);
 
 
 

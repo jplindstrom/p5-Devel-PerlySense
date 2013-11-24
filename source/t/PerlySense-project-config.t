@@ -49,7 +49,10 @@ note("Look for a .PerlySenseProject indicate a project");
     my $dirTest = "$dirProject/bogus/lib/Game";
     my $fileTest = "$dirTest/Lawn.pm";
 
-    ok($oPerlySense->setFindProject(file => $fileTest), "Set project ok");
+    ok(
+        $oPerlySense->setFindProject(file => $fileTest),
+        "Set project ok",
+    );
 
     is_deeply(
         $oPerlySense->rhConfig->{project},

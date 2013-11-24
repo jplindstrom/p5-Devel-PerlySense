@@ -40,7 +40,7 @@ note("Identify which file type to run");
     note("  Bad config formats");
     {
         local $oProject->rhConfig->{run_file}->[0]->{rex} = undef;
-        
+
         throws_ok(
             sub { $oProject->rhConfigTypeForFile(
                 file      => $fileTest,
@@ -53,39 +53,69 @@ note("Identify which file type to run");
 
     {
         local $oProject->rhConfig->{run_file}->[0]->{rex} = 'abc(';
-        
+
         throws_ok(
-            sub { $oProject->rhConfigTypeForFile(file => $fileTest, keyConfig => "run_file") },
+            sub { $oProject->rhConfigTypeForFile(
+                file      => $fileTest,
+                keyConfig => "run_file",
+            ) },
             qr/Invalid rex value in config/,
             "Invalid regex found ok",
         );
     }
 
 
-    
+
     {
         local $oProject->rhConfig->{run_file} = [];
-        
+
         throws_ok(
-            sub { $oProject->rhConfigTypeForFile(file => $fileTest, keyConfig => "run_file") },
+            sub { $oProject->rhConfigTypeForFile(
+                file      => $fileTest,
+                keyConfig => "run_file",
+            ) },
             qr/No run_perl rex matched the/,
             "No matching type found ok",
         );
     }
-    
+
 
     my $rhConfigType;
 
-    ok($rhConfigType = $oProject->rhConfigTypeForFile(file => "abc.t", keyConfig => "run_file"), "Identify a .t file");
+    ok(
+        $rhConfigType = $oProject->rhConfigTypeForFile(
+            file      => "abc.t",
+            keyConfig => "run_file",
+        ),
+        "Identify a .t file",
+    );
     is($rhConfigType->{moniker}, "Test", "  correct moniker");
-   
-    ok($rhConfigType = $oProject->rhConfigTypeForFile(file => "abc.pm", keyConfig => "run_file"), "Identify a .pm file");
+
+    ok(
+        $rhConfigType = $oProject->rhConfigTypeForFile(
+            file      => "abc.pm",
+            keyConfig => "run_file",
+        ),
+        "Identify a .pm file",
+    );
     is($rhConfigType->{moniker}, "Module", "  correct moniker");
-   
-    ok($rhConfigType = $oProject->rhConfigTypeForFile(file => "abc.pl", keyConfig => "run_file"), "Identify a .pl file");
+
+    ok(
+        $rhConfigType = $oProject->rhConfigTypeForFile(
+            file      => "abc.pl",
+            keyConfig => "run_file",
+        ),
+        "Identify a .pl file",
+    );
     is($rhConfigType->{moniker}, "Script", "  correct moniker");
-   
-    ok($rhConfigType = $oProject->rhConfigTypeForFile(file => "abc", keyConfig => "run_file"), "Identify everything else");
+
+    ok(
+        $rhConfigType = $oProject->rhConfigTypeForFile(
+            file      => "abc",
+            keyConfig => "run_file",
+        ),
+        "Identify everything else",
+    );
     is($rhConfigType->{moniker}, "Script (no .pl)", "  correct moniker");
 
 }
@@ -96,7 +126,7 @@ note("Identify which file type to run");
 
 
 note("Run test file inside dir");
-{    
+{
     #This is to avoid identifying the .PerlySenseProject directory
     #_of_the_development_project_ to interfere with the test which
     #expects a free way all the way up to the root without any
@@ -106,7 +136,7 @@ note("Run test file inside dir");
         undef;
     };
 
-    
+
     my $dirBase = "data/project/with-dir";
     my $dirProject = "$dirBase/source";
     my $dirTest = "$dirProject/t";
@@ -116,7 +146,7 @@ note("Run test file inside dir");
     ok(
         my $oPerlySense = Devel::PerlySense->new(),
         "New PerlySense object ok",
-    );    
+    );
     ok(
         my $rhRun = $oPerlySense->rhRunFile(file => $fileTest),
         "rhRunFile returned a data structure",

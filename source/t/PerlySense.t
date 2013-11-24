@@ -18,8 +18,16 @@ isa_ok($oPs->oHome, "Devel::PerlySense::Home", "  oHome property");
 
 
 is($oPs->fileFromModule("Foo"), "Foo.pm", "fileFromModule ok");
-is($oPs->fileFromModule("Foo::Bar"), catfile("Foo", "Bar") . ".pm", "fileFromModule ok");
-is($oPs->fileFromModule("Foo::Bar::Baz"), catfile("Foo", "Bar", "Baz") . ".pm", "fileFromModule ok");
+is(
+    $oPs->fileFromModule("Foo::Bar"),
+    catfile("Foo", "Bar") . ".pm",
+    "fileFromModule ok",
+);
+is(
+    $oPs->fileFromModule("Foo::Bar::Baz"),
+    catfile("Foo", "Bar", "Baz") . ".pm",
+    "fileFromModule ok",
+);
 
 
 

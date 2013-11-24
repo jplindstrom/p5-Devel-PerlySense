@@ -26,14 +26,22 @@ my $oLocation;
 my $rexDestination;
 
 $rexDestination = qr/Game.Object.Worm.Bot.pm$/;
-ok($oLocation = $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 115, col => 45), "Found source ok, on method");
+ok($oLocation = $oPs->oLocationSmartGoTo(
+    file => $fileOrigin,
+    row  => 115,
+    col  => 45,
+), "Found source ok, on method");
 like($oLocation->file, $rexDestination, " file found");
 is($oLocation->row, 81, " row ok");
 is($oLocation->col, 1, " col ok");
 
 
 $rexDestination = qr/Game.Object.Worm.pm$/;
-ok($oLocation = $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 163, col => 39), "Found source ok, on method");
+ok($oLocation = $oPs->oLocationSmartGoTo(
+    file => $fileOrigin,
+    row  => 163,
+    col  => 39,
+), "Found source ok, on method");
 like($oLocation->file, $rexDestination, " file found");
 is($oLocation->row, 360, " row ok");
 is($oLocation->col, 1, " col ok");

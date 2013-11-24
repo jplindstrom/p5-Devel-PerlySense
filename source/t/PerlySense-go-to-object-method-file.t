@@ -26,7 +26,11 @@ my $oLocation;
 my $rexFile = qr/Game.Location.pm$/;
 
 
-ok($oLocation = $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 391, col => 53), "Found source ok, on method");
+ok($oLocation = $oPs->oLocationSmartGoTo(
+    file => $fileOrigin,
+    row  => 391,
+    col  => 53,
+), "Found source ok, on method");
 like($oLocation->file, $rexFile, " file same");
 is($oLocation->row, 44, " row ok");
 is($oLocation->col, 1, " col ok");
