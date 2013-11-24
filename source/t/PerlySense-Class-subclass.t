@@ -33,7 +33,7 @@ ok(
 
 
 
-diag("Game::Object");
+note("Game::Object");
 isa_ok($oClassOject, "Devel::PerlySense::Class");
 is($oClassOject->name, "Game::Object", "  Got correct class name");
 

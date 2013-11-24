@@ -108,7 +108,7 @@ is($oLocation->rhProperty->{found}, "method", " Got found ok");
 
 
 
-diag("Base classes");
+note("Base classes");
 
 $dirData = "data/project-lib";
 my $rexFileDest = qr/Game.Object.Worm.pm/;

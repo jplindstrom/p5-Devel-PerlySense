@@ -34,7 +34,7 @@ my @tests = (
 );
 for my $test (@tests) {
     my $file = $test->{file};
-    diag("Checking role in ($file)");
+    note("Checking role in ($file)");
     
     my $fileOrigin = "t/data/plugin-moose/Role/$file";
     ok(my $oDocument = Devel::PerlySense::Document->new(oPerlySense => Devel::PerlySense->new()), "new ok");

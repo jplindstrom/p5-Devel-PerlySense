@@ -28,12 +28,12 @@ ok(
 my $dir = "t/data/config";
 my $dirTemp = "$dir/temp";
 
-diag("Creating temp dir");
+note("Creating temp dir");
 rmtree($dirTemp);
 mkpath($dirTemp);
 ok(-e $dirTemp, "Temp dir created ok");
 END {
-    diag("Removing  temp dir");
+    note("Removing  temp dir");
     rmtree($dirTemp);
     ok( ! -e $dirTemp, "Temp file gone");
 }
@@ -91,7 +91,7 @@ ok(-e "$dirTemp/.PerlySenseProject/.perlcritic", "Perl::Critic config file creat
 
 
 
-diag("Re-create, rename file");
+note("Re-create, rename file");
 my $globBackupProject = file("$dirTemp/.PerlySenseProject/project.yml") . ".*";
 
 ok($oConfig->rhConfig->{run_file}->[0]->{moniker} = "Blah", "Changed moniker");
@@ -133,7 +133,7 @@ is(
 
 
 
-diag("Create another one");
+note("Create another one");
 sleep(1);
 ok(
     $oConfig->createFileConfigDefault(dirRoot => $dirTemp),

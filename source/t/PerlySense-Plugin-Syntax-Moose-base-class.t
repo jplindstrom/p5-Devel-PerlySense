@@ -34,7 +34,7 @@ my @tests = (
 );
 for my $test (@tests) {
     my $file = $test->{file};
-    diag("Checking extends  in ($file)");
+    note("Checking extends  in ($file)");
     
     my $fileOrigin = "t/data/plugin-moose/SubClass/$file";
     ok(my $oDocument = Devel::PerlySense::Document->new(oPerlySense => Devel::PerlySense->new()), "new ok");

@@ -27,7 +27,7 @@ ok(
 
 
 
-diag("Elisp");
+note("Elisp");
 
 is(
     $oEditor->formatOutputDataStructure(

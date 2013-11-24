@@ -80,7 +80,7 @@ ok(
 );
 
 
-diag("Game::Object::Worm::ShaiHulud");
+note("Game::Object::Worm::ShaiHulud");
 isa_ok($oClassOjectWormShai, "Devel::PerlySense::Class");
 is($oClassOjectWormShai->name, "Game::Object::Worm::ShaiHulud", "  Got correct class name");
 
@@ -100,7 +100,7 @@ ok(my $oClassGameObjectWorm = $oClassOjectWormShai->rhClassBase->{"Game::Object:
 
 
 
-diag("Game::Object::Worm");
+note("Game::Object::Worm");
 isa_ok($oClassGameObjectWorm, "Devel::PerlySense::Class");
 is($oClassGameObjectWorm->name, "Game::Object::Worm", "  Got correct class name");
 
@@ -120,7 +120,7 @@ ok(my $oClassGameObjectFromWorm = $oClassGameObjectWorm->rhClassBase->{"Game::Ob
 
 
 
-diag("Game::Lawn");
+note("Game::Lawn");
 isa_ok($oClassLawn, "Devel::PerlySense::Class");
 is($oClassLawn->name, "Game::Lawn", "  Got correct class name");
 
@@ -138,7 +138,7 @@ ok(my $oClassGameObjectFromLawn = $oClassLawn->rhClassBase->{"Game::Object"}, " 
 
 
 
-diag("Game::Object");
+note("Game::Object");
 is($oClassGameObjectFromLawn, $oClassGameObjectFromWorm, "Game::Object class are the same");
 
 

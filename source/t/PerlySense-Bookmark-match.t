@@ -31,7 +31,7 @@ my $oDefinitionTodo;
         
 
 
-diag("Find matches");
+note("Find matches");
 
 $oDefinitionTodo = Devel::PerlySense::Bookmark::Definition->newFromConfig(
     moniker => "test1",
@@ -57,7 +57,7 @@ is($oMatch->oLocation->col, 0, "  Location row ok");
 
 
 
-diag("Test multiple regexes, and that a definition only matches the first one");
+note("Test multiple regexes, and that a definition only matches the first one");
 $oDefinitionTodo = Devel::PerlySense::Bookmark::Definition->newFromConfig(
     moniker => "test1",
     rex => [

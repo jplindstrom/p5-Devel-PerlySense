@@ -37,7 +37,7 @@ my $oLocation;
 
 
 
-diag("POD");
+note("POD");
 ok(
     $oLocation = $oClassWorm->oLocationMethodDoc(method => "turn"),
     "Location for method turn found",
@@ -68,7 +68,7 @@ like($oLocation->file, qr/Game.Object.pm/, "Location file ok");
 
 
 
-diag("Goto");
+note("Goto");
 ok(
     $oLocation = $oClassWorm->oLocationMethodGoTo(method => "turn"),
     "Location for method turn found",
