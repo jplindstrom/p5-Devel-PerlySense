@@ -725,9 +725,10 @@ The value returned is the value of the last form in BODY."
       (message "nope"))
     )
   )
-(defun ps/minibuffer-ack-option-all  () (interactive) (ps/minibuffer-ack-option-filetype "all"))
-(defun ps/minibuffer-ack-option-perl () (interactive) (ps/minibuffer-ack-option-filetype "perl"))
-(defun ps/minibuffer-ack-option-sql  () (interactive) (ps/minibuffer-ack-option-filetype "sql"))
+(defun ps/minibuffer-ack-option-all         () (interactive) (ps/minibuffer-ack-option-filetype "all"))
+(defun ps/minibuffer-ack-option-known-types () (interactive) (ps/minibuffer-ack-option-filetype "known-types"))
+(defun ps/minibuffer-ack-option-perl        () (interactive) (ps/minibuffer-ack-option-filetype "perl"))
+(defun ps/minibuffer-ack-option-sql         () (interactive) (ps/minibuffer-ack-option-filetype "sql"))
 
 (defun ps/minibuffer-ack-option-toggle (option)
   (save-excursion
@@ -748,6 +749,7 @@ The value returned is the value of the last form in BODY."
 
 ;; This key map is used inside grep-find
 (define-key minibuffer-local-shell-command-map (format "%sa" ps/key-prefix) 'ps/minibuffer-ack-option-all)
+(define-key minibuffer-local-shell-command-map (format "%sk" ps/key-prefix) 'ps/minibuffer-ack-option-known-types)
 (define-key minibuffer-local-shell-command-map (format "%sp" ps/key-prefix) 'ps/minibuffer-ack-option-perl)
 (define-key minibuffer-local-shell-command-map (format "%ss" ps/key-prefix) 'ps/minibuffer-ack-option-sql)
 

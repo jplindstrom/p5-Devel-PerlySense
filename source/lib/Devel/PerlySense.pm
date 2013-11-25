@@ -590,14 +590,15 @@ you'll get to edit the command line with a sensible default chosen from:
 
 When editing the ack command you can use the following keys to set options
 
- |---------+--------+--------+------------------------------------------|
- | "C-o w" | toggle | -w     | Whole word                               |
- | "C-o q" | toggle | -Q     | Quote metacharacters, pattern is literal |
- | "C-o i" | toggle | -i     | Ignore case                              |
- | "C-o a" | use    | --all  |                                          |
- | "C-o p" | use    | --perl |                                          |
- | "C-o s" | use    | --sql  |                                          |
- |---------+--------+--------+------------------------------------------|
+ |---------+--------+---------------+------------------------------------------|
+ | "C-o w" | toggle | -w            | Whole word                               |
+ | "C-o q" | toggle | -Q            | Quote metacharacters, pattern is literal |
+ | "C-o i" | toggle | -i            | Ignore case                              |
+ | "C-o a" | use    | --all         | Ack version <  2.0                       |
+ | "C-o k" | use    | --known-types | Ack version >= 2.0                       |
+ | "C-o p" | use    | --perl        |                                          |
+ | "C-o s" | use    | --sql         |                                          |
+ |---------+--------+---------------+------------------------------------------|
 
 For details, refer to the L<ack> documentation (the program was
 installed as a dependency of PerlySense).
