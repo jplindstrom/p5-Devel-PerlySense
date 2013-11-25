@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 13;
+use Test::More;
 use Test::Exception;
 
 use File::Basename;
@@ -25,18 +25,6 @@ my $fileOrigin = "$dirData/lib/Win32/Word/Writer.pm";
 my $oLocation;
 
 
-
-ok(! $oPs->oLocationSmartGoTo(
-    file => $fileOrigin,
-    row  => 420,
-    col  => 17,
-), "Didn't find hOpt");
-
-ok(! $oPs->oLocationSmartGoTo(
-    file => $fileOrigin,
-    row  => 420,
-    col  => 5234,
-), "Didn't find point at far right");
 
 
 ok($oLocation = $oPs->oLocationSmartGoTo(
@@ -62,5 +50,6 @@ is($oLocation->col, 1, " col ok");
 
 
 
+done_testing();
 
 __END__

@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 16;
+use Test::More;
 use Test::Exception;
 
 use Data::Dumper;
@@ -24,16 +24,6 @@ my $dirData = "data/simple-lib";
 my $fileOrigin = "$dirData/lib/Win32/Word/Writer.pm";
 my $oLocation;
 my $fileTarget = "./$dirData/lib/Win32/Word/Writer/Table.pm";
-
-
-ok(
-    ! $oPs->oLocationSmartGoTo(
-        file => $fileOrigin,
-        row  => 160,
-        col  => 7,
-    ),
-    "Didn't find rhConst",
-);
 
 
 ok(
@@ -78,5 +68,6 @@ is($oLocation->col, 1, " col ok");
 
 
 
+done_testing();
 
 __END__
