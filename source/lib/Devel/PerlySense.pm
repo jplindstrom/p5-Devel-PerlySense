@@ -460,8 +460,9 @@ globally with C-x C-SPC, or locally with C-u C-SPC.
 C<C-o g m> -- Go to Module at point. Useful if "Smart go to" can't
 identify exactly what's at point.
 
-Default is the selected text, or the
-Module at point.
+Default is the selected text, or the Module at point. Or if there's
+nothing at point, you get to enter a module name (useful if you want't
+to an installed CPAN module).
 
 
 =head3 Go to Base Class
