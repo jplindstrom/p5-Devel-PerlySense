@@ -458,7 +458,8 @@ found.
 =cut
 sub moduleAt {
     my ($row, $col) = Devel::PerlySense::Util::aNamedArg(["row", "col"], @_);
-    my $rhToken = $self->rhTokenOfAt($self->rhRowColModule, $row, $col) or return(undef);
+    my $rhToken = $self->rhTokenOfAt($self->rhRowColModule, $row, $col)
+        or return(undef);
     return( $rhToken->{module} );
 }
 
