@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+*
+
+
+
+0.0211 -- 2013-11-25 19:21:46 UTC
+
 * Feature: Edit - Copy Package Name -- "C-o e c p". Copy the current
   package statement name to the clipboard (kill-ring) and display it
   in the echo area.
