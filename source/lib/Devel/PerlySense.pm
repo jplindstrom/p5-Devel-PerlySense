@@ -1773,6 +1773,7 @@ use Devel::PerlySense::BookmarkConfig;
 
 
 
+
 =head1 *** THE FOLLOWING IS DEVELOPER DOCUMENTATION ***
 
 
@@ -2035,6 +2036,8 @@ sub oLocationSmartGoTo {
 
     my $oDocument = $self->oDocumentParseFile($file);
 
+
+    # $self->method
     {
         if(my $method = $oDocument->selfMethodCallAt(row => $row, col => $col)) {
             my $oLocation = $oDocument->oLocationSubDefinition(
@@ -2045,6 +2048,8 @@ sub oLocationSmartGoTo {
         }
     }
 
+
+    # My::Module->method
     my ($module, $method) = $oDocument->moduleMethodCallAt(
         row => $row,
         col => $col,
@@ -2063,6 +2068,7 @@ sub oLocationSmartGoTo {
     }
 
 
+    # $object->method
     my ($oObject, $oMethod, $oLocationSub) = $oDocument->aObjectMethodCallAt(
         row => $row,
         col => $col,
@@ -2093,6 +2099,7 @@ sub oLocationSmartGoTo {
     }
 
 
+    # My::Module
     if(my $module = $oDocument->moduleAt(row => $row, col => $col)) {
         my $file = $self->fileFindModule(
             nameModule => $module,
@@ -2107,6 +2114,7 @@ sub oLocationSmartGoTo {
         return($oLocation);
     }
 
+    # Nothing found at point
     return(undef);
 }
 
