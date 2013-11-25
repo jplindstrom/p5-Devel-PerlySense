@@ -1493,6 +1493,10 @@ The value returned is the value of the last form in BODY."
 *** Refactor
 **** lib/Devel/PerlySense/Project.pm
 **** elisp
+** DONE Go to variable declaration
+
+Smart goto on a variable, goto the my or local or use vars or whatever
+is the first mention of it.
 ** Key bindings
 
 *** C-o a is Assist-with
@@ -2344,12 +2348,6 @@ Goto use section. Don't stop if in comment or pod.
 \C-o g p d
 
 Visit the project dir
-
-
-** Go to variable declaration
-
-Smart goto on a variable, goto the my or local or use vars or whatever
-is the first mention of it.
 
 ** Assist fixing syntax error
 

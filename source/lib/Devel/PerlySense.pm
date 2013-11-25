@@ -446,9 +446,10 @@ C<C-o C-g> is the "Smart go to" command. It's similar to Smart Docs,
 but instead of bringing the docs to you, it brings you to the
 definition of what's at point.
 
-The definition can be either the sub declaration, or if the
-declaration can't be found (like for auto-generated getters/setters,
-autoloaded subs etc), the POD documentation for the sub.
+The definition can be either the variable declaration, the sub/method
+declaration, or if the declaration can't be found (like for
+auto-generated getters/setters, autoloaded subs etc), the POD
+documentation for the sub/method.
 
 Before you go anywhere the mark is set. Go back to earlier marks
 globally with C-x C-SPC, or locally with C-u C-SPC.
@@ -1516,8 +1517,9 @@ context sensitive, "smart", or DWIMy.
 
 =over 4
 
-=item Smart Goto goes to whatever is under the cursor, be it a module
-name, a method call, a file name, or an error message.
+=item Smart Goto goes to whatever is under the cursor, be it a
+variable, module name, a method call, a file name, or an error
+message.
 
 =item Run runs the file differently depending on what kind of file is
 open (tests are "proved", modules are syntax checked, scripts are run,
