@@ -4,7 +4,11 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* Smart go to -- If on a variable, go to the variable
+  declaration. Uses PPIx::EditorTools.
+
+  There seems to be a bug, in that $array[1] doesn't find "my @array;"
+  properly.
 
 
 
