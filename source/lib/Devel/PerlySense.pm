@@ -117,6 +117,9 @@ is module at point.
 B<Edit - Move Use Statement> -- C<C-o e m u> -- Move the 'use Module'
 statement at point to the 'use Module' section at the top.
 
+B<Extract Variable> - C<C-o e e v> -- Do the refactoring Extract
+Variable of the active region.
+
 B<Edit Test Count> -- C<C-o e t c> -- Increase the test count
 (e.g. "tests => 43")
 
