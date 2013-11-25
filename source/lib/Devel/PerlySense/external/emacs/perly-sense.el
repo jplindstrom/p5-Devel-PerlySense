@@ -1143,6 +1143,26 @@ If a Magit buffer is found, magit-refresh it before returning it.
 
 
 
+(defun ps/edit-copy-package-name ()
+  "Copy (put in the kill-ring) the name of the current package
+  statement, and display it in the echo area"
+  (interactive)
+  (save-excursion
+    (end-of-line)
+    (if (search-backward-regexp "^ *\\bpackage +\\([a-zA-Z0-9:]+\\)" nil t)
+        (let (
+              ( package-name (match-string 1) )
+              )
+          (prin1 (match-string 1))
+          (kill-new package-name)
+          (message "Copied package name '%s'" package-name)
+          )
+      (error "No package found")
+      )
+    )
+  )
+
+
 
 
 (defun ps/edit-move-use-statement ()
@@ -2296,6 +2316,7 @@ Return t if found, else nil."
 (global-set-key (format "%sfc" ps/key-prefix) 'ps/find-project-method-callers-at-point)
 
 
+(global-set-key (format "%secp" ps/key-prefix) 'ps/edit-copy-package-name)
 (global-set-key (format "%semu" ps/key-prefix) 'ps/edit-move-use-statement)
 (global-set-key (format "%seau" ps/key-prefix) 'ps/edit-add-use-statement)
 (global-set-key (format "%setc" ps/key-prefix) 'ps/edit-test-count)

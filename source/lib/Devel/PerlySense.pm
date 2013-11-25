@@ -108,6 +108,8 @@ Compilation mode and the settings appropriate for the source type
 (Test, Module, etc.). Highlight errors and jump to source with C-c
 C-c.
 
+B<Edit - Copy Package Name> -- C<C-o e c p> -- Copy the current package name.
+
 B<Edit - Add Use Statement> -- C<C-o e a u> -- Add a 'use Module'
 statement to the 'use Module' section at the top. Default Module name
 is module at point.
@@ -1172,6 +1174,13 @@ I<that particular subroutine>.
 
 Editing code includes both smaller editing tasks and refactorings to
 restucture the code.
+
+
+=head3 Edit - Copy Package Name
+
+C<C-o e c p> -- Copy the current package statement name to the
+clipboard (kill-ring) and display it in the echo area.
+
 
 
 =head3 Edit - Add 'use Module' Statement
