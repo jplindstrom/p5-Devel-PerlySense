@@ -1757,6 +1757,8 @@ use Storable qw/freeze thaw/;
 use List::Util qw/ first /;
 use List::MoreUtils qw/ uniq /;
 
+use PPIx::EditorTools::FindVariableDeclaration;
+
 use Devel::TimeThis;
 
 use Devel::PerlySense::Util;
@@ -2113,6 +2115,32 @@ sub oLocationSmartGoTo {
         );
         return($oLocation);
     }
+
+
+
+
+    # $variable
+    # Do this last since it involves re-indexing the document
+    my $finder = PPIx::EditorTools::FindVariableDeclaration->new();
+    my $oVariableDeclaration = eval {
+        $finder->find(
+            ppi    => $oDocument->oDocument,
+            line   => $row,
+            column => $col,
+        );
+    };
+    ($@ || "") =~ /no declaration/ and die("Could not find declaration\n");
+    if($oVariableDeclaration) {
+        my $raPPILocation = $oVariableDeclaration->element->location;
+        my $oLocation = Devel::PerlySense::Document::Location->new(
+            file => $oDocument->file,
+            row  => $raPPILocation->[0],
+            col  => $raPPILocation->[1],
+        );
+        return($oLocation);
+    }
+
+
 
     # Nothing found at point
     return(undef);
