@@ -1,4 +1,4 @@
-#+Seq_TODO: TODO DOING DONE
+#+Seq_TODO: TODO DOING | WONTDO DONE
 * Done User Stories
 ** DONE Bug: Build.pl
 
@@ -1380,13 +1380,13 @@ POD ERRORS
 **** (scp/prepare-shell-command command)
 **** (scp/shell-command-to-string command stdin-args)
 ***** If no prepared, setup one first
-***** Run command in prepared process and send stdin-args to it. 
+***** Run command in prepared process and send stdin-args to it.
 ***** Wait for process termination and return the output
 ***** cleanup-shell-commands
 ***** Setup idle timer (2s?) to check if a new shell-command needs preparing
 ****** If a new was created, setup new idle timer again, so that one at a time is spawned
 **** (scp/cleanup-shell-command command)
-***** 
+*****
 **** Stories
 ***** I
 ****** DONE Setup
@@ -1402,7 +1402,7 @@ POD ERRORS
 ****** stress test it
 ******* make it robust so it restarts and  can recover from being out of sync
 ****** bug with method docs from overview?
-****** 
+******
 ***** Refactor elisp to use ps/command
 ***** Time/benchmark ps/command
 ***** Switch over to shell-command-prepared
@@ -1721,7 +1721,6 @@ property ($self->{something}) and/or
 method ($self->something) or
 function (none of the previous)?
 
-
 ** TODO Bug: Docs found wrong
 
 Game::Object::Worm, docs for oLocation matches
@@ -1811,9 +1810,7 @@ Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Docum
 
 Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Document::determineLikelyApi0" at /home/lindsj05/smoking_area/change_diffs_with_errors/deps/lib/perl5//Devel/PerlySense/Document.pm line 783.
 
-
-
-** Docs 
+** Docs
 *** declarations
 ** Mark many methods to be run in Test::Class
 ** Assist with test count for Test::Class
@@ -2057,7 +2054,6 @@ New synopsis
 | Assist With Test Count    |           |     |
 |---------------------------+-----------+-----|
 
-
 ** TODO Coverage -- default to disabled
 ** Visualize Coverage information in buffer
 *** DONE Output as hash refs and collage them before
@@ -2135,11 +2131,12 @@ Should work both in source and in Class Overview
 *** C-o g B -- Go to any BASE class
 *** Smart goto -- method -- shortcut for $self->METHOD in same file
 
+
 Check in elisp whether it's a $self->METHOD_CALL and whether
 METOD_CALL is a sub in the same file and package, etc. to avoid the
 round trip to perly_sense.
 
-** Other Window operations
+** TODO Other Window operations
 C-x 2 xxx to do the thing in the other window
 C-x 5  etc
 
@@ -2161,7 +2158,7 @@ Goto ->new found "setup_new" docs
 Search for data_collection finds create_data_collection
 
 Don't match if there's a leading sigil, e.g. $oLocation
-      
+
 ** Refactor: Remove duplication in Project, for calling covered
 ** Goto Other Test file - reuse window
 
@@ -2172,34 +2169,29 @@ Try a switch to buffer first if possible.
 Wed May 21 16:38:15 2008: Processing file (/home/lindsj05/source/pips3/branches/imi_length/t/lib/PIPTest/Setup.pm)
 Wed May 21 16:38:15 2008: Use of uninitialized value in concatenation (.) or string at /home/lindsj05/source/pips3/branches/imi_length/deps/lib/perl5//Devel/PerlySense/Document/Meta.pm line 500.
 
-** Source -- add module
+** DONE Source -- add module
 
 http://blog.jrock.us/articles/Learning%20Emacs%20Lisp%20has%20paid%20off.pod
 
 Either add at top, or add on this line.
 
-Assist for syntax errors that says: missing module, did you forget to use it
-
-
-
+** Assist for syntax errors that says: missing module, did you forget to use it
 ** Documentation -- Smart docs
 
 When explaining e.g. Smart docs, $self->method
 
 Use examples, and show sample output
 
-
 ** Goto any base class
 
 C-o g C-b - goto any base class, and list them if there are many.
 Display the hierarchy in the buffer during the selection if possible.
 
-** Document Inheritance -- show current class
+** DONE Document Inheritance -- show current class
 
 Document inheritance
 
 Markup the current class with [<Whatever >], just like everything else
-
 
 ** Assist test count
 
@@ -2212,12 +2204,10 @@ If in .t, assume *compilation* is for it.
 
 If not in .t look up *compilation*, and its .t file.
 
-
 ** Run tests covering this source file
 
 C-o r t
 Ask covered for which files to test, then do it.
-
 
 ** Doc Type
 
@@ -2226,7 +2216,7 @@ and display all matches.
 
 Choose one, then select the inheritance hierarchy
 
-** Find file, line number
+** TODO Find file, line number
 
 C-p g l
 
@@ -2293,12 +2283,10 @@ anywhere in the project.
 
 Also, if it's an error message/warning thing, goto the line
 
-
 ** Goto tests -- deal with buffers properly
 
 After visit file, also go to buffer or something, what if the file is
 already open in a different window.
-
 
 ** Flymake -- mode line indicator
 
@@ -2308,7 +2296,6 @@ colored blob.
 ** Goto Sub / Method
 
 Show a list of subs, let user choose one of them, go there.
-
 
 ** Bug: when running Goto Version Control from outside a project?
 
@@ -2325,15 +2312,13 @@ List POD heading, let user chose which one to go to
 
 Goto use section. Don't stop if in comment or pod.
 
-
 ** Goto Project Dir
 
 \C-o g p d
 
 Visit the project dir
 
-
-** Go to variable declaration
+** DOING Go to variable declaration
 
 Smart goto on a variable, goto the my or local or use vars or whatever
 is the first mention of it.
@@ -2365,12 +2350,6 @@ When doing the flymake info, put [-YYY] in the kill ring.
 
 When Assist on a Perlcritic complaint:
 Open .perlcritic file and put the cursor after the last [-XX] heading.
-
-
-
-
-
-
 ** Assist many things
 
 Assist things.
@@ -2401,7 +2380,6 @@ Somehow run a t file with coverage enabled, then parse the report and
 highlight the source, so that we incrementally can see line, branch,
 flow coverage of the subs we develop.
 
-
 ** Fix keybindings globally
 
 Add hook to dired, svn to rebind C-o stuff
@@ -2414,29 +2392,21 @@ not use define-global, use define-key or something instead?
 
 Find lexicals that are only declared, never used.
 
-** C-2 prefix for all navigation etc commands
+** TODO C-2 prefix for all navigation etc commands
 
 If with C-2 (or is it?) prefix, always open in other window, C-3 other window, etc
 
-
-** Goto Module -- selected text
+** DONE Goto Module -- selected text
 
 If selection, use that as the text, don't look at thing at point.
 
 Same as for other things?
 
-
-
 ** Smart Goto for file => ffap, error message => goto error line
 
 Make \C-o \C-g context sensitive to error message, and file
 
-
-
 ** Inheritance with many packagkes in the same file -- e.g. Datetime::Infinite inheritance
-
-
-
 ** Integrate regex-tool
 *** DONE Bundle the regex tool,
 *** DONE C-o a r to bring it up
@@ -2473,48 +2443,39 @@ C-o g s n -- s is "Syntax"
 
 C-o d s
 
-
-** Alt. Run File
+** DONE Alt. Run File
 
 C-u Run to run with Alt command line
 
-Or \C-o r c for Run with Cover
+** \C-o r c for Run with Cover
 
 If a .t file, run that file,
 If a .pm file, find the .t files, run those.
-
 
 ** Goto Run file --
 
 \C-o g r c -- Go to *compilation* buffer
 \C-o g r f -- Go to file being run in the compilation buffer
 
+** TODO Run History - Goto, Run
 
+Just keep a *PerlySense-Compilation-History* buffer around and add a
+line at the top for each new file.
 
-** Run History - Goto, Run
+Then with C-o C-r on a line would run that file.
 
 \C-o g r r -- Go to run file (the one in the compilation buffer)
 \C-o g r h -- Go to file in Run History
 -- Keep them in ordered list, promote them to top when run
-
-
-\C-o r h -- Run files in Run History
-With numeric argument, run the last n files
-
-
-
-** Goto module -- understand sub
+** TODO Goto module -- understand sub
 
 Go to module. If a module name isn't found, consider if it's really
 Module::Name::sub_name, and try Module::Name.
-
-
 
 ** perly-sense.el internals - trap error
 
 perl-sense.el trap eval error and display invalid input, and
 command. When evaling the response from perly_sense.
-
 
 ** FindBugs -- like Critic but better
 http://perlcritic.tigris.org/servlets/ReadMsg?list=dev&msgNo=1619
@@ -2524,7 +2485,6 @@ http://perlcritic.tigris.org/servlets/ReadMsg?list=dev&msgNo=1619
 C-o m i
 
 Indent region, or sub (select current sub if no selection)
-
 
 ** Regex tool -- Explain
 
@@ -2537,12 +2497,11 @@ C-o m m o
 
 ForMat Mark Outer
 
-
 ** Document Api -- C-o d a
 
 Display the Api in the echo area
 
-** Goto Project Config
+** TODO Goto Project Config
 
 \C-o g p c
 
@@ -2550,8 +2509,7 @@ Visit the project config dir
 
 From here it's simple to visit each type of thin
 
-
-** Goto find buffer
+** DONE Goto find buffer
 
 After a C-o C-f or find or whatever
 
@@ -2559,9 +2517,7 @@ Goto Find buffer *grep*
 
 C-o g f
 
-
-
-** Document Bookmarks -- C-o d b
+** DONE Document Bookmarks -- C-o d b
 
 Display the bookmarks in the echo area
 
@@ -2572,12 +2528,10 @@ Goto file if on a filename. Try to find it in the project if partial.
 
 Integrate with goto error line
 
-
-** Smart Goto variable declaration
+** DOING Smart Goto variable declaration
 
 If point is on a variable, go to the my, our, use vars or first use
 declaration. Deal with scope properly.
-
 
 ** Document x -- colorize text in echo area
 ** Smart Goto -- let user chose if multiple targets
@@ -2589,13 +2543,9 @@ Let the user choose which one, now that we have Choose Class.
 
 Display class name, and matching percentage
 
-
 ** Goto base class from Overview
 
 \C-o g b from base class should work
-
-
-
 
 ** Class Overview -- Hide private methods outside project
 
@@ -2603,9 +2553,6 @@ This should be a setting
 
 - overview:
   -     is_private_methods_from_outside_project_visible: 0
-
-
-
 ** Perltidy
 
 *** Config
@@ -2763,8 +2710,6 @@ This should be a setting
 (global-set-key (kbd "\C-o m t r") 'perltidy-region)
 (global-set-key (kbd "\C-o m t s") 'perltidy-sub)
 
-
-
 ** Overview -- change key binding
 
 \C-o d o
@@ -2774,16 +2719,14 @@ Much more logical
 Or are there more types of overviews?
 - It appars so
 
-
 ** POD display from Class Overview should be nicely marked up
 
 At the moment, just text
 
 ** Highlight / diff Testing Got vs Expected
 
-When in the *compiation* buffer, on an error, find the regions for the
+When in the *compilation* buffer, on an error, find the regions for the
 values, and start a diff.
-
 
 ** TODO Bug: Inheritance with @ISA captures more than it should
 
@@ -2793,8 +2736,6 @@ use vars qw(@ISA @EXPORT @EXPORT_OK $VERSION);
 Picks up VERSION and stuff, when it obviously shouldn't.
 
 Not when @ISA is a quoted value / part of a string
-
-
 
 ** TODO Bug: flymake captures "print" output
 
@@ -2816,7 +2757,6 @@ from command line
 -ne " /Subroutine [\\w:]+ redefined at/ || /line, it must also be used
 on the command line/ or print"},
 
-
 ** Performance
 
 *** Persistent environment?
@@ -2837,10 +2777,11 @@ queued things.
 
 ** Bug: $self->X is found within comments
 E.g. in Api.pm
-** Cache management
-*** Clear cache automatically on upgrade?
+** DONE Cache management
+*** DONE Clear cache automatically on upgrade?
+**** Not necessary, use version in cache key
 *** Spin of cache manager process to remove old cache entries?
-** Bug: when identifying subs $self->SUPER::anyting is picked up
+** Bug: when identifying subs $self->SUPER::anything is picked up
 
 Identify  $self->SUPER::  ::NEXT
 
@@ -2857,7 +2798,7 @@ Simplest thing? Block it from matching sigils before method name
 Or collect all, and chose the one nearest the start of the string
 
 
-*** Indicate when a method has overriden a base class method
+*** DONE Indicate when a method has overriden a base class method
 
 \->oDirection
 
@@ -2893,8 +2834,6 @@ Identify  $self->SUPER::  ::NEXT
 even if $self->parent::mymethod is called, pick "mymethod"
 
 Don't pick up "SUPER", but look at what was supered.
-
-
 
 ** POD display from Class Overview should be nicely marked up
 
@@ -2944,8 +2883,7 @@ From <Pips3::Importer::Validator>
 
 The editor should display this as a doc hint somehow.
 
-
-** Smart Goto **
+*** Smart Goto
 
 In the same file, at the same location.
 
@@ -2998,18 +2936,11 @@ The output of the program is:
 In case of many possible base classes, there will be many files in the
 class-list.
 
-
 ** Performance
-
 *** Persistent environment?
-
 **** inferior shell
-
-*** No PPI? Lots of memory and information that isn't needed in this
-case. Becomes harder as we use more and more capabilities. Because PPI
-is good.
-
-
+*** No PPI? Lots of memory and information that isn't needed in this case.
+**** Becomes harder as we use more and more capabilities. Because PPI is good.
 
 ** Overview -- histogram over subs
 
@@ -3017,12 +2948,9 @@ sub SLOC
 complexity?
 coverage
 
-
-** Bug: Goto method should find a sub in base classes
+** TODO Bug: Goto method should find a sub in base classes
 
 even if there is a POD entry in the current class.
-
-
 
 ** Parse syntax - plugins
 
@@ -3032,34 +2960,15 @@ Plugins for e.g. Class::Accessor idioms
 
 sub Catalyst::Log::Log4perl::logdie
 
-
-** POD display from Class Overview should be nicely marked up
-
-At the moment, just text
-
 ** Smart Goto and Docs etc from the Class overview doesn't work
 
 Just the keystroke works, but not the prefix-Smart-xxx command.
 
 Could this be overridden in the local keymap?
 
-
 ** C-2 other window for Clas Overview
 
 C-2 d, g, etc should work from the  Class Overview, display in other window
-
-
-** Performance
-
-*** Persistent environment?
-
-**** inferior shell
-
-*** No PPI? Lots of memory and information that isn't needed in this
-case. Becomes harder as we use more and more capabilities. Because PPI
-is good.
-
-
 
 ** Run Perl in the Source - xmp filter
 
@@ -3073,20 +2982,17 @@ http://www.emacswiki.org/cgi-bin/emacs/download/unit-test.el
 
 $_[0] is $self, so look for that idiom too
 
-
 ** Class Overview -- display non-project Classes differently
 
 In the Inheritance, Use, and Neighbourhood,d isplay Classes outside
 the current project in a more subdued color.
-
 
 ** Bookmark navigation -- open in other frame
 
 If another frame is open, return should open the file there instead of
 the current one. If not, open in same.
 
-
-** Bug: when going to sub declaration, try parent subs before failing to POD
+** TODO Bug: when going to sub declaration, try parent subs before failing to POD
 
 
 P POD m
@@ -3096,17 +3002,12 @@ S POD m
 
 should find the S POD, but go to the P sub
 
-
-
 ** .emacs load improvement
 
 Load ps-flymake if flymake is already loaded
 Change the install docs
 
-
-
 ** Go Back
-
 *** From Overview - b -- Go to previous Class Overview
 
 *** From Overview - C-b -- Go to previous Class Overview
@@ -3117,7 +3018,6 @@ Change the install docs
 
 List both Class Overview, and other things, like Smart Go To, Smart
 Docs, Run file(?)
-
 
 ** Bookmarks - List bookmarks with transform sub ref
 
@@ -3131,7 +3031,6 @@ Do when there is a Project Overview
 in config
 is_file_visible: 1  (default)
 is_project_visible: 1 (default)
-
 
 ** Docs Method, fail to displaying other interesting stuff
 *** A notice where it is declared
@@ -3151,17 +3050,14 @@ $self or $class as first argument
 
 ***** Assume self if not found?
 
-
 ** Goto Method, fail to a use of it
 
 If a method can't be found, either declaration or doc, fail to an
 invocation of the method, and message an explanation.
 
-
-** Bug: Create Project -- no critic config created
+** DONE Bug: Create Project -- no critic config created
 
 No critic config created by default when create_project
-
 
 ** Directory Overview
 
@@ -3187,8 +3083,6 @@ Navigate to Directory Overview DIR, Directory Tree
 
 List all bookmarks in all files, grouped by definition
 
-
-
 ** Class Overview for what's at point
 *** Class name
 *** $self (as today)
@@ -3200,14 +3094,12 @@ Both percent and slidebar
 89% XXXXXXXXXXXxxxxx
 47% XXXXXXXxxxxxxxxx
 
-
 ** Make class overview become Overview
 
 Make it work for non-classes too, it's clearly useful to plain files,
 tests, etc.
 
 C-o C-o
-
 
 ** Crap 4 Perl
 
@@ -3222,174 +3114,154 @@ Tests good
 Debunking CC
 http://www.sdtimes.com/content/article.aspx?ArticleID=31820
 
-
 ** Flymake - Don't run flymake unless the file exists
 ** perly_sense - abort gracefully if Devel::PerlySense can't be loaded
 ** Class Overview - List Perl::Critic tings
+ ** Class Overview - Go Back
 
+ b
 
+ *** Keep history of actions performed using perly_sense
 
-** Class Overview - Go Back
+ Which classes
+ **** visited
+ **** overviewed
 
-b
+ C-p C-h Smart History
 
-*** Keep history of actions performed using perly_sense
 
-Which classes
-**** visited
-**** overviewed
+ ** HTML output format for Class Overview
+ ** Goto Project config file
 
-C-p C-h Smart History
+ C-p g p p -- Go to the Project's project.yml config file.
 
+ C-p g p c -- Go to the Project's Critic .perlcritic config file
 
 
-** Goto Project config file
 
-C-p g p p -- Go to the Project's project.yml config file.
+ ** Broken POD rendering/parsing in Mehod docs
 
-C-p g p c -- Go to the Project's Critic .perlcritic config file
+ This doesn't show the item
 
+ =head2 relationship_info
 
+ =over 4
 
+ =item Arguments: $relname
 
-** Broken POD rendering/parsing in Mehod docs
+ =back
 
-This doesn't show the item
+ Returns a hash of relationship information for the specified
+ relationship
+ name.
 
-=head2 relationship_info
+ =cut
 
-=over 4
+ sub relationship_info {
+   my ($self, $rel) = @_;
+   return $self->_relationships->{$rel};
+ }
 
-=item Arguments: $relname
 
-=back
+ ** Copy-paste / duplication identification and highligting
 
-Returns a hash of relationship information for the specified
-relationship
-name.
+ Implement as different module, decoupled from PerlySense.
 
-=cut
+           http://www.perlmonks.org/?node_id=667084
+ http://www.perlmonks.org/?node_id=310219
 
-sub relationship_info {
-  my ($self, $rel) = @_;
-  return $self->_relationships->{$rel};
-}
 
 
+ *** Types of copy-paste
 
-** Copy-paste / duplication identification and highligting
+ **** Straight copy-paste, i.e. exact copies of text longer than x lines.
+ - some things may be legitimately ignored
+ - boilerplate pod, copyright notices
+ - use MODULE lines?
+ - sub new, etc.
 
-Implement as different module, decoupled from PerlySense.
 
-          http://www.perlmonks.org/?node_id=667084
-http://www.perlmonks.org/?node_id=310219
+ **** Similar code, i.e. normalized repeating constructs.
+ on a statement level, not per line. Identifiers and string literals
+ collapsed.
 
 
 
-*** Types of copy-paste
 
-**** Straight copy-paste, i.e. exact copies of text longer than x lines.
-- some things may be legitimately ignored
-- boilerplate pod, copyright notices
-- use MODULE lines?
-- sub new, etc.
+ ** Pod-mode
 
+ http://search.cpan.org/~schwigon/pod-mode/
 
-**** Similar code, i.e. normalized repeating constructs.
-on a statement level, not per line. Identifiers and string literals
-collapsed.
+ Include this somehow
 
+ ** Tests for flymake!
+ ** Enhanced compilation regexes
 
+ http://www.geocities.com/user42_kevin/compilation/compilation-perl.el.txt
 
+ ** Flymake filter out redefined warnings
 
+ Filter out x::something not just something.
 
-** Pod-mode
+ ** Flymake
 
-http://search.cpan.org/~schwigon/pod-mode/
+ *** Configurable
+ **** Re-analyse PPI Cache!
+ **** DONE Run Critic using cached PPI doc (to store it once we parse the doc)
+ **** Run other analysis (complexity)
+ **** Copy-paste warnings?
 
-Include this somehow
+ Critic and complexity requires it's own config, which things to check
+ for.
 
+ Go to next error: also display error text as (message), put any Critic
+ module mentioned in the clipboard. If already on last error, redisplay
+ message.
 
-** Tests for flymake!
+ ** Doc: Trouble shooting Flymake
 
+ (flymake-log-level 3)
+ M-x flymake-mode
+ Look in *Messages*
 
-** Enhanced compilation regexes
 
-http://www.geocities.com/user42_kevin/compilation/compilation-perl.el.txt
 
 
-** Flymake filter out redefined warnings
+ ** Config for Class Overview
 
-Filter out x::something not just something.
+ Which sections to display?
 
+ - whether to display subclasses
 
-** Flymake
 
-*** Configurable
-**** Re-analyse PPI Cache!
-**** DONE Run Critic using cached PPI doc (to store it once we parse the doc)
-**** Run other analysis (complexity)
-**** Copy-paste warnings?
 
-Critic and complexity requires it's own config, which things to check
-for.
+ ** Project Source Root directory
 
-Go to next error: also display error text as (message), put any Critic
-module mentioned in the clipboard. If already on last error, redisplay
-message.
+ Introduce this soon, before too many things confuse the Project Root
+ (config, Find below here) and the Source Root (source root, run files
+ from here, include files from here).
 
+ Step 1: just call them two different things, let them both be the
+ current thing.
 
-** Doc: Trouble shooting Flymake
+ Step 2: make source configurable
 
-(flymake-log-level 3)
-M-x flymake-mode
-Look in *Messages*
+ Step 3: add additional INC dirs, but keep one the primary source root.
 
 
 
+ ** Class Overview -- reorder method
 
-
-** Config for Class Overview
-
-Which sections to display?
-
-- whether to display subclasses
-
-
-
-
-** Project Source Root directory
-
-Introduce this soon, before too many things confuse the Project Root
-(config, Find below here) and the Source Root (source root, run files
-from here, include files from here).
-
-Step 1: just call them two different things, let them both be the
-current thing.
-
-Step 2: make source configurable
-
-Step 3: add additional INC dirs, but keep one the primary source root.
-
-
-
-
-** Class Overview -- reorder method
-
-Move method within file
-
-
+ Move method within file
 
 ** DONE Perl tests - increase test plan count
 
 C-o e t c
 C-o a t
 
-
 ** PerlTidy
 
 http://obsidianrook.com/perlnow/emacs_as_perl_ide.html#perltidy
-
 
 ** create_project - set initial values
 
@@ -3398,20 +3270,16 @@ copy_from = DIR
 syntax = 1
 critic = 1
 
-
-** Project Config - perl critic config
+** DONE Project Config - perl critic config
 
 What default perlcritic is used, and why isn't it created at
 create_project?
 
-
-
-** Compilation - go back to source file
+** WONTDO Compilation - go back to source file
 
 C-p r f
 
 When in the compilation buffer, navigate to the original file
-
 
 ** Refactorings -- list
 
@@ -3429,9 +3297,6 @@ pick two or more base classes, and push common stuff to super class
 
 ****
 
-
-
-
 ** Refactor: rename lexical
 
 C-o r r
@@ -3447,12 +3312,9 @@ possible versions and let the user select the correct one to open.
 
 perly-sense-find-file-in-project
 
-
-
-** Refactor: Replace literal with named lexical.
+** DONE Refactor: Replace literal with named lexical.
 
 C-p e r l
-
 
 ** Refactorign menu
 
@@ -3464,9 +3326,6 @@ Refactoring
 
 http://www.refactoring.com/catalog/
 
-
-
-
 ** Run file - Specify command line parameters - Emacs
 
 Prompt for command line, if called with C-u modifier
@@ -3476,13 +3335,10 @@ interactively edit it instead.
 
 Still, look up the correct dir to run from.
 
-
-
-** Run file -- without a project
+** DONE Run file -- without a project
 
 There may not be a project, and no lib, just a simple script with
 installed deps. Continue with the Unknown project (with default config).
-
 
 ** Run File - error diag text is outside screen
 
@@ -3494,30 +3350,20 @@ Defadvice this defun? (it's not a proper defun?)
 
 compilation-set-window
 
-
 ** DONE Run File -- with plugins for file endings
 
 Plugins for file endings.
 
-
-** Perldb
+** DONE Perldb
 
 Run pelrdb from the root, with inc, etc
 
 Show prompt
 
-
-
-
 ** DONE Run file - green text for "All tests successful."
 
 Change the syntax highlighting in the compilation mode?
-
-
-
-
-
-** Project docs
+** WONTDO Project docs
 
 If you have a t/lib in your t directory, you need a .PerlySenseProject
 dir, to override that, otherwise PerlySense will think that t is the
@@ -3526,13 +3372,7 @@ modules are included. Which it does, it's just not where your primary
 lib is located).
 
 perly_sense create_project
-
-
-
-
-
-
-** Run test file
+** WONTDO Run test file
 
 C-p r t  or  C-p T t
 
@@ -3543,9 +3383,6 @@ If in a .t buffer, run it
 If not in a .t buffer
   If point is on a .t file, run that file
   If not, find the tests that may test this class
-
-
-
 ** Run test Suite
 
 C-p r s  or  C-p T s
@@ -3555,23 +3392,11 @@ Run the entire test suite, in the *compiation* buffer
 prove -r t
 
 With modifier, show command line to provide editing
-
-
-
-
-
 ** Open File -- check if directory exists, otherwise ask perly_sense to find it
 
 file-directory-p
   Function: Return t if FILENAME names an existing directory.
   Plist: ange-ftp
-
-
-
-
-
-
-
 ** Find copy-pasted code
 
 Indicate it in the class overview, link to the other instances.
@@ -3579,26 +3404,15 @@ Indicate it in the class overview, link to the other instances.
 Indicate it in the Project Overview.
 
 Run identification as a background job. Make it it's own module.
-
-
-
-
-
-
-
 ** Find module backup
-
+*** What does that mean?
 If not on a class with C-p m f, ask for it in the minibuffer
-
-
-
 ** Refactor x
 
 C-p e
 
 
-
-** Format: format parameter list
+** TODO Format: format parameter list
 
 C-p r f p
 
@@ -3614,50 +3428,31 @@ method(
     $e,
 );
 
-
-
-
-** Format: Align region
+** TODO Format: Align region
 
 C-c a
 
 Run align current, but only on the region, re-indent properly
 
 Also create a select-outer-block, C-c s o
-
-
-
-** Format: collapse whitespace
-
-
-** Format: delete trailing whitespace
+** WONTDO Format: collapse whitespace
+** WONTDO Format: delete trailing whitespace
 
 
 
 
-
-** Find the file mentioned in region in the project, open it.
+** WONTDO Find the file mentioned in region in the project, open it.
 
 C-p f f
-
-
-
-
-** Change the bindings to be action oriented
+** DONE Change the bindings to be action oriented
 
 the first is always Ctrl-action on the current
 
 C-p g c -- Goto class at point (replaces C-p m f)
-
-
-
-
-
-** Overview -- visulizer
+** WONTDO Overview -- visulizer
 
 Something similar to
 http://www.flickr.com/photos/carlmanaster/9254599/in/set-228603/
-
 
 ** Class Overview -- works for any file, not just classes
 
@@ -3665,10 +3460,6 @@ So, for .pl and .t files, it also makes sense to be able to see
 includes, structure, vcs activity, etc.
 
 So, don't stop the analysis just because it's not a Class.
-
-
-
-
 ** Signature Survey - highlighting
 
 Syntax highlighting the survey with diff background color for S
@@ -3676,10 +3467,6 @@ Syntax highlighting the survey with diff background color for S
 A very cool thing would be to increase the greyness as a Sub goes on,
 so that long subs are clearly visible, maybe they should turn towards
 red after n chars?
-
-
-
-
 ** Class Overview - Structure navitation and docs
 
 When moving over things in the Structure, the message would update and
@@ -3694,11 +3481,6 @@ to.
 
 Note: this position may not be known, but the editor should attempt to
 pass it in.
-
-
-
-
-
 ** PerlySense config in $HOME
 
 Some things are User specific, some are Project specific. Overridable
@@ -3708,34 +3490,18 @@ per Project.
 ~/.perlysense/user.yml
 
 http    ://search.cpan.org/~hasant/Config-Merge-0.02/Merge.pm
-
-
-
-
-
-
-
-** Overview - Neighbourhood - don't list package names that don't have
-a file
+** Overview - Neighbourhood - don't list package names that don't have a file
 
 Check this out in production.
 
 Indicate that some aren't actually files you can visit by a faded
 color?
-
-
-
-
 ** Class Overview - Back button
 b
 
 Keep an internal stack of Classes being overviewed, use b to go
 back. Also display it with under a * Recently Overviewed * heading?
-
-
-
-
-** Class Overview - Show Code coverage
+** DONE Class Overview - Show Code coverage
 
 Use project config to point to a place where code coverage runs are
 available. Show in class overview
@@ -3743,19 +3509,11 @@ available. Show in class overview
 Show inline with the file, for each sub?
 
 Link to file
-
-
-
-** Class Overview - Source Control - Related files
+** TODO Class Overview - Source Control - Related files
 
 Look at changesets and figure out which other files were checked in
 whenever this file was checked in.
-
-
-
-
-
-** Class Overview - Source Control Activity
+** TODO Class Overview - Source Control Activity
 
 To complement "annotate"
 
@@ -3805,7 +3563,6 @@ checkin would do the same, but for all checkins that day.
 
 
 
-
 ** Project Overview - Source Control Activity
 
 Tree map with source file size as block size, and recent activity as
@@ -3817,10 +3574,6 @@ Another view - Show recent number of bugs fixed related to files, red
 is many files with bug fixes.
 
 Checkin messages and/or Trac integration
-
-
-
-
 ** Project Overview - Source Code Complexity
 
 Tree map with source complexity metric as block size.
@@ -3832,10 +3585,6 @@ Coverage
 One of my favourite quotes from Ken Thompson (who apparently knows a bit about computers) is:
 
 I tend to break up a subprogram when there are too many local variables. Another clue is [too many] levels of indentation. I rarely look at length.
-
-
-
-
 ** Emacs faces
 
 something like this?
@@ -3849,21 +3598,8 @@ something like this?
   `((t (:background "grey15")))
   "Default inherited face for ERB tag delimeters"
   :group 'rhtml-faces)
-
-
-
-
-
-
-
-
 ** Overview - Inheritance - find classes that are base classes which
 are packages in the same oDocument.
-
-
-
-
-
 ** Show complexity or other metric
 
 Show Cyclomatic Complexity of class / sub somehow
@@ -3873,21 +3609,11 @@ Other metrics that may be useful?
 http://search.cpan.org/dist/Perl-Metrics-Simple/lib/Perl/Metrics/Simple/Analysis/File.pm
 
 http://search.cpan.org/~nwclark/perl-5.8.8/ext/B/B/Concise.pm
-
-
-
-
 ** Parse @ISA
 
 Text::Diff module:
 
 @Text::Diff::Unified::ISA = qw( Text::Diff::Base );
-
-
-
-
-
-
 ** When ready, list PelrlySense on the EmacsWiki and elsewhere
 
 http://www.emacswiki.org/cgi-bin/wiki/PerlLanguage
@@ -3904,29 +3630,15 @@ http://perldoc.perl.org/perlfaq3.html#Is-there-an-IDE-or-Windows-Perl-Editor%3F
 http://www.perlmonks.org/?node_id=639314
 
 http://www.perlmonks.org/?node_id=192684
-
-
-
-
 ** Fix Class to lazily walk up the base class chain
 
 Initialize rhClassBase on first access
-
-
-
-
 ** Class Overview - Neighbourhood with dir names
 
 Show the directory name at the top of each column? Just the actual
 directory:
 
 Pips3    Pips3/Series   Pips3/Series/*
-
-
-
-
-
-
 ** PerlySense && Emacs: Class Hierarchy Step 6?
 
 Look at subclasses in the entire project, not just below
@@ -3948,10 +3660,6 @@ from project modules.
 Have a complete hierarchy somewhere else usign GraphViz?
 
 Put base classes in one group and subclasses on one
-
-
-
-
 ** Abbreviate long common class names in Class Overview
 
 Embedd full class names somehow (org-link thing?) with hidden
@@ -3971,20 +3679,10 @@ Then shorten each class name with a header at the top of each column:
 [ Version ]
 
 http://search.cpan.org/~simonw/Text-CommonParts-0.5/lib/Text/CommonParts.pm
-
-
-
-
-
-** Go to Class, and let me edit the text beforehand.
+** DONE Go to Class, and let me edit the text beforehand.
 
 Perhaps C-p m f could display the word at point and let me edit it
 first.
-
-
-
-
-
 ** Put the log files in the project dir
 
 .perlysense/
@@ -3992,40 +3690,17 @@ first.
   log/
     debug.log
     history.log
-
-
-
-
-
 ** Emacs: Clean up Class Overview
-
-
-
-
-** Clean up perly_sense and perly-sense.el to use alists in a general
-way
-
-
-
-
-
+** Clean up perly_sense and perly-sense.el to use alists in a general way
 ** There is a fundamental mis-design when it comes to Packages in Documents/Meta
 
 Documents should have Packages which should have other stuff. Walking
 upwards from a Document to a a base class something, should be moved
 to become the reponsibility of Class.
-
-
-
-
-** Pod display
+** TODO Pod display
 
 If there is a .pod file next to a module, use that one too (or
 instead?).
-
-
-
-
 ** Project Class Overview
 \C-p p c
 
@@ -4033,50 +3708,27 @@ List all Classes in the namespace hierarchy with the with the "current"
 class highlighted.
 
 Recently visited classes (maybe just highlighted?).
-
-
-
-
 ** Eldoc - display the signature of the method you're typing
-
 
 http://www.emacswiki.org/cgi-bin/emacs-en/ElDoc
 
 ** Create a reference card.
 
 This will probably make inconsistencies in the keymappings obvious.
-
-
-
-
-** Consider changing the default keymap from C-p to
+** DONE Consider changing the default keymap from C-p to
 
 C-c C-p   ? Used by POD spell, but that's insignificant
 
 C-o       Used by open-line, fairly unuable...
 
 C-l       Used recenter, may actually be used by people
-
-
-
-
 ** DONE Sync test count with compilation buffer
 
 Look at the *compilation* buffer, find the reported test count,
 whether it's ok or is missing any tests. Update the "tests => n"
 
 ** Make keymappings buffer local, not global
-
-
-
-
-** Use the increment test count trick
-
-
-
-
-
-
+** DONE Use the increment test count trick
 ** Project History
 \C-p p h
 
@@ -4085,19 +3737,10 @@ Recently visited Classes
 Recently visited .t files
 
 Recently visited .pl files
-
-
-
-
-
 ** Class Overview is context sensitive
 
 Can identify whether it's on a named class (or literal), or not (and
 assume it's the current package).
-
-
-
-
 ** History
 
 Store per project whenever a class, or method is looked up.
@@ -4105,11 +3748,6 @@ Store per project whenever a class, or method is looked up.
 \C-p \C-h -- Bring up PerlySense History for recent places you were
 
 .perlysense/log/history.log
-
-
-
-
-
 ** Indent and align
 
 Use this with the select outer block
@@ -4120,8 +3758,6 @@ Use this with the select outer block
     (indent-region beginning end nil)
     (align beginning end)
     ))
-
-
 ** Class Overview: Group system classes
 
 In the class hierarchy, bounding box classes in the perl lib to
@@ -4231,50 +3867,27 @@ graph { flow: up; }
   H                                            H                                   v
   #======================================>   [<Game::Object::Worm                                             >]   <** [ Game::Object::Worm::Snake ]
                                              [ Game::Object::Worm::Boa   ]
-
-
-
-
-
-** Emacs: After goto: show destination as message
+** DONE Emacs: After goto: show destination as message
 
 b. Show package and sub(?)
-
-
-
-
-
 ** Support XS stuff with Dynaloader
 
 Can we determine anything from XS code? Is there XS metadata anywhere
 to pick up?
-
-
-
 ** Bug: look for @ISA only in the proper package
 
 When there are two packages (e.g. main and some other, or two package
 statements), the @ISA should only matter if it's in the proper
 package.
-
-
-
-
 ** Smart-docs: on variable with method call shows class
 
 Whenever Smart-docs is invoked on an object, show which class it has.
-
-
-
 ** Smart-docs: show package name of found method, etc
 
 Currently, the method is displayed, but it's impossible to see where
 the documentation came from.
 
 Show which class the method doc is for.
-
-
-
 ** Smart-goto: look at chained methods
 
 $self->lawn->stuff
@@ -4283,70 +3896,32 @@ $self->lawn($dfskd)->stuff
 $self->lawn($dfskd / 2)->stuff
 
 It should work to find "stuff"
-
-
-
-
 ** Refactoring: Fix Devel::PerlySense::Util::aNamedArg
 
 Export aNamedArg and replace all uses with the shorter version.
-
-
-
-
-** File bug about Token::QuoteLike
+** TODO File bug about Token::QuoteLike
 
 Make sure it has a "string" method, like the Token::Quote classes.
-
-
-
-
-
-** Bug: warnings in Document->oLocationSub, line 457 (no package?)
+** TODO Bug: warnings in Document->oLocationSub, line 457 (no package?)
 
 WindowTool.pm, line 236, Win32::GUI::Loft::Design->newLoad
 
 Remove the silenced warnings.
-
-
-
 ** Debug support
-
-
-
-** Goto module as string
+** TODO Goto module as string
 
 As in:
 
 use base "Sdkjsd::Sd";
-
-
-
-
-
+** Completion for Package names
 ** Use the entire project lib as context
 
 Usually, a module isn't "used" from within the document, still it's
 used in the code.
-
-
-
-
 ** Determine probably "used" modules by looking for module looking stuff in comments and pod.
 
 Auto-prefix with the current thing?
-
-
-
-
-** Bug? $self->method in Opera
-
-c:/Dokument/Jobb/Projekt/BossOpera/Modules/Ray/source/lib/Boss/Opera/Ray/ProductGroup.pm, line 64
-
-
-
-
-** Anonymous subs within a sub
+** TODO Anonymous subs within a sub
 
 sub a {
     my $b = sub { my $c = shift; $c->methodcall() };
@@ -4354,14 +3929,7 @@ sub a {
 
 methodcall() isn't recognized?
 
-
-
-
-
 ** Look why e.g. "use Catalyst" takes forever
-
-
-
 ** Display stuff in a web browser
 http://search.cpan.org/~corion/HTML-Display-0.39/lib/HTML/Display.pm
 
@@ -4370,28 +3938,14 @@ http://search.cpan.org/~corion/HTML-Display-0.39/lib/HTML/Display.pm
 
 
 __PACKAGE__->newScalar
-
-
-
-
 ** Discard oDocument ?
 
 The PPI data takes  a lot of memory
-
-
-
-
-
 ** Look into POD warning
 
 (((C:\Perl\lib\Class\MethodMaker\hash.pm)))
     Parsing: (((C:\Perl\lib\Class\MethodMaker\hash.pm)))
 Use of uninitialized value in concatenation (.) or string at ../lib/Devel/PerlySense/Document/Meta.pm line 461.
-
-
-
-
-
 ** Lazy load everything?
 
 Document (most important, possible 2.5 profiling seconds to strip)
@@ -4399,55 +3953,26 @@ Document (most important, possible 2.5 profiling seconds to strip)
 22.66    1.3602        9   0.151135     PPI::Node::__link_children
 11.06    0.6641     3173   0.000209     PPI::Node::DESTROY
  8.49    0.5097    15829   0.000032     PPI::Element::DESTROY
-
-
-
-
-
 ** Smart docs: always display which file the hint was taken from,
 since that may be unclear.
-
-
-
-
 ** Smart goto: $object->method1->method2
 ** Smart docs: $object->method1->method2
-
-
 ** Smart goto: sub calls
 ** Smart docs: sub calls
-
-
-
 ** Smart: $object method: Also notice e.g. $aDocumentDest[0]->oLocationPod
 
 
-
-
 PPI::Structure::List (e.g. () )  with no children doesn't have a location?
-
-
-
-
-
 ** Smart goto: $object->method  - deal with multiple matches
 
 Either pick the first and show the other ones, or Show all and let the
 user chose. This could be a choise within Emacs.
-
 ** Smart docs: $object->method  - deal with multiple modules
 
 Either pick the first and show the other ones, or Show all and let the
 user chose. This could be a choise within Emacs.
-
-
-
-
 ** Smart docs: $object->method
-
 *** Look for the method in use modules
-
-
 *** Find a use'd module which has some or all of the method calls
 
 List them all for user choise or goto right away? How about the C-p
@@ -4455,164 +3980,74 @@ C-g goes to the first/best (most base in an inheritance situation +
 other characteristics), but signals in the message bar the other
 choises (including the ISA hierarchy of them)?
 
-
-
 **** Identify interface: ignore $self->{_something}
 
 Since it's private by convention
 
-
-
-
 **** Refactor: rename Document->aNameBase => aNameModuleBase
 
 Bad name.
-
-
-
-
-
-
-
 ** Smart goto: $object->SUPER::method2
-
 ** Smart docs: $object->SUPER::method2
-
-
-
-
 ** Find interface: Look in the entire project's modules.
 
 Don't do this unless it was found in an explicitly used module?
-
-
-
-
 ** GUI interaction: Show gui dialog with progress bar and current activity
 
 Some operations are very time consuming when not cached, so we need to
 give the user feedback + cancel ability. How cross platform is Tk? How
 fast does it load?
-
-
-
-
 **** Refactor: Clean up the naming convention for package/module etc.
-
-
 **** Refactor: Document->oLocationSmartGoTo
 
 Find commonalities to make the lookup more efficient.
 
-
-
 *** C-p g m - Go to the method, but show a list when there are ambiguities.
-
-
-
-
-
-** Hack in tab/space support in PPI, or fix it in PerlySense?
-
-
-
-
+** WONTDO Hack in tab/space support in PPI, or fix it in PerlySense?
 **** Refactor Document oLocationPod, it's really ugly
-
-
-
 ** Smart goto: Look around when looking for method calls
-
-
-
 ** Smart docs: Look around when looking for method calls
 
 
 
 
-
 ** Ask on PerlMonks: What modules are "stopwords"? E.g. Exporter.
-
-
-
 ** Smart docs -
-
 *** Smart docs - Fail to: find the POD SYNOPSIS
-
 *** Smart docs - Fail to: find the sub declaration and find the proceeding comment block
-
 *** Smart docs - Fail to: find the sub declaration and figure out the parameter list
 **** Figure out a my "($param1, $param2) = @_;"
 **** Figure out a my "$param = shift;" sequence
 **** Figure out everything up to the first blank line, at most n lines.
-
-
-
-
-
 ** Smart goto: $object->method
 *** Look for the method in previously studied modules in the project
-
-
-
 ** Smart docs: $object->method
 *** Look for the method in use modules
 *** Look for the method in previously studied modules in the project
-
-
-
 ** Smart goto: function or function()
 *** Look for the function in use modules
 *** Look for the function in previously studied modules in the project
-
-
-
 ** Smart docs: function or function()
 *** Look for the function in use modules
 *** Look for the function in previously studied modules in the project
 *** Builtins
-
-
-
-
-
 ** Smart go up: C-p g u - If in a sub, go to the parent class where
 the sub is also implemented or documented. If outside a sub, go to the
 immediate parent class at ? ?.
-
-
-
 ** Smart docs up up: C-p d u - If in a sub, show the docs in the
 parent class where the sub is also implemented. If outside a sub, show
 POD of the immediate parent class. If multiple inheritance, go left-first.
-
-
-
-** Smart go to new: C-p g n - Go to the new() method, or find the base
+** DONE Smart go to new: C-p g n - Go to the new() method, or find the base
 implementation or documented.
-
-
-
-
-
-
 ** Determine class of $self->property->method_call()
 
 Do this by determining all calls to $self->property and look for this
 class by looking for a module which has all the subs (or
 inherited). Look in "use Module" and remembered modules in this
 project.
-
-
-
 ** Determine class of $object->method_call() if $object was
 Module::Name->new in the same scope
-
-
-
-
-
-** Java ideas
+** TODO Java ideas - usages - callers
 
 Mentioned here just so I don't forget about it
 
@@ -4630,8 +4065,6 @@ http://jde-usages.sourceforge.net/
 
 (define-key jde-mode-map "\M-un" 'jde-usages-next-pos)
 (define-key jde-mode-map "\M-ul" 'jde-usages-locate-class)
-
-
 ** Insert arglist
 
 When here
@@ -4648,19 +4081,9 @@ Weigh possible matches against each other, with preferably no false
 positives (i.e. if a class (in module or parent) doesn't provide a
 method, disqualify it (this isn't possible since getters/setters may
 be auto-defined and not present in the code).
-
-
 ** Smart goto: look in "use"
-
-
-
 ** Smart docs: look in known already visited files
-
-
 ** Smart goto: look in known already visited files
-
-
-
 ** Emacs: Bind C-p SPC - IntelliSense command completion
 
 http://www.emacswiki.org/cgi-bin/emacs-en/CompletionUI
@@ -4669,23 +4092,11 @@ http://nschum.de/src/emacs/company-mode/
 
 http://www.emacswiki.org/cgi-bin/emacs-en/PredictiveMode
 -fill a dictionary whenever -> is inserted in the buffer?
-
-
-** Get pod docs as HTML (just to make sure we bring a formatter
-object)
-
-
-
-
-
+** Get pod docs as HTML (just to make sure we bring a formatter object)
 ** Show flattened POD for module
 
 in an imenu? Is that possible
-
-
-
-
-** Run file in bin directory
+** WONTDO Run file in bin directory
 
 Default to previous file name, or the first .pl file or the first file
 found in the bin dir.
@@ -4693,34 +4104,21 @@ found in the bin dir.
 Translate file/line numbers to compilation errors.
 
 
-
 ** Run current file (already in cperl-mode?), but translate "# Failed
 test (PerlySense-smart-doc-pod.t at line 60)" to something that looks
 like file/line compilation errors. Also syntax errors.
-
-
-
 ** Look into gtags
 
 http://code.google.com/p/google-gtags/
 
-** Run perl test file
+** WONTDO Run perl test file
 
 Default to the current t file, or the previously run t file if the
 current buffer isn't a t file.
-
-
 ** Prove the tests
 
 and open the test files that didn't pass all tests
-
-
-
-** Syntax check current file with perl -c (already in cperl-mode?)
-
-
-
-
+** DONE Syntax check current file with perl -c (already in cperl-mode?)
 ** Help with Demeter
 
 Find $self->getter->method->* method chains
@@ -4729,16 +4127,9 @@ Find $self->getter->method->* method chains
 this class if more than 2? 3?
 
 Perl::Critic plugin
-
-
 ** Lazy load oDocument, replace parse with load, and parse on demand.
 
 (may not be needed even)
-
-
-
-
-
 ** Pre-analyze time-consuming modules in @INC at installation
 
 1.010290 : C:\Perl\site\lib\Pod\Parser.pm
@@ -4931,14 +4322,11 @@ Perl::Critic plugin
 
 
 
-
 ** Sparklines
-
 sparklines
 http://www.bissantz.de/sparklines/
 http://www.bonavistasystems.com/OnlineDemoReports.html
 http://sparkline.wikispaces.com/Examples
-
 
 *** For SVN activity going back x days
 
@@ -4946,7 +4334,6 @@ try to at least show one checkin, and adjust the x scale accordingly,
 so that it's only a pixel wide if it was a long time ago.
 
 color: user; presence: checkin that day; height: size of commit
-
 
 *** For code coverage over time
 
@@ -5041,5 +4428,3 @@ $importer->_persisted_objects
 ** Emacs libs
 
 http://www.dr-qubit.org/emacs.php
-
-
