@@ -2,7 +2,7 @@
 * Refactorings
 ** Lexical
 *** Rename lexical variable
-*** Extract x to lexical
+*** DONE Extract x to lexical
 **** Literal
 **** Expression
 *** Move declaration to outer scope

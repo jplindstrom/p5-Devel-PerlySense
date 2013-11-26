@@ -1,5 +1,5 @@
 #+Seq_TODO: TODO DOING DONE
-* User Stories
+* Done User Stories
 ** DONE Bug: Build.pl
 
 Fix Build.PM to refer to the file with / not \\
@@ -1493,6 +1493,11 @@ The value returned is the value of the last form in BODY."
 *** Refactor
 **** lib/Devel/PerlySense/Project.pm
 **** elisp
+* Stories
+** DONE Run current Test::Class method only
+*** C-o r m
+**** Mark method to be current, or toggle if already current
+**** Set whatever var
 ** Key bindings
 
 *** C-o a is Assist-with
@@ -1531,7 +1536,6 @@ be done in context
   - l Lexical / v Variable (make selection a lexical variable
   - p Property (extract the selected thing and put it into $self->propname, getter/setter)
   - m Method
-
 
 ** Moose syntax parser
 *** DONE Plugin
@@ -1718,7 +1722,6 @@ method ($self->something) or
 function (none of the previous)?
 
 
-
 ** TODO Bug: Docs found wrong
 
 Game::Object::Worm, docs for oLocation matches
@@ -1747,9 +1750,6 @@ Ignore during parse altogether, or just hide from view?
 
 Document aNameBase has a hard coded list, use it for both ignoring base
 classes, and for not looking at base classes when listing methods.
-
-
-
 ** TODO Bug: Infinite base class loop
 
 File::Spec
@@ -1813,14 +1813,8 @@ Thu May 22 16:22:01 2008: Deep recursion on subroutine "Devel::PerlySense::Docum
 
 
 
-
-
 ** Docs 
 *** declarations
-** DONE Run current Test::Class method only
-*** C-o r m
-**** Mark method to be current, or toggle if already current
-**** Set whatever var
 ** Mark many methods to be run in Test::Class
 ** Assist with test count for Test::Class
 *** Not as important, use no_plan instead anyway
@@ -2013,20 +2007,14 @@ Class overview on Pips3/DateTime/DateTime.pm
 
 Infinite loop.
 
-
 ** Bug: infinite loop
 
 c:/Perl/site/lib/Win32/GUI/Loft/Design.pm 2359
     my $name = $objTabStrip->runtimeName($self);
 
-
 ** Cleverer Go To method
 *** Do a center screen unless point is in the top half of the frame
 ** Make sure we don't have infinite loops when following the ISA
-
-
-
-
 ** TODO Vim features
 
 Put it under the synopsis as HTML only
@@ -2068,7 +2056,6 @@ New synopsis
 | ** ASSIST **              |           |     |
 | Assist With Test Count    |           |     |
 |---------------------------+-----------+-----|
-
 
 
 ** TODO Coverage -- default to disabled
