@@ -9,7 +9,7 @@
 
 
 
-;; (require 'cl-seq)  ;; find-if
+(load "cl-seq")  ;; find-if
 
 (require 'pc-select)  ;; next-line-nomark
 (require 'gud)        ;; perldb
