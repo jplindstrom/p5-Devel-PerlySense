@@ -471,7 +471,6 @@ See the POD docs for how to enable flymake."
 
 
 
-
 (defun ps/run-file (&optional use-alternate-command)
   "Run the current file"
   (interactive "P")
@@ -482,35 +481,42 @@ See the POD docs for how to enable flymake."
         (message "Recompile file...")
         (recompile)
         )
+
     (message "Run File...")
+    (let ((alternate-command-option
+           (if use-alternate-command "--use_alternate_command" "")))
+      (ps/run-file-with-options alternate-command-option)
+      )
+    )
+  )
 
-    (let* ((alternate-command-option
-            (if use-alternate-command "--use_alternate_command" ""))
-           (result-alist (ps/command-on-current-file-location
-                          "run_file"
-                          alternate-command-option))
-           (dir-run-from (alist-value result-alist "dir_run_from"))
-           (command-run (alist-value result-alist "command_run"))
-           (type-source-file (alist-value result-alist "type_source_file"))
-           (message-string (alist-value result-alist "message")))
-      (if command-run
-          (progn
-            ;; Test::Class integration
-            (setenv "TEST_METHOD"
-                    (if ps/tc/current-method
-                        (format "^%s$" ps/tc/current-method)
-                      nil))
 
-            (ps/run-file-run-command
-             ;;             (ps/run-file-get-command command-run type-source-file)
-             command-run
-             dir-run-from
-             )
-            )
-        )
-      (if message-string
-          (message message-string)
-        )
+
+(defun ps/run-file-with-options (options)
+  "Run the current file with OPTIONS passed to perly_sense"
+  (let* (
+         (result-alist     (ps/command-on-current-file-location "run_file" options))
+         (dir-run-from     (alist-value result-alist "dir_run_from"))
+         (command-run      (alist-value result-alist "command_run"))
+         (type-source-file (alist-value result-alist "type_source_file"))
+         (message-string   (alist-value result-alist "message")))
+    (if command-run
+        (progn
+          ;; Test::Class integration
+          (setenv "TEST_METHOD"
+                  (if ps/tc/current-method
+                      (format "^%s$" ps/tc/current-method)
+                    nil))
+
+          (ps/run-file-run-command
+           ;;             (ps/run-file-get-command command-run type-source-file)
+           command-run
+           dir-run-from
+           )
+          )
+      )
+    (if message-string
+        (message message-string)
       )
     )
   )
