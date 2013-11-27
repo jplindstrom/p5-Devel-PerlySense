@@ -492,6 +492,16 @@ See the POD docs for how to enable flymake."
 
 
 
+(defun ps/run-file-with-coverage ()
+  "Run the current file with Devel::Cover enabled and collect
+Devel::CoverX::Covered data"
+  (interactive)
+  (message "Run File (with Devel::Cover)...")
+  (ps/run-file-with-options "--coverage")
+  )
+
+
+
 (defun ps/run-file-with-options (options)
   "Run the current file with OPTIONS passed to perly_sense"
   (let* (
@@ -2341,6 +2351,7 @@ Return t if found, else nil."
 
 (global-set-key (format "%s\C-r" ps/key-prefix) 'ps/run-file)
 (global-set-key (format "%srr" ps/key-prefix) 'ps/rerun-file)
+(global-set-key (format "%src" ps/key-prefix) 'ps/run-file-with-coverage)
 (global-set-key (format "%srd" ps/key-prefix) 'ps/debug-file)
 
 (global-set-key (format "%sgf" ps/key-prefix) 'ps/goto-find-buffer)
