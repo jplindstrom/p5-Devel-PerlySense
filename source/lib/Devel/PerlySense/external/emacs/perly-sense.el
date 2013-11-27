@@ -720,7 +720,7 @@ The value returned is the value of the last form in BODY."
 (defun ps/minibuffer-ack-option-filetype (new-type)
   (save-excursion
     (beginning-of-line)
-    (if (re-search-forward "\\(--nocolor \\)\\(--[a-z]+\\)" nil t)
+    (if (re-search-forward "\\(--nocolor \\)\\(--[a-z-]+\\)" nil t)
         (replace-match (format "\\1--%s" new-type) nil nil)
       (message "nope"))
     )
