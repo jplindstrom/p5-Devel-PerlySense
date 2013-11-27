@@ -1731,10 +1731,39 @@ be done in context
 ** DOING Go to variable declaration
 Smart goto on a variable, goto the my or local or use vars or whatever
 is the first mention of it. Deal with scope properly.
+** TODO Run multiple files
+*** Run from a file *.tests
+*** Get all files, normalize them to the run dir
+**** Start with all
+**** If commented out, skip
+**** Skip emtpy lines, etc
+**** If region, only use that
+*** Provide config var with quotes space separated list of files
+*** But if run with Cover support
+**** Don't run as one invocation
+**** Instead, run as multiple invocations with one file each
+** TODO Run History - Collect, Goto
+*** Add files run to top of a history file
+**** Config, but default on
+***** Don't do this for the default (non) project
+**** ./PerlySenseProject/run_history.tests
+**** If already present, bump to top
+*** C-o g r h -- Go to Run History file
+*** To go to a file in the list, use "C-o g e -- Go to error file"
+**** Or make Smart go to recognize file names and error messages
+*** WONTDO If not a test file .pm file, find the .t files, run those.
 ** TODO \C-o r c for Run with Cover
-
-If a .t file, run that file,
-If a .pm file, find the .t files, run those.
+*** Use the regular Run command, but
+**** Check it's installed
+**** cover -delete;
+**** Set $ENV{PERL5OPT} .= "-MDevel::Cover" during the test run (alone)
+**** covered runs
+**** Loop over all buffers and re-load the coverage data
+**** If coverage not visible, enable visible
+** Run entire test suite for Project
+*** C-o r p
+** Run entire test suite for Project with Cover
+*** Good key binding?
 ** TODO Coverage -- default to disabled
 ** TODO Cover
 *** DONE Emacs - go to test other files
@@ -1750,23 +1779,8 @@ Send mail to maintainer
                       (setq selection selidx
                             done      t))
 
-
 *** User config where the cover db is located
-*** Coverage -- last test run, or accumulated since last coverage reset
-
-Somehow run a t file with coverage enabled, then parse the report and
-highlight the source, so that we incrementally can see line, branch,
-flow coverage of the subs we develop.
-** TODO Run History - Goto, Run
-
-Just keep a *PerlySense-Compilation-History* buffer around and add a
-line at the top for each new file.
-
-Then with C-o C-r on a line would run that file.
-
-\C-o g r r -- Go to run file (the one in the compilation buffer)
-\C-o g r h -- Go to file in Run History
--- Keep them in ordered list, promote them to top when run
+** \C-o g r r -- Go to current Run file (the one in the compilation buffer)
 ** TODO Bug: Docs found wrong
 
 Game::Object::Worm, docs for oLocation matches
