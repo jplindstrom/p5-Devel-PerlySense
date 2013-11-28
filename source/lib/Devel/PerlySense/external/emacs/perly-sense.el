@@ -471,7 +471,7 @@ See the POD docs for how to enable flymake."
 
 
 
-(defun ps/run-file (&optional use-alternate-command)
+(defun ps/run-file (&optional use-alternate-command run-with-coverage)
   "Run the current file"
   (interactive "P")
 
@@ -485,24 +485,39 @@ See the POD docs for how to enable flymake."
     (message "Run File...")
     (let ((alternate-command-option
            (if use-alternate-command "--use_alternate_command" "")))
-      (ps/run-file-with-options alternate-command-option)
+      (ps/run-file-with-options alternate-command-option run-with-coverage)
       )
     )
   )
 
 
 
-(defun ps/run-file-with-coverage ()
+(defun ps/run-file-with-coverage (&optional use-alternate-command)
   "Run the current file with Devel::Cover enabled and collect
 Devel::CoverX::Covered data"
-  (interactive)
-  (message "Run File (with Devel::Cover)...")
-  (ps/run-file-with-options "--coverage")
+  (interactive "P")
+  ;; TODO: check Devel::CoverX::Covered is installed
+  (ps/run-file use-alternate-command t)
   )
 
 
 
-(defun ps/run-file-with-options (options)
+(defun ps/coverage-command (command)
+  "Return a shell command to run COMMAND under
+Devel::CoverX::Covered
+
+Note: will currently only work in Unix-like shells because of the
+way PERL5OPT is set."
+  (format
+   "cover -delete;
+PERL5OPT=-MDevel::Cover %s;
+covered runs"
+   command)
+  )
+
+
+
+(defun ps/run-file-with-options (options &optional run-with-coverage)
   "Run the current file with OPTIONS passed to perly_sense"
   (let* (
          (result-alist     (ps/command-on-current-file-location "run_file" options))
@@ -512,17 +527,21 @@ Devel::CoverX::Covered data"
          (message-string   (alist-value result-alist "message")))
     (if command-run
         (progn
+
           ;; Test::Class integration
           (setenv "TEST_METHOD"
                   (if ps/tc/current-method
                       (format "^%s$" ps/tc/current-method)
                     nil))
 
-          (ps/run-file-run-command
-           ;;             (ps/run-file-get-command command-run type-source-file)
-           command-run
-           dir-run-from
-           )
+          (let ((command-effective
+                 (if run-with-coverage
+                     (ps/coverage-command command-run)
+                   command-run)
+                 ))
+
+            (ps/run-file-run-command command-effective dir-run-from)
+            )
           )
       )
     (if message-string
