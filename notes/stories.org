@@ -1755,11 +1755,18 @@ is the first mention of it. Deal with scope properly.
 ** TODO \C-o r c for Run with Cover
 *** Use the regular Run command, but
 **** Check it's installed
-**** cover -delete;
-**** Set $ENV{PERL5OPT} .= "-MDevel::Cover" during the test run (alone)
-**** covered runs
+**** DONE cover -delete;
+**** DONE Set $ENV{PERL5OPT} .= "-MDevel::Cover" during the test run (alone)
+**** DONE covered runs
 **** Loop over all buffers and re-load the coverage data
 **** If coverage not visible, enable visible
+**** Make sure the commands and ENV can be set cross platform
+***** Run commands before and after compilation
+***** Set PERL5OPT only around the compilation of command
+**** Docs
+***** Mention ignore (.gitignore) for new dirs
+****** /cover_db/*
+****** /covered/*
 ** Run entire test suite for Project
 *** C-o r p
 ** Run entire test suite for Project with Cover
