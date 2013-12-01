@@ -1734,10 +1734,10 @@ is the first mention of it. Deal with scope properly.
 ** TODO Run multiple files
 *** Run from a file *.tests
 *** Get all files, normalize them to the run dir
-**** Start with all
+**** Run all files in file, but
+***** if region, only use that
 **** If commented out, skip
 **** Skip emtpy lines, etc
-**** If region, only use that
 *** Provide config var with quotes space separated list of files
 *** But if run with Cover support
 **** Don't run as one invocation
@@ -1754,16 +1754,31 @@ is the first mention of it. Deal with scope properly.
 *** WONTDO If not a test file .pm file, find the .t files, run those.
 ** TODO \C-o r c for Run with Cover
 *** Use the regular Run command, but
-**** Check it's installed
+**** Check covered is installed
 **** DONE cover -delete;
 **** DONE Set $ENV{PERL5OPT} .= "-MDevel::Cover" during the test run (alone)
 **** DONE covered runs
+**** Alternate
+***** Mention in Changes, that it just works on Unix systems
+***** Make sure the commands and ENV can be set cross platform
+****** Run commands before and after compilation
+****** Set PERL5OPT only around the compilation of command
+***** Compile with run_with_cover
+***** run_with_cover
+****** Figure out the CLI
+****** Init
+******* cd to source dir
+******* remove dir
+****** Run
+******* local PERL5OPT = cover
+******* cd to run dir
+******* Run CLI
+****** Post-process
+******* covered runs
 **** Loop over all buffers and re-load the coverage data
 **** If coverage not visible, enable visible
-**** Make sure the commands and ENV can be set cross platform
-***** Run commands before and after compilation
-***** Set PERL5OPT only around the compilation of command
 **** Docs
+***** Only Unix
 ***** Mention ignore (.gitignore) for new dirs
 ****** /cover_db/*
 ****** /covered/*
