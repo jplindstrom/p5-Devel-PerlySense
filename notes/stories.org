@@ -1754,7 +1754,7 @@ is the first mention of it. Deal with scope properly.
 *** WONTDO If not a test file .pm file, find the .t files, run those.
 ** TODO \C-o r c for Run with Cover
 *** Use the regular Run command, but
-**** Check covered is installed
+**** DONE Check covered is installed
 **** DONE cover -delete;
 **** DONE Set $ENV{PERL5OPT} .= "-MDevel::Cover" during the test run (alone)
 **** DONE covered runs
@@ -1777,6 +1777,7 @@ is the first mention of it. Deal with scope properly.
 ******* covered runs
 **** Loop over all buffers and re-load the coverage data
 **** If coverage not visible, enable visible
+**** Changes
 **** Docs
 ***** Only Unix
 ***** Mention ignore (.gitignore) for new dirs
