@@ -176,6 +176,17 @@ Return t if coverage was loaded, else nil."
 
 
 
+(defun ps/reload-sub-coverage-quality-in-all-buffers ()
+  "Reload coverage information in all buffers which have it
+  already loaded"
+  (dolist (buffer (buffer-list))
+    (with-current-buffer buffer
+      (when ps/alist-covered-subs-quality-loaded-p
+        (ps/load-sub-coverage-quality))))
+  )
+
+
+
 (defun ps/display-all (beg end)
   "Fontify the current buffer with all display information"
   (interactive)
@@ -198,6 +209,21 @@ the source code."
   (font-lock-fontify-buffer)
   )
 
+
+
+(defun ps/enable-and-reload-coverage (buffer)
+  "Enable coverage visualization and reload any existing buffer coverage information.
+
+If BUFFER didn't have any coverage information yet, load the
+coverage in that buffer. "
+  (setq ps/enable-test-coverage-visualization t)
+  (ps/reload-sub-coverage-quality-in-all-buffers)
+
+  (with-current-buffer buffer
+    (setq ps/enable-test-coverage-visualization nil)
+    (ps/toggle-coverage-visualization)
+    )
+  )
 
 
 ;; Change this to "toggle all visualizations" when there are more

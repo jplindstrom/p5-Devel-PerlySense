@@ -555,9 +555,18 @@ covered runs"
                  (if run-with-coverage
                      (ps/coverage-command command-run)
                    command-run)
-                 ))
+                 )
+                (post-compile-lambda
+                 (if run-with-coverage
+                     (lambda ()
+                       (ps/enable-and-reload-coverage (current-buffer)))
+                   nil))
+                )
 
-            (ps/run-file-run-command command-effective dir-run-from)
+            (ps/run-file-run-command
+             command-effective
+             dir-run-from
+             post-compile-lambda)
             )
           )
       )
@@ -595,12 +604,33 @@ covered runs"
           (message message-string)))))
 
 
+(defun ps/compile-and-then (command &optional post-compilation)
+  "Run COMMAND using the compiler function.
 
-(defun ps/run-file-run-command (command dir-run-from)
-  "Run command from dir-run-from using the compiler function"
+If the POST-COMPILATION lambda is non-nil, invoke it after the
+compilation has finished."
+  (lexical-let
+      ((post-compile-lambda0 (or post-compile-lambda (lambda () )))
+       (finish-callback))
+    (setq finish-callback
+          (lambda (buf msg)
+            (setq compilation-finish-functions (delq finish-callback compilation-finish-functions))
+            (funcall post-compile-lambda0)
+            ))
+    (push finish-callback compilation-finish-functions)
+    (compile command))
+  )
+
+
+
+(defun ps/run-file-run-command (command dir-run-from &optional post-compile-lambda)
+  "Run COMMAND from DIR-RUN-FROM using the compiler function.
+
+If POST-COMPILE-LAMBDA is non-nil, invoke it after the
+compilation has finished."
   (with-temp-buffer
     (cd dir-run-from)
-    (compile command)
+    (ps/compile-and-then command post-compile-lambda)
     )
   )
 
