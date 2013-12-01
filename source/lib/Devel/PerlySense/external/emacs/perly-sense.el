@@ -471,8 +471,7 @@ See the POD docs for how to enable flymake."
 
 
 
-
-(defun ps/run-file (&optional use-alternate-command)
+(defun ps/run-file (&optional use-alternate-command run-with-coverage)
   "Run the current file"
   (interactive "P")
 
@@ -482,35 +481,97 @@ See the POD docs for how to enable flymake."
         (message "Recompile file...")
         (recompile)
         )
-    (message "Run File...")
 
-    (let* ((alternate-command-option
-            (if use-alternate-command "--use_alternate_command" ""))
-           (result-alist (ps/command-on-current-file-location
-                          "run_file"
-                          alternate-command-option))
-           (dir-run-from (alist-value result-alist "dir_run_from"))
-           (command-run (alist-value result-alist "command_run"))
-           (type-source-file (alist-value result-alist "type_source_file"))
-           (message-string (alist-value result-alist "message")))
-      (if command-run
-          (progn
-            ;; Test::Class integration
-            (setenv "TEST_METHOD"
-                    (if ps/tc/current-method
-                        (format "^%s$" ps/tc/current-method)
-                      nil))
+    (message "Run File...")
+    (let ((alternate-command-option
+           (if use-alternate-command "--use_alternate_command" "")))
+      (ps/run-file-with-options alternate-command-option run-with-coverage)
+      )
+    )
+  )
+
+
+
+(defun ps/is-cpan-module-installed? (module-name)
+  "Return t if MODULE-NAME is installed, else nil."
+  (with-temp-buffer
+    (shell-command (format "perl -M%s -e 1" module-name) t nil)
+    ;; Empty buffer ==> no output ==> module is installed
+    (eq (point-max) (point-min))))
+
+
+
+(defun ps/ensure-cpan-module-is-installed (module-name)
+  "Display error and throw exception unless
+  MODULE-NAME is installed"
+  (unless (ps/is-cpan-module-installed? module-name)
+    (error "CPAN module (%s) is not installed." module-name)))
+
+
+
+(defun ps/run-file-with-coverage (&optional use-alternate-command)
+  "Run the current file with Devel::Cover enabled and collect
+Devel::CoverX::Covered data"
+  (interactive "P")
+  (ps/ensure-cpan-module-is-installed "Devel::CoverX::Covered")
+  (ps/run-file use-alternate-command t)
+  )
+
+
+
+(defun ps/coverage-command (command)
+  "Return a shell command to run COMMAND under
+Devel::CoverX::Covered
+
+Note: will currently only work in Unix-like shells because of the
+way PERL5OPT is set."
+  (format
+   "cover -delete;
+PERL5OPT=-MDevel::Cover %s;
+covered runs"
+   command)
+  )
+
+
+
+(defun ps/run-file-with-options (options &optional run-with-coverage)
+  "Run the current file with OPTIONS passed to perly_sense"
+  (let* (
+         (result-alist     (ps/command-on-current-file-location "run_file" options))
+         (dir-run-from     (alist-value result-alist "dir_run_from"))
+         (command-run      (alist-value result-alist "command_run"))
+         (type-source-file (alist-value result-alist "type_source_file"))
+         (message-string   (alist-value result-alist "message")))
+    (if command-run
+        (progn
+
+          ;; Test::Class integration
+          (setenv "TEST_METHOD"
+                  (if ps/tc/current-method
+                      (format "^%s$" ps/tc/current-method)
+                    nil))
+
+          (let ((command-effective
+                 (if run-with-coverage
+                     (ps/coverage-command command-run)
+                   command-run)
+                 )
+                (post-compile-lambda
+                 (if run-with-coverage
+                     (lambda ()
+                       (ps/enable-and-reload-coverage (current-buffer)))
+                   nil))
+                )
 
             (ps/run-file-run-command
-             ;;             (ps/run-file-get-command command-run type-source-file)
-             command-run
+             command-effective
              dir-run-from
-             )
+             post-compile-lambda)
             )
-        )
-      (if message-string
-          (message message-string)
-        )
+          )
+      )
+    (if message-string
+        (message message-string)
       )
     )
   )
@@ -543,12 +604,33 @@ See the POD docs for how to enable flymake."
           (message message-string)))))
 
 
+(defun ps/compile-and-then (command &optional post-compilation)
+  "Run COMMAND using the compiler function.
 
-(defun ps/run-file-run-command (command dir-run-from)
-  "Run command from dir-run-from using the compiler function"
+If the POST-COMPILATION lambda is non-nil, invoke it after the
+compilation has finished."
+  (lexical-let
+      ((post-compile-lambda0 (or post-compile-lambda (lambda () )))
+       (finish-callback))
+    (setq finish-callback
+          (lambda (buf msg)
+            (setq compilation-finish-functions (delq finish-callback compilation-finish-functions))
+            (funcall post-compile-lambda0)
+            ))
+    (push finish-callback compilation-finish-functions)
+    (compile command))
+  )
+
+
+
+(defun ps/run-file-run-command (command dir-run-from &optional post-compile-lambda)
+  "Run COMMAND from DIR-RUN-FROM using the compiler function.
+
+If POST-COMPILE-LAMBDA is non-nil, invoke it after the
+compilation has finished."
   (with-temp-buffer
     (cd dir-run-from)
-    (compile command)
+    (ps/compile-and-then command post-compile-lambda)
     )
   )
 
@@ -2335,6 +2417,7 @@ Return t if found, else nil."
 
 (global-set-key (format "%s\C-r" ps/key-prefix) 'ps/run-file)
 (global-set-key (format "%srr" ps/key-prefix) 'ps/rerun-file)
+(global-set-key (format "%src" ps/key-prefix) 'ps/run-file-with-coverage)
 (global-set-key (format "%srd" ps/key-prefix) 'ps/debug-file)
 
 (global-set-key (format "%sgf" ps/key-prefix) 'ps/goto-find-buffer)

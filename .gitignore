@@ -4,3 +4,5 @@
 *_flymake.*
 /source/Devel-PerlySense-*
 /temp/
+/source/cover_db/*
+/source/covered/*
