@@ -1146,6 +1146,12 @@ slow. A nightly build is usually a good idea.
 You can also collect / undate coverage information for indivual test
 files with C<C-o r c>. This is the easiest way to just try it out.
 
+You might want to add the following to be ignored by your VCS
+(e.g. .gitignore):
+
+    /cover_db/*
+    /covered/*
+
 
 
 =head3 Using Coverage Visualization
