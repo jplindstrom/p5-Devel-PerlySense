@@ -20,7 +20,8 @@ Search through the project for method declarations, invocants or free
 text using Ack.
 
 Run tests and scripts with easy navigation to errors/warnings/failing
-tests.
+tests. Tests can be run under Devel::Cover to collect (and display)
+test coverage information.
 
 Automate common editing tasks related to source code, tests, regular
 expressions, etc.
@@ -107,6 +108,9 @@ B<Run file> -- C<C-o C-r> -- Run the current file using the
 Compilation mode and the settings appropriate for the source type
 (Test, Module, etc.). Highlight errors and jump to source with C-c
 C-c.
+
+B<Run file under Devel::CoverX::Covered> -- C<C-o r c> -- Run the
+current file, collecting Devel::CoverX::Covered information.
 
 B<Edit - Copy Package Name> -- C<C-o e c p> -- Copy the current package name.
 
@@ -238,7 +242,8 @@ These aren't needed to begin with, but may be very useful.
 =item * L<Devel::CoverX::Covered>
 
 If you have a lot of tests to navigate and run a nightly build with
-Devel::Cover to generate test coverage.
+Devel::Cover to generate test coverage. You can also run individual
+files under Devel::CoverX::Covered with C<C-o r c>.
 
 =item * L<File::Corresponding>
 
@@ -838,6 +843,15 @@ Note: this will re-run whatever is displayed in the B<*compilation*>
 buffer.
 
 
+=head3 Run File under Devel::CoverX::Covered
+
+C<C-o r c> -- This is the same as Run File, but collect test coverage
+information using Devel::CoverX::Covered.
+
+Note: Currently this only works with Unix like shells.
+
+
+
 =head3 Go to Run-buffer
 
 Invoke C<C-o g r> to go to the B<*compilation*> buffer.
@@ -900,6 +914,9 @@ limited to those that cover that particular sub.
 
 This requires that L<Devel::CoverX::Covered> is installed and a
 L<Devel::Cover> cover_db in the project root directory.
+
+You can build the coverage database either as a (very slow) separate
+test run, or by running individual files with C<C-o r c>.
 
 See L<Devel::CoverX::Covered> for details.
 
@@ -1125,6 +1142,10 @@ ordinarily the case).
 
 Note: Running the test suite with Devel::Cover can be very, very
 slow. A nightly build is usually a good idea.
+
+You can also collect / undate coverage information for indivual test
+files with C<C-o r c>. This is the easiest way to just try it out.
+
 
 
 =head3 Using Coverage Visualization
