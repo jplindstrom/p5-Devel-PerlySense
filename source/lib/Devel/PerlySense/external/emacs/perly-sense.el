@@ -492,11 +492,28 @@ See the POD docs for how to enable flymake."
 
 
 
+(defun ps/is-cpan-module-installed? (module-name)
+  "Return t if MODULE-NAME is installed, else nil."
+  (with-temp-buffer
+    (shell-command (format "perl -M%s -e 1" module-name) t nil)
+    ;; Empty buffer ==> no output ==> module is installed
+    (eq (point-max) (point-min))))
+
+
+
+(defun ps/ensure-cpan-module-is-installed (module-name)
+  "Display error and throw exception unless
+  MODULE-NAME is installed"
+  (unless (ps/is-cpan-module-installed? module-name)
+    (error "CPAN module (%s) is not installed." module-name)))
+
+
+
 (defun ps/run-file-with-coverage (&optional use-alternate-command)
   "Run the current file with Devel::Cover enabled and collect
 Devel::CoverX::Covered data"
   (interactive "P")
-  ;; TODO: check Devel::CoverX::Covered is installed
+  (ps/ensure-cpan-module-is-installed "Devel::CoverX::Covered")
   (ps/run-file use-alternate-command t)
   )
 
