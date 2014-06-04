@@ -116,6 +116,8 @@ B<Edit - Copy Package Name> -- C<C-o e c p> -- Copy the current package name.
 
 B<Edit - Copy Sub Name> -- C<C-o e c s> -- Copy the current sub name.
 
+B<Edit - Copy File Name> -- C<C-o e c f> -- Copy the current file name.
+
 B<Edit - Add Use Statement> -- C<C-o e a u> -- Add a 'use Module'
 statement to the 'use Module' section at the top. Default Module name
 is module at point.
@@ -1219,6 +1221,13 @@ clipboard (kill-ring) and display it in the echo area.
 
 C<C-o e c s> -- Copy the current sub name to the clipboard (kill-ring)
 and display it in the echo area.
+
+
+
+=head3 Edit - Copy File Name
+
+C<C-o e c f> -- Copy the current file name to the clipboard
+(kill-ring) and display it in the echo area.
 
 
 
