@@ -1235,7 +1235,6 @@ If a Magit buffer is found, magit-refresh it before returning it.
         (let (
               ( package-name (match-string 1) )
               )
-          (prin1 (match-string 1))
           (kill-new package-name)
           (message "Copied package name '%s'" package-name)
           )
@@ -1255,7 +1254,6 @@ display it in the echo area"
         (let (
               ( sub-name (match-string 1) )
               )
-          (prin1 (match-string 1))
           (kill-new sub-name)
           (message "Copied sub name '%s'" sub-name)
           )
