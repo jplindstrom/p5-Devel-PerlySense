@@ -47,18 +47,25 @@ is($oMeta->rhRowColModule->{171}->{14}->{module} . "", "None::Exsistent::Module"
 
 #print Dumper($oMeta->rhRowColModule->{42});
 
-is($oMeta->rhRowColModule->{341}->{5}, undef, " no module at sub declaration");
-is($oMeta->rhRowColModule->{341}->{28}, undef, " no module at variable name");
-is($oMeta->rhRowColModule->{341}->{27}, undef, " no module at variable sigil");
-is($oMeta->rhRowColModule->{332}->{1}, undef, " no module at nothing");
-is($oMeta->rhRowColModule->{363}->{16}, undef, " no module at string literal");
-is($oMeta->rhRowColModule->{365}->{5}, undef, " no module at keyword return");
-is($oMeta->rhRowColModule->{161}->{47}, undef, " no module at method call");
-is($oMeta->rhRowColModule->{145}->{29}, undef, " no module at numeric literal");
+sub _check_no_module {
+    my ($oMeta, $line, $col, $message) = @_;
+    my $oModule = $oMeta->rhRowColModule->{$line}->{$col};
+    is($oModule, undef, " no module at ($line, $col) $message")
+        or diag("Details: " . Dumper($oModule));
+}
 
+_check_no_module($oMeta, 341, 5 , "sub declaration");
+_check_no_module($oMeta, 341, 28, "variable name");
+_check_no_module($oMeta, 341, 27, "variable sigil");
+_check_no_module($oMeta, 332, 1 , "nothing");
+_check_no_module($oMeta, 363, 16, "string literal");
+_check_no_module($oMeta, 365, 5 , "keyword return");
+_check_no_module($oMeta, 161, 47, "method call");
+_check_no_module($oMeta, 145, 29, "numeric literal");
 
-is($oMeta->rhRowColModule->{42}->{5}, undef, " no module at string literal 'Exception'");
-is($oMeta->rhRowColModule->{159}->{16}, undef, ' no module at string literal "O"');
-is($oMeta->rhRowColModule->{151}->{18}, undef, ' no module at string literal "white"');
+_check_no_module($oMeta, 42 , 5 , "string literal 'Exception'");
+_check_no_module($oMeta, 159, 16, 'string literal "O"');
+_check_no_module($oMeta, 151, 18, 'string literal "white"');
+
 
 __END__
