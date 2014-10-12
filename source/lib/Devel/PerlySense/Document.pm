@@ -788,7 +788,7 @@ sub determineLikelyApi {
         $self->rhPackageApiLikely($rhPackageApi);
     } else {
         $self->determineLikelyApi0(nameModule => $nameModule);
-       $self->cacheSet($keyCache, $self->file, $self->rhPackageApiLikely);
+        $self->cacheSet($keyCache, $self->file, $self->rhPackageApiLikely);
    }
 
     return(1);
