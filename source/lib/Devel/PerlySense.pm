@@ -1711,7 +1711,7 @@ L<http://vimdoc.sourceforge.net/htmldoc/eval.html#Dictionaries> - Vim native dat
 
 =head1 AUTHOR
 
-Johan Lindström, C<< <johanl buzzwordninja.com> >>
+Johan Lindstrom, C<< <johanl buzzwordninja.com> >>
 
 =head1 CONTRIBUTIONS, BUGS, AND CAVEATS
 
@@ -1763,7 +1763,7 @@ Jaeyoun Chung for dropdown-list L<http://www.emacswiki.org/cgi-bin/wiki/dropdown
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007 Johan Lindström, All Rights Reserved.
+Copyright 2007 Johan Lindstrom, All Rights Reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
