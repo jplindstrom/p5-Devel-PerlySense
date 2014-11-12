@@ -4,7 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* Silence random warnings from loading CPAN modules (they go to the
+  debug log)
 
 
 

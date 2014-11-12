@@ -6,6 +6,11 @@ use lib "/home/j.lindstrom/dev/personal/p5-Devel-PerlySense/source/lib";
 
 use strict;
 
+# Must do this early to silence noisy CPAN modules which keep breaking
+# the output
+use Devel::PerlySense::Util::Log;
+BEGIN { $SIG{__WARN__} = sub { debug(@_); }; }
+
 use Getopt::Long;
 use Pod::Usage;
 use File::Basename;
@@ -19,7 +24,6 @@ use List::MoreUtils qw/ any /;
 use lib "../lib", "lib";
 use Devel::PerlySense;
 use Devel::PerlySense::Home;
-use Devel::PerlySense::Util::Log;
 use Devel::PerlySense::Editor;
 use Devel::PerlySense::Editor::Emacs;
 use Devel::PerlySense::Editor::Vim;
@@ -29,8 +33,6 @@ use Cwd;
 
 use Data::Dumper;
 use Devel::TimeThis;
-
-local $SIG{__WARN__} = sub { debug(@_); };
 
 
 main();
