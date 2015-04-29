@@ -802,10 +802,17 @@ The value returned is the value of the last form in BODY."
 (defun ps/minibuffer-ack-option-filetype (new-type)
   (save-excursion
     (beginning-of-line)
-    (if (re-search-forward "\\(--nocolor \\)\\(--[a-z-]+\\)" nil t)
-        (replace-match (format "\\1--%s" new-type) nil nil) ; Replace option
-      (if (re-search-forward "\\(--nocolor \\)" nil t)
-          (replace-match (format "\\1--%s " new-type) nil nil) ; Add option
+    (if (re-search-forward "\\(--nocolor \\)--\\([a-z-]+\\) " nil t) ; Replace option
+        (let ((existing-type (match-string 2)))
+          (if (string= new-type existing-type)
+              ;; Same, so toggle by removing filetype
+              (replace-match "\\1" nil nil)
+            ;; Not same, so replace
+            (replace-match (format "\\1--%s " new-type) nil nil)
+            )
+          )
+      (if (re-search-forward "\\(--nocolor \\)" nil t) ; Add option
+          (replace-match (format "\\1--%s " new-type) nil nil)
         (message "nope"))
       )
     )

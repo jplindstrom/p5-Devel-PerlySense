@@ -608,11 +608,14 @@ When editing the ack command you can use the following keys to set options
  | "C-o w" | toggle | -w            | Whole word                               |
  | "C-o q" | toggle | -Q            | Quote metacharacters, pattern is literal |
  | "C-o i" | toggle | -i            | Ignore case                              |
- | "C-o a" | use    | --all         | Ack version <  2.0                       |
- | "C-o k" | use    | --known-types | Ack version >= 2.0                       |
  | "C-o p" | use    | --perl        |                                          |
+ | "C-o a" | use    | --all         | Ack version <  2.0                       |
+ | "C-o k" | use    | --known-types |                                          |
  | "C-o s" | use    | --sql         |                                          |
  |---------+--------+---------------+------------------------------------------|
+
+To search for all files, toggle the current file type off (typically
+--perl, so type C<C-o p> to toggle it off).
 
 For details, refer to the L<ack> documentation (the program was
 installed as a dependency of PerlySense).
