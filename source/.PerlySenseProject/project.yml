@@ -89,7 +89,6 @@ run_file:
 #match is used.
 debug_file:
   -
-    command: "perl -d ${INC} \"${SOURCE_FILE}\""
     command: "perl -c ${INC} \"${SOURCE_FILE}\""
     moniker: Test
     rex: \.t$
