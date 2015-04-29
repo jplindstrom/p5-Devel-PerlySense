@@ -803,8 +803,11 @@ The value returned is the value of the last form in BODY."
   (save-excursion
     (beginning-of-line)
     (if (re-search-forward "\\(--nocolor \\)\\(--[a-z-]+\\)" nil t)
-        (replace-match (format "\\1--%s" new-type) nil nil)
-      (message "nope"))
+        (replace-match (format "\\1--%s" new-type) nil nil) ; Replace option
+      (if (re-search-forward "\\(--nocolor \\)" nil t)
+          (replace-match (format "\\1--%s " new-type) nil nil) ; Add option
+        (message "nope"))
+      )
     )
   )
 (defun ps/minibuffer-ack-option-all         () (interactive) (ps/minibuffer-ack-option-filetype "all"))
