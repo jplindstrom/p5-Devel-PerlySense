@@ -2627,6 +2627,35 @@ sub isFileInProject {
 
 
 
+=head2 callSitesForMethod(method => $nameMethod, dirOrigin => $dirOrigin)
+
+Find callers of $nameMethod in $dirOrigin.
+
+Return array ref of call sites.
+
+=cut
+sub callSitesForMethod {
+    my ($nameMethod, $dirOrigin) = Devel::PerlySense::Util::aNamedArg(["nameMethod", "dirOrigin"], @_);
+
+    $self->setFindProject(dir => $dirOrigin);
+
+    my @aFile = $self->oProject->aFileSourceCode;
+    for my $file ( @aFile ) {
+        
+    }
+    # Find per files in project
+    # Grep for ->method
+    # find sub name and package for match
+
+    ###JPL: make any file names relative to project
+
+    return \@aFile
+}
+
+
+
+
+
 =head1 IMPLEMENTATION METHODS
 
 =head2 fileFindLookingAround($fileModuleBase, $dirOrigin, $nameModule?)
