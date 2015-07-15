@@ -2639,17 +2639,39 @@ sub callSitesForMethod {
 
     $self->setFindProject(dir => $dirOrigin);
 
-    my @aFile = $self->oProject->aFileSourceCode;
-    for my $file ( @aFile ) {
-        
+    my @aMatch;
+    for my $file ( $self->oProject->aFileSourceCode ) {
+        my $source = slurp($file);
+
+        my $row = 0;
+        my $oDocument;
+        for my $line (split("\n", $source)) {
+            $row++;
+            $line =~ m/ -> \s* $nameMethod \b/x or next;
+            $oDocument ||= $self->oDocumentParseFile($file) or last;
+
+            my $oLocationSub = $oDocument->oLocationSubAt(
+                row => $row,
+                col => 1,
+            ) or next;
+
+            my $rhPropertySub = $oLocationSub->rhProperty;
+            push(
+                @aMatch,
+                {
+                    file    => $file,
+                    row     => $row,
+                    line    => $line,
+                    package => $rhPropertySub->{namePackage},
+                    method  => $rhPropertySub->{nameSub},
+                },
+            );
+        }
     }
-    # Find per files in project
-    # Grep for ->method
-    # find sub name and package for match
 
     ###JPL: make any file names relative to project
 
-    return \@aFile
+    return \@aMatch;
 }
 
 
