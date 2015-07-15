@@ -18,6 +18,7 @@ A Project::Unknown indicates the lack of a project being defined.
 
 
 package Devel::PerlySense::Project::Unknown;
+
 use base "Devel::PerlySense::Project";
 
 
