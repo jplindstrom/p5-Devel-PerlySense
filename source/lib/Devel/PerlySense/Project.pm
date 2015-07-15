@@ -720,7 +720,7 @@ Return array with file names with perl source code in the project.
 sub aFileSourceCode {
     return File::Find::Rule
         ->name("*.pm", "*.pl")
-        ->in($self->aDirIncAbsolute);
+        ->in( $self->aDirIncAbsolute );
 }
 
 
