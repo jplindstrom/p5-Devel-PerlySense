@@ -128,6 +128,9 @@ statement at point to the 'use Module' section at the top.
 B<Extract Variable> - C<C-o e e v> -- Do the refactoring Extract
 Variable of the active region.
 
+B<Find Callers> - C>C-o e f c> -- Find callers of a method in the
+project and insert them as a comment in the source.
+
 B<Edit Test Count> -- C<C-o e t c> -- Increase the test count
 (e.g. "tests => 43")
 
@@ -1344,6 +1347,64 @@ and extract it, and end up with this:
 Nice!
 
 =back
+
+
+
+=head3 Edit -- Find Callers
+
+C<C-o e f c> -- Find callers of a method in the current project, and
+insert the package->sub as a comment.
+
+This is for understanding where in the code base method calls
+originate.
+
+If point is on something that looks like a method call, look for that
+method. This can be in source code, or in a comment with
+callers. Insert the comment with callers above the current line.
+
+Otherwise, look for callers to the current sub. Insert the comment
+with callers above the sub declaration.
+
+Example: Point is in the sub C<price>:
+
+    package MyApp::Book;
+
+    sub price {
+    |
+
+Hit C<C-o e f c> and PerlySense will insert the three places where the
+price method is called:
+
+    package MyApp::Book;
+
+    #     MyApp::Book->discount_price
+    #     MyApp::User->total_book_cost
+    #     MyApp::Author->daily_total_income
+    # MyApp::Book->price
+    sub price {
+    |
+
+Let's assume the method call chain for total_book_cost is interesting,
+so put the cursor on that line and again hit C<C-o e f c>. The callers
+for that method is now inserted on the line above.
+
+    package MyApp::Book;
+
+    #     MyApp::Book->discount_price
+    #         MyApp::Controller::User->user_details
+    #         MyApp::User->total_cost
+    # |   MyApp::User->total_book_cost
+    #     MyApp::Author->daily_total_income
+    # MyApp::Book->price
+    sub price {
+
+You can go on like this and add more callers to investigate the code
+structure.
+
+This works by method names alone, so there might be false positives,
+or uninteresting callers added to the list. Delete those lines to
+avoid clutter.
+
 
 
 =head3 Assist With -- Regex
