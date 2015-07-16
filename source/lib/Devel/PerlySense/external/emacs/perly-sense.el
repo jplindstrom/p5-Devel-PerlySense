@@ -1467,6 +1467,48 @@ current test run, if any"
 
 
 
+(defun ps/edit-find-callers-at-point ()
+  "Find callers of a method and insert them as a comment"
+  (interactive)
+  ;; If in a comment, else if in a sub
+  ;; Insert "Finding callers of x" while working, then remove
+  (save-excursion
+    (beginning-of-line)
+    (if (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t)
+        (let* ((prefix-string (or (match-string 1) ""))
+               (indent-length (+ (length prefix-string) 4 -2)) ;; -2 is for "# "
+               (indent-string (make-string indent-length ? ))
+               (method-name (match-string 2)))
+          (let* ((result-alist (ps/command-on-current-file-location
+                                "find_callers"
+                                (format "--sub=%s --file_origin=%s" method-name (buffer-file-name))))
+                 (callers (alist-value result-alist "callers"))
+                 (caller-string (mapconcat
+                                 (lambda (caller) (let* (
+                                                         (package (alist-value caller "package"))
+                                                         (method (alist-value caller "method"))
+                                                         )
+                                                    (format "# %s%s->%s" indent-string package method)
+                                                    ))
+                                 callers
+                                 "\n"))
+                 )
+            (if (string= caller-string "")
+                (message "No callers found")
+              (beginning-of-line)
+              (open-line 1)
+              (insert caller-string)
+              )
+            )
+          )
+      (message "No method found")
+      )
+    )
+  )
+;; Special case C-o C-g: if in comment, look for a class method call
+
+
+
 
 (defun ps/command-on-current-file-location (command &optional options)
   "Call perly_sense COMMAND with the current file and row/col,
@@ -2442,6 +2484,7 @@ Return t if found, else nil."
 (global-set-key (format "%setc" ps/key-prefix) 'ps/edit-test-count)
 (global-set-key (format "%seev" ps/key-prefix) 'lr-extract-variable)
 (global-set-key (format "%seh"  ps/key-prefix) 'lr-remove-highlights)
+(global-set-key (format "%sefc" ps/key-prefix) 'ps/edit-find-callers-at-point)
 
 (global-set-key (format "%sat" ps/key-prefix) 'ps/assist-sync-test-count)
 
