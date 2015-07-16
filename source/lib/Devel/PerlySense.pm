@@ -2709,6 +2709,7 @@ sub raCallSiteForMethod {
         for my $line (split("\n", $source)) {
             $row++;
             $line =~ m/ -> \s* $nameMethod \b/x or next;
+            ###TODO: filter out comments
             $oDocument ||= $self->oDocumentParseFile($file) or last;
 
             my $oLocationSub = $oDocument->oLocationSubAt(
@@ -2717,6 +2718,7 @@ sub raCallSiteForMethod {
             ) or next;
 
             my $rhPropertySub = $oLocationSub->rhProperty;
+            ###TODO: ditch the row and line and only report one per sub
             push(
                 @aMatch,
                 {
