@@ -2688,14 +2688,14 @@ sub isFileInProject {
 
 
 
-=head2 callSitesForMethod(method => $nameMethod, dirOrigin => $dirOrigin)
+=head2 raCallSiteForMethod(method => $nameMethod, dirOrigin => $dirOrigin)
 
 Find callers of $nameMethod in $dirOrigin.
 
 Return array ref of call sites.
 
 =cut
-sub callSitesForMethod {
+sub raCallSiteForMethod {
     my ($nameMethod, $dirOrigin) = Devel::PerlySense::Util::aNamedArg(["nameMethod", "dirOrigin"], @_);
 
     $self->setFindProject(dir => $dirOrigin);

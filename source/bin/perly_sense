@@ -138,7 +138,7 @@ sub main_perly_sense {
         $sub or syntax("Missing option --sub");
 
         eval {
-            my $callSites = $oPs->callSitesForMethod(
+            my $callSites = $oPs->raCallSiteForMethod(
                 nameMethod => $sub,
                 dirOrigin  => $dirOrigin,
             );
