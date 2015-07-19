@@ -129,7 +129,10 @@ B<Extract Variable> - C<C-o e e v> -- Do the refactoring Extract
 Variable of the active region.
 
 B<Find Callers> - C>C-o e f c> -- Find callers of a method in the
-project and insert them as a comment in the source.
+project and insert the call tree as a comment in the source.
+
+B<Visualize Callers> - C>C-o e v c> -- Visualize callers in a call
+tree (found by Find Callers) by drawing the call tree using GraphViz.
 
 B<Edit Test Count> -- C<C-o e t c> -- Increase the test count
 (e.g. "tests => 43")
@@ -1353,7 +1356,7 @@ Nice!
 =head3 Edit -- Find Callers
 
 C<C-o e f c> -- Find callers of a method in the current project, and
-insert the package->sub as a comment.
+insert the package->sub as a call tree in a comment.
 
 This is for understanding where in the code base method calls
 originate.
@@ -1400,16 +1403,30 @@ for that method is now inserted on the line above.
 You can go on like this and add more callers to investigate the code
 structure.
 
-The cursor is placed conveniently to make it easy to subsequent
+The cursor is placed conveniently to make it easy to add subsequent
 callers to the call tree.
 
 If the same caller is already present in the comment, it is marked
 with a * to indicate that there's no point following them.
 
-The method of identifying callers works by method names alone, so
-there might be false positives, or uninteresting callers added to the
-list. Delete those lines to avoid clutter.
+Caveat: The method of identifying callers works by method names alone,
+so there might be false positives, or uninteresting callers added to
+the list. Delete those lines to avoid clutter.
 
+
+
+=head3 Edit -- Visualize Callers
+
+C<C-o e v c> -- Visualize callers in a call tree (collected using Find
+Callers above) by drawing it using GraphViz.
+
+Put the cursor in a comment with the call tree and hit C<C-o e v
+c>. PerlySense will create a temporary .dot file and let GraphViz
+render it into a nice .png image, which will be opened.
+
+If you're running a graphical Emacs it might even look pretty.
+
+This requires GraphViz' C<dot> binary to be installed.
 
 
 =head3 Assist With -- Regex
