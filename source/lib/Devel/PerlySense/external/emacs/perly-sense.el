@@ -1472,38 +1472,43 @@ current test run, if any"
   (interactive)
   ;; If in a comment, else if in a sub
   ;; Insert "Finding callers of x" while working, then remove
-  (save-excursion
-    (beginning-of-line)
-    (if (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t)
-        (let* ((prefix-string (or (match-string 1) ""))
-               (indent-length (+ (length prefix-string) 4 -2)) ;; -2 is for "# "
-               (indent-string (make-string indent-length ? ))
-               (method-name (match-string 2)))
-          (let* ((result-alist (ps/command-on-current-file-location
-                                "find_callers"
-                                (format "--sub=%s --file_origin=%s" method-name (buffer-file-name))))
-                 (callers (alist-value result-alist "callers"))
-                 (caller-string (mapconcat
-                                 (lambda (caller) (let* (
-                                                         (package (alist-value caller "package"))
-                                                         (method (alist-value caller "method"))
-                                                         )
-                                                    (format "# %s%s->%s" indent-string package method)
-                                                    ))
-                                 callers
-                                 "\n"))
-                 )
-            (if (string= caller-string "")
-                (message "No callers found")
-              (beginning-of-line)
-              (open-line 1)
-              (insert caller-string)
-              )
+  (beginning-of-line)
+  (if (save-excursion (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t))
+      (let* ((prefix-string (or (match-string 1) ""))
+             (indent-length (+ (length prefix-string) 4 -2)) ;; -2 is for "# "
+             (indent-string (make-string indent-length ? ))
+             (method-name (match-string 2)))
+        (let* ((result-alist (ps/command-on-current-file-location
+                              "find_callers"
+                              (format "--sub=%s --file_origin=%s" method-name (buffer-file-name))))
+               (callers (alist-value result-alist "callers"))
+               (caller-string 
+                (mapconcat
+                 ;; Check if any of these already are listed below in the comment.
+                 ;; If so, prepend "* "
+                 (lambda (caller) (let* (
+                                         (package (alist-value caller "package"))
+                                         (method (alist-value caller "method"))
+                                         )
+                                    (format "# %s%s->%s" indent-string package method)
+                                    ))
+                 callers
+                 "\n"))
+               )
+          (if (string= caller-string "")
+              (message "No callers found")
+            (beginning-of-line)
+            (open-line 1)
+            (insert caller-string)
+            ;; Move point to last caller
+            (beginning-of-line)
+            (forward-word)(forward-word -1)
             )
           )
-      (message "No method found")
-      )
+        )
+    (message "No method found")
     )
+
   )
 ;; Special case C-o C-g: if in comment, look for a class method call
 
