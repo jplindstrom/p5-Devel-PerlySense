@@ -2709,8 +2709,8 @@ sub raCallSiteForMethod {
         my $oDocument;
         for my $line (split("\n", $source)) {
             $row++;
-            $line =~ m/ -> \s* $nameMethod \b/x or next;
-            ###TODO: filter out comments
+            $line =~ m/ -> \s* $nameMethod \b /x or next;
+            $line =~ m/ ^ \s* \# /x and next; # No comments
             $oDocument ||= $self->oDocumentParseFile($file) or last;
 
             my $oLocationSub = $oDocument->oLocationSubAt(
