@@ -1466,12 +1466,7 @@ current test run, if any"
          (string-to-number (match-string 1)))))
 
 
-
-(defun ps/edit-find-callers-at-point ()
-  "Find callers of a method and insert them as a comment"
-  (interactive)
-  ;; If in a comment, else if in a sub
-  ;; Insert "Finding callers of x" while working, then remove
+(defun ps/edit-find-callers-at-point-in-comment ()
   (if (save-excursion
         (beginning-of-line)
         (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t)
@@ -1510,7 +1505,14 @@ current test run, if any"
         )
     (message "No method found")
     )
+  )
 
+(defun ps/edit-find-callers-at-point ()
+  "Find callers of a method and insert them as a comment"
+  (interactive)
+  ;; If in a comment, else if in a sub
+  ;; Insert "Finding callers of x" while working, then remove
+  (ps/edit-find-callers-at-point-in-comment)
   )
 ;; Special case C-o C-g: if in comment, look for a class method call
 
