@@ -73,7 +73,7 @@ sub main {
 sub main_perly_sense {
     my ($oPs) = @_;
 
-    my ($dirOrigin, $fileOrigin, $module, $dir, $file, $row, $col, $sub, $nameClass, $nameMethod, $clearCache, $widthDisplay, $typeIo, $useAlternateCommand);
+    my ($dirOrigin, $fileOrigin, $module, $dir, $file, $row, $col, $sub, $nameClass, $nameMethod, $source, $clearCache, $widthDisplay, $typeIo, $useAlternateCommand);
     my @aShow;
     debug("CWD: (" . getcwd() . "), ARGV: (" . join(" ", map { "|$_|" } ("perly_sense",  @ARGV)) . ")");
 
@@ -89,11 +89,12 @@ sub main_perly_sense {
         "class_name:s"          => \$nameClass,
         "method_name:s"         => \$nameMethod,
         "show:s"                => \@aShow,
+        "source:s"              => \$source,
         "clear_cache"           => \$clearCache,
         "use_alternate_command" => \$useAlternateCommand,
         "width_display:s"       => \$widthDisplay,
         "io_type:s"             => \$typeIo,
-        );
+    );
     my ($command) = @ARGV;
     $command or syntax("Missing command");
 
@@ -144,6 +145,22 @@ sub main_perly_sense {
             );
             print $oEditor->formatOutputDataStructure(
                 rhData => { callers => $callSites },
+            );
+        };
+        if(my $err = $@) {
+            chomp($err);
+            print $oEditor->formatOutputDataStructure( rhData => { message => $err } );
+        }
+
+    } elsif($command eq "visualize_callers") {
+        $source or syntax("Missing option --source");
+
+        eval {
+            my $rhFileCaller = $oPs->rhFileCallerVisualized(
+                source => $source,
+            );
+            print $oEditor->formatOutputDataStructure(
+                rhData => { output_files => $rhFileCaller },
             );
         };
         if(my $err = $@) {

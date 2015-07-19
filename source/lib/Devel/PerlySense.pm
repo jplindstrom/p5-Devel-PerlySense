@@ -1893,6 +1893,7 @@ use File::Basename;
 use File::Path;
 use File::Find::Rule;
 use Path::Class qw/dir file/;
+use Path::Tiny;
 use Pod::Text;
 use IO::String;
 use Cache::Cache;
@@ -2762,6 +2763,36 @@ sub raCallSiteForMethod {
     return \@aMatch;
 }
 
+
+
+
+
+=head2 rhFileCallerVisualized(source => $source)
+
+Extract call tree from $source and render it into a .dot and .png
+file.
+
+Return hash ref with (keys: "dot", "png"; values: file names).
+
+Die if there is no "dot" binary to run.
+
+=cut
+# TODO: reimplement this in a separate distro
+sub rhFileCallerVisualized {
+    my ($source) = Devel::PerlySense::Util::aNamedArg(["source"], @_);
+
+    my $dirTemp = path("~/.PerlySense/temp");
+    my $dirTempCallTree = path($dirTemp, "call_tree");
+    $dirTempCallTree->mkpath();
+
+    my $fileTempDot = path($dirTempCallTree, time() . ".dot");
+
+    my @aLineSource =
+        map { s/#/ /; $_ } ## no critic
+        reverse split("\n", $source);
+
+    
+}
 
 
 
