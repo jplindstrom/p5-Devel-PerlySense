@@ -1358,8 +1358,8 @@ insert the package->sub as a comment.
 This is for understanding where in the code base method calls
 originate.
 
-If point is on something that looks like a method call, look for that
-method. This can be in source code, or in a comment with
+If point is in a comment on something that looks like a method call,
+look for that method. This can be in source code, or in a comment with
 callers. Insert the comment with callers above the current line.
 
 Otherwise, look for callers to the current sub. Insert the comment
@@ -1379,10 +1379,9 @@ price method is called:
 
     #     MyApp::Book->discount_price
     #     MyApp::User->total_book_cost
-    #     MyApp::Author->daily_total_income
+    #    |MyApp::Author->daily_total_income
     # MyApp::Book->price
     sub price {
-    |
 
 Let's assume the method call chain for total_book_cost is interesting,
 so put the cursor on that line and again hit C<C-o e f c>. The callers
@@ -1392,14 +1391,20 @@ for that method is now inserted on the line above.
 
     #     MyApp::Book->discount_price
     #         MyApp::Controller::User->user_details
-    #         MyApp::User->total_cost
-    # |   MyApp::User->total_book_cost
+    #        |MyApp::User->total_cost
+    #     MyApp::User->total_book_cost
     #     MyApp::Author->daily_total_income
     # MyApp::Book->price
     sub price {
 
 You can go on like this and add more callers to investigate the code
 structure.
+
+The cursor is placed conveniently to make it easy to subsequent
+callers to the call tree.
+
+If there the same caller is found multiple times in the comment, they
+are marked with a * to indicate that there's no point following them.
 
 This works by method names alone, so there might be false positives,
 or uninteresting callers added to the list. Delete those lines to
