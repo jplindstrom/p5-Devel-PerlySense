@@ -2723,14 +2723,13 @@ sub raCallSiteForMethod {
             my $nameSub = $rhPropertySub->{nameSub};
 
             $hSeen{ "$namePackage->$nameSub" }++ and next;
+
             push(
                 @aMatch,
                 {
                     file    => $file,
-                    row     => $row,
-                    line    => $line,
-                    package => $rhPropertySub->{namePackage},
-                    method  => $rhPropertySub->{nameSub},
+                    package => $namePackage,
+                    method  => $nameSub,
                 },
             );
         }
