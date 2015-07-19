@@ -4,7 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* Feature: Edit - Find Callers -- "C-o e f c". Find callers of a
+method in the current project, and insert the package->sub as a
+comment.
+
+This is for understanding where in the code base method calls
+originate.
 
 
 

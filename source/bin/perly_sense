@@ -132,6 +132,25 @@ sub main_perly_sense {
         };
         $@ and warn("Internal error: $@\n");
 
+    } elsif($command eq "find_callers") {
+        $fileOrigin and $dirOrigin = dirname($fileOrigin);
+        $dirOrigin ||= ".";
+        $sub or syntax("Missing option --sub");
+
+        eval {
+            my $callSites = $oPs->raCallSiteForMethod(
+                nameMethod => $sub,
+                dirOrigin  => $dirOrigin,
+            );
+            print $oEditor->formatOutputDataStructure(
+                rhData => { callers => $callSites },
+            );
+        };
+        if(my $err = $@) {
+            chomp($err);
+            print $oEditor->formatOutputDataStructure( rhData => { message => $err } );
+        }
+
     } elsif($command eq "display_module_pod") {
         $fileOrigin and $dirOrigin = dirname($fileOrigin);
         $dirOrigin ||= ".";

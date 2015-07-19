@@ -34,6 +34,7 @@ use File::Basename;
 use Path::Class;
 use File::Slurp;
 use File::chdir;
+use File::Find::Rule;
 use Perl::Critic 1.105;
 use List::MoreUtils qw/ uniq /;
 
@@ -703,6 +704,23 @@ sub raFileProjectOther {
     );
 
     return(\@aFileProjectOther);
+}
+
+
+
+
+
+=head2 aFileSourceCode()
+
+Return array with file names with perl source code in the project.
+
+# TODO: also look inside files without extension and check for perlyness
+
+=cut
+sub aFileSourceCode {
+    return File::Find::Rule
+        ->name("*.pm", "*.pl")
+        ->in( $self->aDirIncAbsolute );
 }
 
 

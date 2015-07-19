@@ -515,7 +515,7 @@ Die if $file doesn't exist, or on other errors.
 =cut
 sub rhRegexExample {
     my ($row, $col) = Devel::PerlySense::Util::aNamedArg(["row", "col"], @_);
-    
+
     return { regex => "", example => "" };
 }
 
@@ -574,11 +574,11 @@ sub oLocationSubAt {
         if(           $row >= $oLocation->row
                    && $row <= $oLocation->rhProperty->{oLocationEnd}->row
                ) {
-            debug("Sub found at ($row/$col): (" . Dumper($oLocation) . ")");
+            debug("Sub " . $oLocation->rhProperty->{namePackage} . "->" . $oLocation->rhProperty->{nameSub} . " found at (" . $oLocation->file . ":$row)");
             return($oLocation->clone);
         }
     }
-    
+
     return(undef);
 }
 

@@ -1728,6 +1728,23 @@ be done in context
 *** Also: spiffy
 *** Also: Class::MethodMaker
 *** Also: Class::Accessor
+** DOING Find callers
+**** find_callers
+***** --method=x
+****** Return data structure with call sites for unique calls to ->x in Perl files (.pm, .pl) in the current project
+******* package
+******* sub_name
+****** Possibly
+******* file
+******* col
+******* row
+******* source_line
+***** tasks
+****** command
+****** Find perl files in project
+****** Grep for ->x
+****** Find sub name and package for match
+****** Return data structure
 ** DOING Go to variable declaration
 Smart goto on a variable, goto the my or local or use vars or whatever
 is the first mention of it. Deal with scope properly.

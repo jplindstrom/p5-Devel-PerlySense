@@ -1234,36 +1234,44 @@ If a Magit buffer is found, magit-refresh it before returning it.
     ))
 
 
+(defun ps/current-package-name ()
+  "Return the name of the current package statement, or nil if
+  there isn't one."
+  (save-excursion
+    (end-of-line)
+    (if (search-backward-regexp "^ *\\bpackage +\\([a-zA-Z0-9:]+\\)" nil t)
+        (let (( package-name (match-string 1) ))
+          package-name)
+      nil)))
 
 (defun ps/edit-copy-package-name ()
   "Copy (put in the kill-ring) the name of the current package
   statement, and display it in the echo area"
   (interactive)
+  (let ((package-name (ps/current-package-name)))
+    (if package-name
+        (progn
+          (kill-new package-name)
+          (message "Copied package name '%s'" package-name))
+      (error "No package found"))))
+
+(defun ps/current-sub-name ()
+  "Return the name of the current sub, or nil if none was found."
   (save-excursion
     (end-of-line)
-    (if (search-backward-regexp "^ *\\bpackage +\\([a-zA-Z0-9:]+\\)" nil t)
-        (let (
-              ( package-name (match-string 1) )
-              )
-          (kill-new package-name)
-          (message "Copied package name '%s'" package-name)
-          )
-      (error "No package found")
-      )
-    )
-  )
+    (beginning-of-defun)
+    (if (search-forward-regexp "\\bsub +\\([a-zA-Z0-9_]+\\)" nil t)
+        (let (( sub-name (match-string 1) ))
+          sub-name)
+      nil)))
 
 (defun ps/edit-copy-sub-name ()
   "Copy (put in the kill-ring) the name of the current sub, and
 display it in the echo area"
   (interactive)
-  (save-excursion
-    (end-of-line)
-    (beginning-of-defun)
-    (if (search-forward-regexp "\\bsub +\\([a-zA-Z0-9_]+\\)" nil t)
-        (let (
-              ( sub-name (match-string 1) )
-              )
+  (let ((sub-name (ps/current-sub-name)))
+    (if sub-name
+        (progn
           (kill-new sub-name)
           (message "Copied sub name '%s'" sub-name)
           )
@@ -1464,6 +1472,170 @@ current test run, if any"
     (goto-char (point-min))
     (and (re-search-forward "tests\\s-+=>\\s-*\\([0-9]+\\)" nil t)
          (string-to-number (match-string 1)))))
+
+(defun ps/looking-backwards-at-comment-line ()
+  (save-excursion
+    (beginning-of-line)
+    (if (bobp)
+        nil ;; Beginning of buffer, not looking at comment
+      (forward-line -1)
+      (looking-at-p "\\s*?#")))
+  )
+
+(defun ps/backward-to-first-comment-line ()
+  "Move point back to the first line that isn't preceeded by a
+non-comment line. This could mean staying in place if there is no
+comment lines.
+
+Return point, or nil if there was no comment line."
+  (interactive)
+  (if (ps/looking-at-comment-line)
+      (progn
+        (while (ps/looking-backwards-at-comment-line)
+          (forward-line -1)
+          )
+        (beginning-of-line)
+        (point))
+    nil
+    )
+  )
+
+(defun ps/looking-at-next-comment-line ()
+  (save-excursion
+    (forward-line 1)
+    (if (eobp)
+        nil ;; End of buffer, not looking at comment
+      (beginning-of-line)
+      (looking-at-p "\\s*?#")))
+  )
+
+(defun ps/looking-at-comment-line ()
+  (save-excursion
+      (beginning-of-line)
+      (looking-at-p "\\s*?#")))
+
+(defun ps/forward-to-last-comment-line ()
+  "Assume point is on a comment line. Move point forward to the
+last line that is a comment line. This could mean staying in
+place if this is the last comment line.
+
+Return point, or nil if there was no comment line."
+  (interactive)
+  (progn
+    (while (ps/looking-at-next-comment-line)
+      (forward-line 1)
+      )
+    (end-of-line)
+    (point))
+  )
+
+(defun ps/current-comment-region ()
+  (interactive)
+  "Return a two item list with the position of the beginning and
+  end of the current comment block."
+  (save-excursion
+    (let* ((beg (ps/backward-to-first-comment-line)))
+      (if beg
+          (let* ((end (ps/forward-to-last-comment-line)))
+            (if end
+                (list beg end)
+              nil))
+        nil))))
+
+(defun ps/extant-marker-for-caller (caller beg end)
+  "Return '* ' if CALLER is present in the buffer between bet-end
+  or '' if not."
+  (message "%s to %s" beg end)
+  (save-excursion
+    (goto-char beg)
+    (if (search-forward-regexp (format " %s\\b" caller) end t)
+        "* "
+      "")))
+
+(defun ps/edit-find-callers-at-point-in-comment ()
+  (if (save-excursion
+        (beginning-of-line)
+        (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t)
+        )
+      ;; Insert "Finding callers of x" while working, then remove
+      (let* ((prefix-string (or (match-string 1) ""))
+             (indent-length (+ (length prefix-string) 4 -2)) ;; -2 is for "# "
+             (indent-string (make-string indent-length ? ))
+             (method-name (match-string 2))
+             (comment-region (ps/current-comment-region))
+             (comment-beg (car comment-region))
+             (comment-end (car (cdr comment-region)))
+             )
+        (let* ((result-alist (ps/command-on-current-file-location
+                              "find_callers"
+                              (format "--sub=%s --file_origin=%s" method-name (buffer-file-name))))
+               (callers (alist-value result-alist "callers"))
+               (caller-string
+                (mapconcat
+                 ;; Check if any of these already are listed below in the comment.
+                 ;; If so, prepend "* "
+                 (lambda (caller)
+                   (let*
+                       (
+                        (package (alist-value caller "package"))
+                        (method (alist-value caller "method"))
+                        (caller (format "%s->%s" package method))
+                        (extant-marker (ps/extant-marker-for-caller
+                                        caller
+                                        comment-beg
+                                        comment-end))
+                        )
+                     (format "# %s%s%s" indent-string extant-marker caller)
+                     ))
+                 callers
+                 "\n"))
+               )
+          (if (string= caller-string "")
+              (message "No callers found")
+            (beginning-of-line)
+            (open-line 1)
+            (insert caller-string)
+
+            ;; Move point to last caller
+            (beginning-of-line)(forward-word)(forward-word -1)
+            )
+          )
+        )
+    (message "No method found")
+    )
+  )
+
+(defun ps/edit-find-callers-at-point-in-sub ()
+  (let ((sub-name (ps/current-sub-name))
+        (package-name (ps/current-package-name)))
+    (if (and sub-name package-name)
+        (progn
+          ;; Insert this method
+          (end-of-line) (beginning-of-defun)
+          (open-line 1)
+          (insert (format "# %s->%s" package-name sub-name))
+
+          ;; Now find callers of this method
+          (ps/edit-find-callers-at-point-in-comment)
+        )
+      (error "No sub found.")
+      )
+    )
+  )
+
+(defun ps/edit-find-callers-at-point ()
+  "Find callers of a method and insert them as a comment"
+  (interactive)
+  (if (save-excursion
+        (beginning-of-line)
+        (looking-at-p "^\\s*?#")
+        )
+      ;; If in a comment, else if in a sub
+      (ps/edit-find-callers-at-point-in-comment)
+    (ps/edit-find-callers-at-point-in-sub)
+    )
+  )
+;; Special case C-o C-g: if in comment, look for a class method call
 
 
 
@@ -2442,6 +2614,7 @@ Return t if found, else nil."
 (global-set-key (format "%setc" ps/key-prefix) 'ps/edit-test-count)
 (global-set-key (format "%seev" ps/key-prefix) 'lr-extract-variable)
 (global-set-key (format "%seh"  ps/key-prefix) 'lr-remove-highlights)
+(global-set-key (format "%sefc" ps/key-prefix) 'ps/edit-find-callers-at-point)
 
 (global-set-key (format "%sat" ps/key-prefix) 'ps/assist-sync-test-count)
 
