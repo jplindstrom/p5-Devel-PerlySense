@@ -1472,8 +1472,10 @@ current test run, if any"
   (interactive)
   ;; If in a comment, else if in a sub
   ;; Insert "Finding callers of x" while working, then remove
-  (beginning-of-line)
-  (if (save-excursion (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t))
+  (if (save-excursion
+        (beginning-of-line)
+        (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t)
+        )
       (let* ((prefix-string (or (match-string 1) ""))
              (indent-length (+ (length prefix-string) 4 -2)) ;; -2 is for "# "
              (indent-string (make-string indent-length ? ))
