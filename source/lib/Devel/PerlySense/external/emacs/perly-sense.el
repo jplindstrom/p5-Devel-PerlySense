@@ -1488,7 +1488,7 @@ current test run, if any"
                               "find_callers"
                               (format "--sub=%s --file_origin=%s" method-name (buffer-file-name))))
                (callers (alist-value result-alist "callers"))
-               (caller-string 
+               (caller-string
                 (mapconcat
                  ;; Check if any of these already are listed below in the comment.
                  ;; If so, prepend "* "
@@ -1507,12 +1507,29 @@ current test run, if any"
             (open-line 1)
             (insert caller-string)
             ;; Move point to last caller
-            (beginning-of-line)
-            (forward-word)(forward-word -1)
+            (beginning-of-line)(forward-word)(forward-word -1)
             )
           )
         )
     (message "No method found")
+    )
+  )
+
+(defun ps/edit-find-callers-at-point-in-sub ()
+  (let ((sub-name (ps/current-sub-name))
+        (package-name (ps/current-package-name)))
+    (if (and sub-name package-name)
+        (progn
+          ;; Insert this method
+          (end-of-line) (beginning-of-defun)
+          (open-line 1)
+          (insert (format "# %s->%s" package-name sub-name))
+
+          ;; Now find callers of this method
+          (ps/edit-find-callers-at-point-in-comment)
+        )
+      (error "No sub found.")
+      )
     )
   )
 
@@ -1525,7 +1542,7 @@ current test run, if any"
         )
       ;; If in a comment, else if in a sub
       (ps/edit-find-callers-at-point-in-comment)
-    (message "Not in comment")
+    (ps/edit-find-callers-at-point-in-sub)
     )
   )
 ;; Special case C-o C-g: if in comment, look for a class method call
