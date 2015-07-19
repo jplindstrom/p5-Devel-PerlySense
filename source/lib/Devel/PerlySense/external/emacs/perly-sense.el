@@ -1471,6 +1471,7 @@ current test run, if any"
         (beginning-of-line)
         (search-forward-regexp "\\(.*?\\)[a-zA-Z:_0-9]+->\\([a-zA-Z_0-9]+\\)" (point-at-eol) t)
         )
+      ;; Insert "Finding callers of x" while working, then remove
       (let* ((prefix-string (or (match-string 1) ""))
              (indent-length (+ (length prefix-string) 4 -2)) ;; -2 is for "# "
              (indent-string (make-string indent-length ? ))
@@ -1510,9 +1511,14 @@ current test run, if any"
 (defun ps/edit-find-callers-at-point ()
   "Find callers of a method and insert them as a comment"
   (interactive)
-  ;; If in a comment, else if in a sub
-  ;; Insert "Finding callers of x" while working, then remove
-  (ps/edit-find-callers-at-point-in-comment)
+  (if (save-excursion
+        (beginning-of-line)
+        (looking-at-p "^\\s*?#")
+        )
+      ;; If in a comment, else if in a sub
+      (ps/edit-find-callers-at-point-in-comment)
+    (message "Not in comment")
+    )
   )
 ;; Special case C-o C-g: if in comment, look for a class method call
 
