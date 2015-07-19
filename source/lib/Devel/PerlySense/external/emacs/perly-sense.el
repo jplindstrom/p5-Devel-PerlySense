@@ -1234,36 +1234,44 @@ If a Magit buffer is found, magit-refresh it before returning it.
     ))
 
 
+(defun ps/current-package-name ()
+  "Return the name of the current package statement, or nil if
+  there isn't one."
+  (save-excursion
+    (end-of-line)
+    (if (search-backward-regexp "^ *\\bpackage +\\([a-zA-Z0-9:]+\\)" nil t)
+        (let (( package-name (match-string 1) ))
+          package-name)
+      nil)))
 
 (defun ps/edit-copy-package-name ()
   "Copy (put in the kill-ring) the name of the current package
   statement, and display it in the echo area"
   (interactive)
+  (let ((package-name (ps/current-package-name)))
+    (if package-name
+        (progn
+          (kill-new package-name)
+          (message "Copied package name '%s'" package-name))
+      (error "No package found"))))
+
+(defun ps/current-sub-name ()
+  "Return the name of the current sub, or nil if none was found."
   (save-excursion
     (end-of-line)
-    (if (search-backward-regexp "^ *\\bpackage +\\([a-zA-Z0-9:]+\\)" nil t)
-        (let (
-              ( package-name (match-string 1) )
-              )
-          (kill-new package-name)
-          (message "Copied package name '%s'" package-name)
-          )
-      (error "No package found")
-      )
-    )
-  )
+    (beginning-of-defun)
+    (if (search-forward-regexp "\\bsub +\\([a-zA-Z0-9_]+\\)" nil t)
+        (let (( sub-name (match-string 1) ))
+          sub-name)
+      nil)))
 
 (defun ps/edit-copy-sub-name ()
   "Copy (put in the kill-ring) the name of the current sub, and
 display it in the echo area"
   (interactive)
-  (save-excursion
-    (end-of-line)
-    (beginning-of-defun)
-    (if (search-forward-regexp "\\bsub +\\([a-zA-Z0-9_]+\\)" nil t)
-        (let (
-              ( sub-name (match-string 1) )
-              )
+  (let ((sub-name (ps/current-sub-name)))
+    (if sub-name
+        (progn
           (kill-new sub-name)
           (message "Copied sub name '%s'" sub-name)
           )
