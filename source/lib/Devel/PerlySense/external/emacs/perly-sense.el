@@ -1473,6 +1473,84 @@ current test run, if any"
     (and (re-search-forward "tests\\s-+=>\\s-*\\([0-9]+\\)" nil t)
          (string-to-number (match-string 1)))))
 
+(defun ps/looking-backwards-at-comment-line ()
+  (save-excursion
+    (beginning-of-line)
+    (if (bobp)
+        nil ;; Beginning of buffer, not looking at comment
+      (forward-line -1)
+      (looking-at-p "\\s*?#")))
+  )
+
+(defun ps/backward-to-first-comment-line ()
+  "Move point back to the first line that isn't preceeded by a
+non-comment line. This could mean staying in place if there is no
+comment lines.
+
+Return point, or nil if there was no comment line."
+  (interactive)
+  (if (ps/looking-at-comment-line)
+      (progn
+        (while (ps/looking-backwards-at-comment-line)
+          (forward-line -1)
+          )
+        (beginning-of-line)
+        (point))
+    nil
+    )
+  )
+
+(defun ps/looking-at-next-comment-line ()
+  (save-excursion
+    (forward-line 1)
+    (if (eobp)
+        nil ;; End of buffer, not looking at comment
+      (beginning-of-line)
+      (looking-at-p "\\s*?#")))
+  )
+
+(defun ps/looking-at-comment-line ()
+  (save-excursion
+      (beginning-of-line)
+      (looking-at-p "\\s*?#")))
+
+(defun ps/forward-to-last-comment-line ()
+  "Assume point is on a comment line. Move point forward to the
+last line that is a comment line. This could mean staying in
+place if this is the last comment line.
+
+Return point, or nil if there was no comment line."
+  (interactive)
+  (progn
+    (while (ps/looking-at-next-comment-line)
+      (forward-line 1)
+      )
+    (end-of-line)
+    (point))
+  )
+
+(defun ps/current-comment-region ()
+  (interactive)
+  "Return a two item list with the position of the beginning and
+  end of the current comment block."
+  (save-excursion
+    (let* ((beg (ps/backward-to-first-comment-line)))
+      (if beg
+          (let* ((end (ps/forward-to-last-comment-line)))
+            (if end
+                (list beg end)
+              nil))
+        nil))))
+
+(defun ps/extant-marker-for-caller (caller beg end)
+  "Return '* ' if CALLER is present in the buffer between bet-end
+  or '' if not."
+  (message "%s to %s" beg end)
+  (save-excursion
+    (goto-char beg)
+    (if (search-forward-regexp (format " %s\\b" caller) end t)
+        "* "
+      "")))
 
 (defun ps/edit-find-callers-at-point-in-comment ()
   (if (save-excursion
@@ -1483,7 +1561,11 @@ current test run, if any"
       (let* ((prefix-string (or (match-string 1) ""))
              (indent-length (+ (length prefix-string) 4 -2)) ;; -2 is for "# "
              (indent-string (make-string indent-length ? ))
-             (method-name (match-string 2)))
+             (method-name (match-string 2))
+             (comment-region (ps/current-comment-region))
+             (comment-beg (car comment-region))
+             (comment-end (car (cdr comment-region)))
+             )
         (let* ((result-alist (ps/command-on-current-file-location
                               "find_callers"
                               (format "--sub=%s --file_origin=%s" method-name (buffer-file-name))))
@@ -1492,12 +1574,19 @@ current test run, if any"
                 (mapconcat
                  ;; Check if any of these already are listed below in the comment.
                  ;; If so, prepend "* "
-                 (lambda (caller) (let* (
-                                         (package (alist-value caller "package"))
-                                         (method (alist-value caller "method"))
-                                         )
-                                    (format "# %s%s->%s" indent-string package method)
-                                    ))
+                 (lambda (caller)
+                   (let*
+                       (
+                        (package (alist-value caller "package"))
+                        (method (alist-value caller "method"))
+                        (caller (format "%s->%s" package method))
+                        (extant-marker (ps/extant-marker-for-caller
+                                        caller
+                                        comment-beg
+                                        comment-end))
+                        )
+                     (format "# %s%s%s" indent-string extant-marker caller)
+                     ))
                  callers
                  "\n"))
                )
@@ -1506,6 +1595,7 @@ current test run, if any"
             (beginning-of-line)
             (open-line 1)
             (insert caller-string)
+
             ;; Move point to last caller
             (beginning-of-line)(forward-word)(forward-word -1)
             )
