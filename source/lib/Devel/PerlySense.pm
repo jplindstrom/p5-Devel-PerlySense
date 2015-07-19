@@ -1403,12 +1403,12 @@ structure.
 The cursor is placed conveniently to make it easy to subsequent
 callers to the call tree.
 
-If there the same caller is found multiple times in the comment, they
-are marked with a * to indicate that there's no point following them.
+If the same caller is already present in the comment, it is marked
+with a * to indicate that there's no point following them.
 
-This works by method names alone, so there might be false positives,
-or uninteresting callers added to the list. Delete those lines to
-avoid clutter.
+The method of identifying callers works by method names alone, so
+there might be false positives, or uninteresting callers added to the
+list. Delete those lines to avoid clutter.
 
 
 
