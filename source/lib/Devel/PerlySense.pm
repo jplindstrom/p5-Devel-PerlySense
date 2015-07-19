@@ -2701,6 +2701,7 @@ sub raCallSiteForMethod {
     $self->setFindProject(dir => $dirOrigin);
 
     my @aMatch;
+    my %hSeen;
     for my $file ( $self->oProject->aFileSourceCode ) {
         my $source = slurp($file);
 
@@ -2718,7 +2719,10 @@ sub raCallSiteForMethod {
             ) or next;
 
             my $rhPropertySub = $oLocationSub->rhProperty;
-            ###TODO: ditch the row and line and only report one per sub
+            my $namePackage = $rhPropertySub->{namePackage};
+            my $nameSub = $rhPropertySub->{nameSub};
+
+            $hSeen{ "$namePackage->$nameSub" }++ and next;
             push(
                 @aMatch,
                 {
