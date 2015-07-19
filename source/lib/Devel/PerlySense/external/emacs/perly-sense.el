@@ -1545,7 +1545,6 @@ Return point, or nil if there was no comment line."
 (defun ps/extant-marker-for-caller (caller beg end)
   "Return '* ' if CALLER is present in the buffer between bet-end
   or '' if not."
-  (message "%s to %s" beg end)
   (save-excursion
     (goto-char beg)
     (if (search-forward-regexp (format " %s\\b" caller) end t)
