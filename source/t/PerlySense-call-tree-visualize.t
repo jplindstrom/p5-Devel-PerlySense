@@ -2,6 +2,7 @@
 use strict;
 
 use Test::More tests => 4;
+use Test::Differences;
 use Test::Exception;
 use Data::Dumper;
 
@@ -44,13 +45,40 @@ my $source = "
 
 ok(my $call_tree = Devel::PerlySense::CallTree->new(source => $source), "new ok");
 
-warn "JPL: " . Dumper([ map { $_->id } @{$call_tree->callers} ]);
-
-
-
-
-
-
+eq_or_diff(
+    [ map { $_->id } @{$call_tree->callers} ],
+    [
+        "devel_perlysense__odocumentfindmodule",
+        "devel_perlysense_document__determinelikelyapi0",
+        "devel_perlysense_document__determinelikelyapi",
+        "devel_perlysense_editor__textclassapi",
+        "devel_perlysense_document__determinelikelyapi0",
+        "devel_perlysense__aapiofclass",
+        "devel_perlysense__adocumentfindmodulewithinterface",
+        "devel_perlysense_document__olocationpod",
+        "devel_perlysense_document__olocationpod",
+        "devel_perlysense_document__olocationsubdefinition",
+        "devel_perlysense__olocationmethoddocfromdocument",
+        "devel_perlysense_document_api_method__new",
+        "devel_perlysense_class__olocationmethoddoc",
+        "devel_perlysense__olocationsmartdoc",
+        "devel_perlysense_document__olocationsubdefinition",
+        "devel_perlysense_document__olocationsubdefinition",
+        "devel_perlysense__olocationmethoddefinitionfromdocument",
+        "devel_perlysense_class__olocationmethodgoto",
+        "devel_perlysense__olocationsmartgoto",
+        "devel_perlysense_class__newfromname",
+        "devel_perlysense_class__findbaseclasses",
+        "devel_perlysense_class__new",
+        "devel_perlysense__adocumentfindmodulewithinterface",
+        "devel_perlysense__olocationsmartdoc",
+        "devel_perlysense__olocationsmartgoto",
+        "devel_perlysense__classbyname",
+        "devel_perlysense__olocationsmartdoc",
+        "devel_perlysense__olocationsmartgoto",
+    ],
+    "Correctly parsed ids",
+);
 
 
 
