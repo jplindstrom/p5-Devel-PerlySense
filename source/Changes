@@ -4,7 +4,9 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* Fix: Find Callers highlights part of method as being already present
+  in the call tree. Use regex symbol boundary instead of word
+  boundary.
 
 
 
