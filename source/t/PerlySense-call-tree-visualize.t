@@ -80,6 +80,63 @@ eq_or_diff(
     "Correctly parsed ids",
 );
 
+$call_tree->assign_called_by();
+
+eq_or_diff(
+    $call_tree->method_called_by_caller,
+    #   Target <-- Caller
+    {
+        "Devel::PerlySense::Document->oLocationPod" => {
+            "Devel::PerlySense::Document->oLocationSubDefinition" => 1,
+            "Devel::PerlySense::Document->oLocationPod" => 1,
+            "Devel::PerlySense->oLocationMethodDocFromDocument" => 1
+        },
+        "Devel::PerlySense->aDocumentFindModuleWithInterface" => {
+            "Devel::PerlySense->oLocationSmartGoTo" => 1,
+            "Devel::PerlySense->oLocationSmartDoc" => 1
+        },
+        "Devel::PerlySense::Document->determineLikelyApi" => {
+            "Devel::PerlySense::Document->determineLikelyApi0" => 1,
+            "Devel::PerlySense->aApiOfClass" => 1,
+            "Devel::PerlySense->aDocumentFindModuleWithInterface" => 1,
+            "Devel::PerlySense::Editor->textClassApi" => 1
+        },
+        "Devel::PerlySense::Document->oLocationSubDefinition" => {
+            "Devel::PerlySense->oLocationSmartGoTo" => 1,
+            "Devel::PerlySense::Document->oLocationSubDefinition" => 1,
+            "Devel::PerlySense->oLocationMethodDefinitionFromDocument" => 1
+        },
+        "Devel::PerlySense::Class->newFromName" => {
+            "Devel::PerlySense::Class->findBaseClasses" => 1
+        },
+        "Devel::PerlySense->oLocationMethodDefinitionFromDocument" => {
+            "Devel::PerlySense::Class->oLocationMethodGoTo" => 1
+        },
+        "Devel::PerlySense->oLocationMethodDocFromDocument" => {
+            "Devel::PerlySense::Class->oLocationMethodDoc" => 1,
+            "Devel::PerlySense->oLocationSmartDoc" => 1,
+            "Devel::PerlySense::Document::Api::Method->new" => 1
+        },
+        "Devel::PerlySense->oDocumentFindModule" => {
+            "Devel::PerlySense::Document->determineLikelyApi0" => 1,
+            "Devel::PerlySense::Document->oLocationSubDefinition" => 1,
+            "Devel::PerlySense::Class->newFromName" => 1,
+            "Devel::PerlySense->oLocationSmartGoTo" => 1,
+            "Devel::PerlySense->oLocationSmartDoc" => 1,
+            "Devel::PerlySense->aDocumentFindModuleWithInterface" => 1,
+            "Devel::PerlySense->classByName" => 1,
+            "Devel::PerlySense::Document->oLocationPod" => 1
+        },
+        "Devel::PerlySense::Class->findBaseClasses" => {
+            "Devel::PerlySense::Class->new" => 1
+        },
+        "Devel::PerlySense::Document->determineLikelyApi0" => {
+            "Devel::PerlySense::Document->determineLikelyApi" => 1
+        }
+    },
+    "Call tree ok",
+);
+
 
 
 __END__

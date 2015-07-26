@@ -15,6 +15,8 @@ use utf8;
 
 use Moo;
 use Path::Tiny;
+use List::AllUtils qw/ min /;
+use Tree::Parser;
 
 use Devel::PerlySense::CallTree::Caller;
 
@@ -44,6 +46,45 @@ sub _build_callers {
     ];
 }
 
+has method_called_by_caller => ( is => "lazy" );
+sub _build_method_called_by_caller { +{ } }
+
+sub assign_called_by {
+    my $self = shift;
+
+    my $tree_parser = Tree::Parser->new( $self->callers );
+    $tree_parser->setParseFilter(
+        sub {
+            my ($line_iterator) = @_;
+            my $caller = $line_iterator->next();
+            return (
+                int( $caller->indentation / 4 ),
+                $caller,
+            );
+        });
+    my $tree = $tree_parser->parse();
+
+    $self->walk_tree(undef, $tree);
+
+    return $self->method_called_by_caller;
+}
+
+sub walk_tree {
+    my $self = shift;
+    my ($parent_caller, $tree) = @_;
+    for my $tree_node ( @{$tree->getAllChildren} ) {
+        my $caller = $tree_node->getNodeValue;
+        $self->method_called_by($parent_caller, $caller);
+        $self->walk_tree($caller, $tree_node);
+    }
+}
+
+sub method_called_by {
+    my $self = shift;
+    my ($target, $called) = @_;
+    $target or return;
+    $self->method_called_by_caller->{ $target->caller }->{ $called->caller }++;
+}
 
 1;
 
