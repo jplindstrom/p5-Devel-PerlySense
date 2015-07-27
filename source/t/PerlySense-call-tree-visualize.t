@@ -80,8 +80,6 @@ eq_or_diff(
     "Correctly parsed ids",
 );
 
-$call_tree->assign_called_by();
-
 eq_or_diff(
     $call_tree->method_called_by_caller,
     #   Target <-- Caller

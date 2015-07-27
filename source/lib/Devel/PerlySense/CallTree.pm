@@ -49,6 +49,11 @@ sub _build_callers {
 has method_called_by_caller => ( is => "lazy" );
 sub _build_method_called_by_caller { +{ } }
 
+sub BUILD {
+    my $self = shift;
+    $self->assign_called_by();
+}
+
 sub assign_called_by {
     my $self = shift;
 
