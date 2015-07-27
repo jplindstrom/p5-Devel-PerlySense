@@ -45,23 +45,22 @@ sub _build_indentation {
 has package => ( is => "lazy" );
 sub _build_package {
     my $self = shift;
-    $self->normal_line =~ /([\w:]+)->([\w]+)/ or return undef;
+    $self->caller =~ /([\w:]+)->([\w]+)/ or return undef;
     return $1;
 }
 
 has method => ( is => "lazy" );
 sub _build_method {
     my $self = shift;
-    $self->normal_line =~ /([\w:]+)->([\w]+)/ or return undef;
+    $self->caller =~ /([\w:]+)->([\w]+)/ or return undef;
     return $2;
 }
 
 has caller => ( is => "lazy" );
 sub _build_caller {
     my $self = shift;
-    my $package = $self->package or return undef;
-    my $method = $self->method or return undef;
-    return "$package->$method";
+    $self->normal_line =~ /([\w:]+)->([\w]+)/ or return undef;
+    return "$1->$2";
 }
 
 has id => ( is => "lazy" );
