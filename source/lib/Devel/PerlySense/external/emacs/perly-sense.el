@@ -1548,7 +1548,7 @@ Return point, or nil if there was no comment line."
   (message "%s to %s" beg end)
   (save-excursion
     (goto-char beg)
-    (if (search-forward-regexp (format " %s\_>" caller) end t)
+    (if (search-forward-regexp (format " %s\\_>" caller) end t)
         "* "
       "")))
 
