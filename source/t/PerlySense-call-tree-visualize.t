@@ -9,6 +9,7 @@ use Data::Dumper;
 use lib "../lib";
 
 use_ok("Devel::PerlySense::CallTree");
+use_ok("Devel::PerlySense::CallTree::Graph");
 
 
 
@@ -134,6 +135,12 @@ eq_or_diff(
     },
     "Call tree ok",
 );
+
+
+
+subtest create_graph => sub {
+    
+};
 
 
 
