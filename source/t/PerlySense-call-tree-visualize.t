@@ -137,9 +137,13 @@ eq_or_diff(
 );
 
 
-
+use Devel::PerlySense::CallTree::Graph;
 subtest create_graph => sub {
-    
+    my $call_tree = Devel::PerlySense::CallTree->new(source => $source);
+    my $graph = Devel::PerlySense::CallTree::Graph->new({
+        call_tree => $call_tree,
+    });
+    $graph->create_graph();
 };
 
 
