@@ -46,6 +46,21 @@ sub _build_callers {
     ];
 }
 
+=head2 unique_callers
+
+Arrayref with unique Caller objects. May not contain all callers.
+
+=cut
+has unique_callers => ( is => "lazy" );
+sub _build_unique_callers {
+    my $self = shift;
+    my %seen;
+    return [
+        map { $seen{ $_->caller } ? () : $_ }
+        @{$self->callers}
+    ];
+}
+
 has method_called_by_caller => ( is => "lazy" );
 sub _build_method_called_by_caller { +{ } }
 

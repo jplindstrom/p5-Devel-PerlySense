@@ -65,7 +65,17 @@ sub write_dot_file {
 
     my $called_by_caller = $self->call_tree->method_called_by_caller;
 
-    my $node_declarations = "abc; def;";
+    my $node_declarations = join(
+        "\n",
+        map {
+            sprintf(
+                qq{ %s [ label="%s" ]; },
+                $_->id,
+                $_->caller,
+            );
+        }
+        @{$self->call_tree->unique_callers}
+    );
     my $edge_declarations = join(
         "\n",
         map {
