@@ -25,7 +25,7 @@ use Moo;
 The source line describing this caller.
 
 =cut
-has line => ( is => "ro", required => 1 );
+has line => ( is => "ro" );
 
 has normal_line => ( is => "lazy" );
 sub _build_normal_line {
