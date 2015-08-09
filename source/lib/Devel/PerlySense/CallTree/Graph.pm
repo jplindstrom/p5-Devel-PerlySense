@@ -39,14 +39,14 @@ sub _build_base_file {
 has dot_file => ( is => "lazy" );
 sub _build_dot_file {
     my $self = shift;
-    my $file = path($self->output_dir, $self->base_file . ".dot");
+    my $file = path($self->output_dir, $self->base_file . ".dot")->absolute;
     return $file;
 }
 
 has output_file => ( is => "lazy" );
 sub _build_output_file {
     my $self = shift;
-    path($self->output_dir, $self->base_file . "." . $self->output_format);
+    path($self->output_dir, $self->base_file . "." . $self->output_format)->absolute;
 }
 
 
