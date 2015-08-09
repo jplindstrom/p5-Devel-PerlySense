@@ -19,6 +19,7 @@ use Moo;
 use Path::Tiny;
 
 use Devel::PerlySense::CallTree;
+use Devel::PerlySense::CallTree::Caller;
 
 
 
@@ -62,8 +63,31 @@ sub write_dot_file {
     my $self = shift;
     my ($filename) = @_;
 
+    my $called_by_caller = $self->call_tree->method_called_by_caller;
+
     my $node_declarations = "abc; def;";
-    my $edge_declarations = "abc -> def";
+    my $edge_declarations = join(
+        "\n",
+        map {
+            my $callers = $called_by_caller->{ $_ };
+            my @callers = sort keys %$callers;
+            my $target = Devel::PerlySense::CallTree::Caller->new({
+                caller => $_,
+            });
+            join(
+                "\n",
+                map {
+                    my $method_caller  = $_;
+                    my $caller = Devel::PerlySense::CallTree::Caller->new({
+                        caller => $method_caller,
+                    });
+                    $target->id . " -> " . $caller->id;
+                }
+                @callers
+            );
+        }
+        sort keys %$called_by_caller
+    );
     my $source = qq|
 digraph d {
     overlap  = false
@@ -103,7 +127,8 @@ sub run_dot {
     my $self = shift;
     my ($dot_file, $output_file) = @_;
     my $format = $self->output_format;
-    system("dot -T$format -o$output_file $dot_file");
+    my $command = "dot -T$format -o$output_file $dot_file";
+    system($command);
 }
 
 1;
