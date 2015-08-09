@@ -16,6 +16,7 @@ use utf8;
 
 
 use Moo;
+# use Types::Standard qw(:all);
 
 
 =head1 PROPERTIES
@@ -56,7 +57,10 @@ sub _build_method {
     return $2;
 }
 
-has caller => ( is => "lazy" );
+has caller => (
+    is => "lazy",
+    # isa => "Str",
+);
 sub _build_caller {
     my $self = shift;
     $self->normal_line =~ /([\w:]+)->([\w]+)/ or return undef;

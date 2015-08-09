@@ -48,17 +48,20 @@ sub _build_callers {
 
 =head2 unique_callers
 
-Arrayref with unique Caller objects. May not contain all callers.
+
 
 =cut
-has unique_callers => ( is => "lazy" );
-sub _build_unique_callers {
+has package_callers => ( is => "lazy" );
+sub _build_package_callers {
     my $self = shift;
+    my $package_callers = {};
     my %seen;
-    return [
-        map { $seen{ $_->caller } ? () : $_ }
-        @{$self->callers}
-    ];
+    for my $caller (@{$self->callers}) {
+        $seen{ $caller->id }++ and next;
+        my $callers = $package_callers->{ $caller->package } ||= [];
+        push(@$callers, $caller);
+    }
+    return $package_callers;
 }
 
 has method_called_by_caller => ( is => "lazy" );

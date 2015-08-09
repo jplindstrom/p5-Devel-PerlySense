@@ -59,23 +59,57 @@ sub create_graph {
     $self->run_dot( $dot_file, $self->output_file );
 }
 
+sub node_declaration {
+    my $self = shift;
+    my ($caller) = @_;
+    return sprintf(
+        qq{    %s [ label="%s" ]; },
+        $caller->id,
+        $caller->method,
+    );
+}
+
+sub to_id {
+    my $self = shift;
+    my ($prefix, $name) = @_;
+    $name =~ s/\W+/_/gsm;
+    return join("_", $prefix, lc($name));
+}
+
+sub to_caller {
+    my $self = shift;
+    my ($caller) = @_;
+    return Devel::PerlySense::CallTree::Caller->new({ caller => $caller });
+}
+
 sub write_dot_file {
     my $self = shift;
     my ($filename) = @_;
 
-    my $called_by_caller = $self->call_tree->method_called_by_caller;
-
-    my $node_declarations = join(
+    my $package_callers = $self->call_tree->package_callers;
+    my $cluster_declarations = join(
         "\n",
         map {
-            sprintf(
-                qq{ %s [ label="%s" ]; },
-                $_->id,
-                $_->caller,
+            my $package = $_;
+            my $callers = $package_callers->{ $package };
+            my $node_declarations = join(
+                "\n",
+                map { $self->node_declaration($_) }
+                @$callers
             );
+
+            my $package_id = $self->to_id(package => $package);
+            qq|
+subgraph cluster_${package_id} {
+    label = "$package";
+$node_declarations
+}
+|;
         }
-        @{$self->call_tree->unique_callers}
+        sort keys %$package_callers
     );
+
+    my $called_by_caller = $self->call_tree->method_called_by_caller;
     my $edge_declarations = join(
         "\n",
         map {
@@ -101,28 +135,36 @@ sub write_dot_file {
     my $source = qq|
 digraph d {
     overlap  = false
-    ranksep  = 0.5; nodesep = 0.1;
+    ranksep  = 0.3; nodesep = 0.1;
     rankdir  = TB;
     fontname = "Verdana";
-    labelloc = "b";
+    labelloc = "t";
 
-    graph[ style = invis ];
+    // splines=ortho
+
+    subgraph [
+        fontname = "Verdana",
+        fontsize = 10,
+        fontcolor = "#2980b9",
+        style = "rounded";
+        color="#cccccc";
+    ]
 
     node [
         width    = 0.1,
-        height   = 0.4,
+        height   = 0.2,
         fontname = "Verdana",
         fontsize = 8,
         shape    = "none",
     ];
     edge [
-        arrowsize = 0.5,
+        arrowsize = 0.4,
         fontname  = "Helvetica",
         fontsize  = 9,
     ];
 
 
-    $node_declarations
+    $cluster_declarations
 
 
     $edge_declarations
