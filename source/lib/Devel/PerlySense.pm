@@ -131,6 +131,9 @@ Variable of the active region.
 B<Find Callers> - C>C-o e f c> -- Find callers of a method in the
 project and insert the call tree as a comment in the source.
 
+B<Visualize Callers> - C>C-o e v c> -- Visualize the callers comment
+created by "Find Callers" using GrapViz.
+
 B<Visualize Callers> - C>C-o e v c> -- Visualize callers in a call
 tree (found by Find Callers) by drawing the call tree using GraphViz.
 
@@ -1417,8 +1420,8 @@ the list. Delete those lines to avoid clutter.
 
 =head3 Edit -- Visualize Callers
 
-C<C-o e v c> -- Visualize callers in a call tree (collected using Find
-Callers above) by drawing it using GraphViz.
+C<C-o e v c> -- Visualize callers in a call tree comment (collected
+using Find Callers above) by drawing it using GraphViz.
 
 Put the cursor in a comment with the call tree and hit C<C-o e v
 c>. PerlySense will create a temporary .dot file and let GraphViz
@@ -1426,7 +1429,12 @@ render it into a nice .png image, which will be opened.
 
 If you're running a graphical Emacs it might even look pretty.
 
-This requires GraphViz' C<dot> binary to be installed.
+This requires GraphViz' C<dot> binary to be installed:
+
+    sudo apt-get install graphviz  # Debian / Ubuntu
+    sudo yum install graphviz      # Redhat / CentOS
+
+on OSX, try brew something.
 
 
 =head3 Assist With -- Regex
@@ -1913,6 +1921,8 @@ use Devel::PerlySense::Class;
 use Devel::PerlySense::Document;
 use Devel::PerlySense::Document::Location;
 use Devel::PerlySense::BookmarkConfig;
+use Devel::PerlySense::CallTree;
+use Devel::PerlySense::CallTree::Graph;
 
 
 
@@ -2772,26 +2782,29 @@ sub raCallSiteForMethod {
 Extract call tree from $source and render it into a .dot and .png
 file.
 
-Return hash ref with (keys: "dot", "png"; values: file names).
+Return hash ref with (keys: "dot", "image"; values: file names).
 
 Die if there is no "dot" binary to run.
 
 =cut
-# TODO: reimplement this in a separate distro
 sub rhFileCallerVisualized {
     my ($source) = Devel::PerlySense::Util::aNamedArg(["source"], @_);
 
+    # TODO: extract
     my $dirTemp = path("~/.PerlySense/temp");
     my $dirTempCallTree = path($dirTemp, "call_tree");
-    $dirTempCallTree->mkpath();
 
-    my $fileTempDot = path($dirTempCallTree, time() . ".dot");
+    my $treeCallers = Devel::PerlySense::CallTree->new(source => $source);
+    my $graph = Devel::PerlySense::CallTree::Graph->new({
+        call_tree  => $treeCallers,
+        output_dir => $dirTempCallTree,
+    });
+    $graph->create_graph();
 
-    my @aLineSource =
-        map { s/#/ /; $_ } ## no critic
-        reverse split("\n", $source);
-
-    
+    return {
+        dot   => $graph->dot_file . "",
+        image => $graph->output_file . "",
+    };
 }
 
 

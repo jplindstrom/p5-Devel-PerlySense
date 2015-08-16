@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 $|++;
 use lib q|/Users/johanl/Documents/Projects/Dev/CPAN2/Devel-PerlySense/source/lib|;
 use lib "/Users/johanl/Documents/Projects/Dev/CPAN2/Devel-CoverX-Covered/trunk/source/lib";
@@ -73,7 +73,7 @@ sub main {
 sub main_perly_sense {
     my ($oPs) = @_;
 
-    my ($dirOrigin, $fileOrigin, $module, $dir, $file, $row, $col, $sub, $nameClass, $nameMethod, $source, $clearCache, $widthDisplay, $typeIo, $useAlternateCommand);
+    my ($dirOrigin, $fileOrigin, $module, $dir, $file, $row, $col, $sub, $nameClass, $nameMethod, $clearCache, $widthDisplay, $typeIo, $useAlternateCommand);
     my @aShow;
     debug("CWD: (" . getcwd() . "), ARGV: (" . join(" ", map { "|$_|" } ("perly_sense",  @ARGV)) . ")");
 
@@ -89,7 +89,6 @@ sub main_perly_sense {
         "class_name:s"          => \$nameClass,
         "method_name:s"         => \$nameMethod,
         "show:s"                => \@aShow,
-        "source:s"              => \$source,
         "clear_cache"           => \$clearCache,
         "use_alternate_command" => \$useAlternateCommand,
         "width_display:s"       => \$widthDisplay,
@@ -153,14 +152,20 @@ sub main_perly_sense {
         }
 
     } elsif($command eq "visualize_callers") {
-        $source or syntax("Missing option --source");
+        my $source = "";
+        # Wow, this is getty waaaay too hacky. Replace with a web server already!.
+        while(my $line = <STDIN>) {
+            chomp($line);
+            $line eq "" and last;
+            $source .= "$line\n";
+        }
 
         eval {
             my $rhFileCaller = $oPs->rhFileCallerVisualized(
                 source => $source,
             );
             print $oEditor->formatOutputDataStructure(
-                rhData => { output_files => $rhFileCaller },
+                rhData => $rhFileCaller,
             );
         };
         if(my $err = $@) {
