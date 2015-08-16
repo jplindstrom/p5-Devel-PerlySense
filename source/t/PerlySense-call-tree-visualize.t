@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 4;
+use Test::More;
 use Test::Differences;
 use Test::Exception;
 use Data::Dumper;
@@ -143,10 +143,14 @@ subtest create_graph => sub {
     my $graph = Devel::PerlySense::CallTree::Graph->new({
         call_tree => $call_tree,
     });
-    $graph->create_graph();
+    lives_ok(
+        sub { $graph->create_graph() },
+        "create_graph ok",
+    );
 };
 
 
+done_testing();
 
 __END__
 
