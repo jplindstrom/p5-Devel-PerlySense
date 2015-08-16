@@ -1,0 +1,74 @@
+digraph d {
+    overlap = false
+    ranksep = 0.5; nodesep = 0.1;
+    rankdir = BT;
+    fontname="Verdana";
+    labelloc = "b";
+    graph[ style = filled ];
+
+    node [
+          width    = 0.1,
+          height   = 0.4,
+          fontname = "Verdana",
+          fontsize = 8,
+          shape    = "none",
+          ];
+    edge [
+          arrowsize = 0.5,
+          fontname  = "helvetica",
+          fontsize  = 9,
+          ];
+
+
+
+
+    // TOP
+    subgraph cluster_myapp_gizmo_frobnizgargle_gizmocollection {
+        label = "MyApp::Gizmo::FrobnizGargle::GizmoCollection";
+        smash_and_smesh_gizmo_rows_with_flibble_gizmo_collection;
+        do_stuff_to_odd_values;
+    };
+    subgraph cluster_myapp_gizmo_frobniz {
+        label = "MyApp::Gizmo::Frobniz";
+        update_frobniz_gargle_gizmos_for_tabs;
+        create_gizmos_for_frobniz_gargle;
+        create_gizmos_for_fields;
+    };
+    subgraph cluster_myapp_gizmo_schema_diff {
+        label = "MyApp::Gizmo::Schema::Diff";
+        create_frobniz_gargle_gizmo_collection_for_added_fields;
+    };
+    subgraph cluster_myapp_resource_bar {
+        label = "MyApp::Resource::Bar";
+        create;
+        create_gizmos_for_any_added_fields;
+        create_frobniz_gargle;
+        create_frobniz_gargle_gizmos;
+        update_flibble_gizmo_collection;
+    };
+    subgraph cluster_myapp_controller_gizmocollection {
+        label = "MyApp::Controller::GizmoCollection";
+        post;
+    };
+    subgraph cluster_myapp_controller_frobnizgargle {
+        label = "MyApp::Controller::FrobnizGargle";
+        create_frobniz_gargle_of_type;
+    };
+
+    create_gizmos_for_fields -> do_stuff_to_odd_values;
+    create_gizmos_for_frobniz_gargle -> do_stuff_to_odd_values;
+    smash_and_smesh_gizmo_rows_with_flibble_gizmo_collection -> do_stuff_to_odd_values;
+
+    create_frobniz_gargle_gizmo_collection_for_added_fields -> create_gizmos_for_fields;
+    create_gizmos_for_any_added_fields -> create_frobniz_gargle_gizmo_collection_for_added_fields;
+    update_flibble_gizmo_collection -> create_gizmos_for_any_added_fields;
+    post -> update_flibble_gizmo_collection;
+
+    create_frobniz_gargle_gizmos -> create_gizmos_for_frobniz_gargle;
+    create -> create_frobniz_gargle_gizmos;
+    create_frobniz_gargle -> create_frobniz_gargle_gizmos;
+    create_frobniz_gargle_of_type -> create_frobniz_gargle;
+    update_frobniz_gargle_gizmos_for_tabs -> smash_and_smesh_gizmo_rows_with_flibble_gizmo_collection;
+    update_flibble_gizmo_collection -> update_frobniz_gargle_gizmos_for_tabs;
+
+}

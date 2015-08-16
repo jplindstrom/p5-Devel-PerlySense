@@ -1545,7 +1545,6 @@ Return point, or nil if there was no comment line."
 (defun ps/extant-marker-for-caller (caller beg end)
   "Return '* ' if CALLER is present in the buffer between bet-end
   or '' if not."
-  (message "%s to %s" beg end)
   (save-excursion
     (goto-char beg)
     (if (search-forward-regexp (format " %s\\_>" caller) end t)
@@ -1637,6 +1636,37 @@ Return point, or nil if there was no comment line."
   )
 ;; Special case C-o C-g: if in comment, look for a class method call
 
+(defun ps/edit-visualize-callers-at-point ()
+  "Create new buffer with a graph the call stack at point.
+
+Create the call stack first using ps/edit-find-callers-at-point.
+"
+  (interactive)
+  (if (save-excursion
+        (beginning-of-line)
+        (looking-at-p "^\\s*?#")
+        )
+      (let* ((comment-region (ps/current-comment-region))
+             (comment-beg (car comment-region))
+             (comment-end (car (cdr comment-region)))
+             (comment-source
+              (buffer-substring-no-properties comment-beg comment-end))
+             (result-alist (ps/command-on-current-file-location
+                            "visualize_callers"
+                            (format "\n%s\n\n" comment-source)))
+             (dummy (prin1 result-alist))
+             (image-file-name (alist-value result-alist "image"))
+             )
+        (message "image (%s)" image-file-name)
+        (if image-file-name
+            (find-file-other-window image-file-name)
+          (error "Error: %s" (alist-value result-alist "message"))
+          )
+        )
+    (message "Place point in a comment wiht a call stack.\n(Create a call stack using ps/edit-find-callers-at-point)")
+    )
+  )
+  ;;; TODO: call fn to also display any error and re-throw
 
 
 
@@ -1681,10 +1711,11 @@ options, and return the parsed result as a sexp"
   (ps/parse-sexp
    (ps/shell-command-to-string
     "perly_sense"
-    (format "%s %s --width_display=%s"
+    (format "%s --width_display=%s %s"
             command
+            (- (window-width) 2)
             options
-            (- (window-width) 2)))))
+            ))))
 
 
 
@@ -2615,6 +2646,7 @@ Return t if found, else nil."
 (global-set-key (format "%seev" ps/key-prefix) 'lr-extract-variable)
 (global-set-key (format "%seh"  ps/key-prefix) 'lr-remove-highlights)
 (global-set-key (format "%sefc" ps/key-prefix) 'ps/edit-find-callers-at-point)
+(global-set-key (format "%sevc" ps/key-prefix) 'ps/edit-visualize-callers-at-point)
 
 (global-set-key (format "%sat" ps/key-prefix) 'ps/assist-sync-test-count)
 

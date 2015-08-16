@@ -4,6 +4,10 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Feature: Edit - Visualize Callers -- "C-o e v c". Visualize the
+  callers comment created by "Find Callers" using GrapViz. Requires
+  GraphViz "dot" to be installed.
+
 * Fix: Find Callers highlights part of method as being already present
   in the call tree. Use regex symbol boundary instead of word
   boundary.
