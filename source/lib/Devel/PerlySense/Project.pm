@@ -534,7 +534,9 @@ failed flymake run).
 =cut
 
 sub flymakeFile {
-    my ($file) = Devel::PerlySense::Util::aNamedArg(["file"], @_);
+    my ($file)   = Devel::PerlySense::Util::aNamedArg(["file"], @_);
+    my $run_from = $self->oPerlySense->rhConfig->{external}{editor}{emacs}{flymake}{run_from}
+        || 'file_directory';
 
     if($self->oPerlySense->rhConfig->{external}{editor}{emacs}{flymake}{syntax}) {
         my $rhConfigRun = $self->rhRunFile(
@@ -543,7 +545,7 @@ sub flymakeFile {
                 command => q{perl -c ${INC} "${SOURCE_FILE}" 2>&1 | perl -ne " /Subroutine [\\w:]+ redefined at/ or print"},
                 moniker => "Flymake",
                 rex => "",
-                run_from => "file_directory",
+                run_from => $run_from,
             },
         );
 

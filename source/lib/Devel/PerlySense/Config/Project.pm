@@ -122,6 +122,7 @@ external:
         #provided.
         critic: 0
 
+        run_from: file_directory
 
 #Run File Configuration.
 #"C-o C-r" to run "command" and "C-u C-o C-r" to run alternate_command
