@@ -183,7 +183,8 @@ if END-WORD-BOUNDARY is true"
 
 (defun lr/replace-all-buffer (search-for replace-with)
   (goto-char (point-min))
-  (let* ((quoted-search-for (regexp-quote search-for))
+  (let* ((case-fold-search nil)
+         (quoted-search-for (regexp-quote search-for))
          (ends-at-word-boundary (string-match "[a-zA-Z0-9_]$" search-for 1))
          (search-for-rex (lr/regex-end-word-boundary quoted-search-for ends-at-word-boundary))
          )
