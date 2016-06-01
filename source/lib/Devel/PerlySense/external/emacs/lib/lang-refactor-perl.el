@@ -157,10 +157,10 @@
 
 
 (defun lr/regex-end-word-boundary (str end-word-boundary)
-  "Append a \\b to STR to make it match a word boundary if
-END-WORD-BOUNDARY is true"
+  "Append a \\_> to STR to make it match a symbol right boundary
+if END-WORD-BOUNDARY is true"
   (if end-word-boundary
-      (concat str "\\b")
+      (concat str "\\_>")
     str
     )
   )
