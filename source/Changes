@@ -10,6 +10,9 @@ Feature oriented Revision history for Devel-PerlySense
 
   Useful when you've just created a new .pm file.
 
+* Extract Variable fixes: symbol boundary and case sensitive search
+  and replace.
+
 
 
 0.0216 -- 2015-08-16 22:44:23 UTC
