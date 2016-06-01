@@ -10,6 +10,9 @@ Feature oriented Revision history for Devel-PerlySense
 
   Useful when you've just created a new .pm file.
 
+* Edit - Copy Package Name: if there is no package declaration in the
+  source, fall back to using the package name from the file name.
+
 * Extract Variable fixes: symbol boundary and case sensitive search
   and replace.
 

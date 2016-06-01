@@ -1246,14 +1246,18 @@ If a Magit buffer is found, magit-refresh it before returning it.
 
 (defun ps/edit-copy-package-name ()
   "Copy (put in the kill-ring) the name of the current package
-  statement, and display it in the echo area"
+  statement, and display it in the echo area. Or, if not found,
+  use the file package name."
   (interactive)
-  (let ((package-name (ps/current-package-name)))
+  (let ((package-name
+         (or
+          (ps/current-package-name)
+          (ps/package-name-from-file))))
     (if package-name
         (progn
           (kill-new package-name)
           (message "Copied package name '%s'" package-name))
-      (error "No package found"))))
+      (error "No package found either in the source or the file name"))))
 
 (defun ps/current-sub-name ()
   "Return the name of the current sub, or nil if none was found."
@@ -1288,20 +1292,28 @@ display it in the echo area"
   (message "Copied file name '%s'" (buffer-file-name))
   )
 
+(defun ps/package-name-from-file ()
+  "Return the name of the current file as if it was a package
+name, or return nil if not found."
+  (interactive)
+  (let* ((file-name (buffer-file-name)))
+    (if (string-match "\\blib/\\(.+?\\)\\.pm$" file-name)
+        (let* ((name-part (match-string 1 file-name)))
+          (replace-regexp-in-string "/" "::" name-part)
+          )
+      )))
+
 (defun ps/edit-copy-package-name-from-file ()
   "Copy (put in the kill-ring) the name of the current file as if
 it was a package name, and display it in the echo area"
   (interactive)
-  (let* ((file-name (buffer-file-name)))
-    (if (string-match "\\blib/\\(.+?\\)\\.pm$" file-name)
-        (let* ((name-part (or (match-string 1 file-name) ""))
-               (package-name (replace-regexp-in-string "/" "::" name-part))
-               )
+  (let* ((package-name (ps/package-name-from-file)))
+    (if package-name
+        (progn
           (kill-new package-name)
           (message "Copied package name '%s'" package-name)
           )
-      (error "No package found, is (%s) a Perl module file in a lib directory?" file-name)
-      )))
+      (error "No package found, is (%s) a Perl module file in a lib directory?" (buffer-file-name)))))
 
 
 

@@ -1228,7 +1228,8 @@ restucture the code.
 =head3 Edit - Copy Package Name
 
 C<C-o e c p> -- Copy the current package statement name to the
-clipboard (kill-ring) and display it in the echo area.
+clipboard (kill-ring) and display it in the echo area. If there is no
+package statement, try to get the package name from the file name.
 
 
 
