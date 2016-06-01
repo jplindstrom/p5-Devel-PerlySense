@@ -114,6 +114,9 @@ current file, collecting Devel::CoverX::Covered information.
 
 B<Edit - Copy Package Name> -- C<C-o e c p> -- Copy the current package name.
 
+B<Edit - Copy Package Name From File> -- C<C-o e c P> -- Copy the
+current package name from file name.
+
 B<Edit - Copy Sub Name> -- C<C-o e c s> -- Copy the current sub name.
 
 B<Edit - Copy File Name> -- C<C-o e c f> -- Copy the current file name.
@@ -1226,6 +1229,16 @@ restucture the code.
 
 C<C-o e c p> -- Copy the current package statement name to the
 clipboard (kill-ring) and display it in the echo area.
+
+
+
+=head3 Edit - Copy Package Name From File Name
+
+C<C-o e c P> -- Assuming the file is a Perl module in a lib directory,
+copy the corrsponding package name to the clipboard (kill-ring) and
+display it in the echo area.
+
+Useful when you've just created an empty new Perl module .pm file.
 
 
 

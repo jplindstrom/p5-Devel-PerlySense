@@ -1288,6 +1288,20 @@ display it in the echo area"
   (message "Copied file name '%s'" (buffer-file-name))
   )
 
+(defun ps/edit-copy-package-name-from-file ()
+  "Copy (put in the kill-ring) the name of the current file as if
+it was a package name, and display it in the echo area"
+  (interactive)
+  (let* ((file-name (buffer-file-name)))
+    (if (string-match "\\blib/\\(.+?\\)\\.pm$" file-name)
+        (let* ((name-part (or (match-string 1 file-name) ""))
+               (package-name (replace-regexp-in-string "/" "::" name-part))
+               )
+          (kill-new package-name)
+          (message "Copied package name '%s'" package-name)
+          )
+      (error "No package found, is (%s) a Perl module file in a lib directory?" file-name)
+      )))
 
 
 
@@ -2638,6 +2652,7 @@ Return t if found, else nil."
 
 
 (global-set-key (format "%secp" ps/key-prefix) 'ps/edit-copy-package-name)
+(global-set-key (format "%secP" ps/key-prefix) 'ps/edit-copy-package-name-from-file)
 (global-set-key (format "%secs" ps/key-prefix) 'ps/edit-copy-sub-name)
 (global-set-key (format "%secf" ps/key-prefix) 'ps/edit-copy-file-name)
 (global-set-key (format "%semu" ps/key-prefix) 'ps/edit-move-use-statement)

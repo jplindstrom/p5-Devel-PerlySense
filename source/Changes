@@ -4,6 +4,14 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Feature: Edit - Copy Package Name From File Name -- C-o e c P.
+  Assuming the file is a Perl module in a lib directory, copy the
+  corrsponding package name to the kill ring.
+
+  Useful when you've just created a new .pm file.
+
+
+
 0.0216 -- 2015-08-16 22:44:23 UTC
 
 * Feature: Edit - Visualize Callers -- "C-o e v c". Visualize the
