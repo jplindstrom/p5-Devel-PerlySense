@@ -446,15 +446,34 @@ sub selfMethodCallAt {
     # If the object is "shift" and there is no mention of a $self in
     # the sub, assume it's $self being shifted off @_
     if($object eq "shift") {
+        $self->isThereSelfInSubAt(row => $row, col => $col) and return undef;
         return($method);
     }
 
     return(undef);
 }
 
+=head2 isThereSelfInSubAt(row => $row, col => $col) : Bool
 
+Whether there is a mention of $self in the sub surrounding $row, $col.
 
+=cut
+sub isThereSelfInSubAt {
+    my ($row, $col) = Devel::PerlySense::Util::aNamedArg(["row", "col"], @_);
 
+    my $oLocationSubAt = $self->oLocationSubAt(row => $row, col => $col)
+        or return(0);
+
+    my $source = $oLocationSubAt->rhProperty->{source} or return(0);
+
+    if ( $source =~ / \$self \b /smx ) {
+        # There is a $self somewhere in this sub (could be false
+        # positive in a comment or string), so shift isn't $self
+        return(1);
+    }
+
+    return(0);
+}
 
 =head2 moduleMethodCallAt(row => $row, row => $col)
 
@@ -471,7 +490,7 @@ sub moduleMethodCallAt {
 
     my ($module, $method) = $self->methodCallAt(row => $row, col => $col);
     $module && $method or return(undef);
-    $module =~ /[^\w:]/ and return(undef);   #only allow bareword modules
+    $module =~ /[^\w:]/ and return(undef); #only allow bareword modules
 
     wantarray() and return($module, $method);
     return("$module->$method");

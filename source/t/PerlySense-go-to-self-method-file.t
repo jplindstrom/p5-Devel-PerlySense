@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 
-use Test::More tests => 14;
+use Test::More tests => 18;
 use Test::Exception;
 
 use File::Basename;
@@ -60,8 +60,12 @@ is($oLocation->file, $fileOrigin, " file same");
 is($oLocation->row, 477, " row ok");
 is($oLocation->col, 1, " col ok");
 
-# shift without $self - match
 # shift with $self - no match
+# shift->Set|Style("Default Paragraph Font");
+ok(
+    ! $oPs->oLocationSmartGoTo(file => $fileOrigin, row => 483, col => 14),
+    "Did not find source ok, on method for self is shift, but with self also in the sub"
+);
 
 
 __END__
