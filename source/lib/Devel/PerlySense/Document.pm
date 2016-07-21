@@ -428,6 +428,8 @@ sub methodCallAt {
 
 Return the name of the $self->method at $row, $col in this document.
 
+Also matches shift->method, if there is no $self in this sub at all.
+
 If no method call is found, maybe warn and return undef.
 
 Die on errors.
@@ -438,9 +440,16 @@ sub selfMethodCallAt {
 
     my ($object, $method) = $self->methodCallAt(row => $row, col => $col);
     $method or return(undef);
-    $object and $object eq '$self' or return(undef);    #We only know about self so far
+    $object or return(undef);
+    $object eq '$self' and return($method);
 
-    return($method);
+    # If the object is "shift" and there is no mention of a $self in
+    # the sub, assume it's $self being shifted off @_
+    if($object eq "shift") {
+        return($method);
+    }
+
+    return(undef);
 }
 
 

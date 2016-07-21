@@ -480,7 +480,7 @@ sub SetStyle {
     $style ||= "Normal";
 
     return(1) if($style eq $self->styleOld);        #Workaround for bug in Word 2000/2002: http://support.microsoft.com/kb/292174
-    $self->styleOld($style);
+    shift->styleOld($style);
 
     local $SIG{__WARN__} = sub { die(@_) };
     eval { $self->oSelection->{Style} = $style; };
@@ -509,9 +509,9 @@ formatting style.
 
 =cut
 sub ClearCharacterFormatting {
-    my $self = shift;
 
-    $self->SetStyle("Default Paragraph Font");        ##Change for Word 2002 to "Clear Formatting", or does it work?
+
+    shift->SetStyle("Default Paragraph Font");        ##Change for Word 2002 to "Clear Formatting", or does it work?
 
     return(1);
 }

@@ -2180,6 +2180,9 @@ Currently supported:
   $self->method, look in current file and base classes. If no sub can
   be found, look for POD.
 
+  shift->method for subs that don't have a $self. Same as
+  $self->method.
+
   $object->method, look in current file and used modules. If no sub
   can be found, look for POD.
 
