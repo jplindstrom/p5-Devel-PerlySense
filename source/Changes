@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+*
+
+
+
+0.0217 -- 2016-07-21 12:53:23 UTC
+
 * Feature: Edit - Copy Package Name From File Name -- C-o e c P.
   Assuming the file is a Perl module in a lib directory, copy the
   corrsponding package name to the kill ring.
