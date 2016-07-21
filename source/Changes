@@ -16,6 +16,10 @@ Feature oriented Revision history for Devel-PerlySense
 * Extract Variable fixes: symbol boundary and case sensitive search
   and replace.
 
+* When identifying an object method in "$self->abc", assume
+  "shift->abc" means $self if there is no $self already used in the
+  sub.
+
 
 
 0.0216 -- 2015-08-16 22:44:23 UTC
