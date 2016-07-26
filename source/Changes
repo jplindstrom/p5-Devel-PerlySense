@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+*
+
+
+
+0.0218 -- 2016-07-26 12:22:22 UTC
+
 * Fixed broken docs image links after a PAUSE cleanup.
 
 
