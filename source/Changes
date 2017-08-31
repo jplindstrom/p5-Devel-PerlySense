@@ -4,7 +4,9 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* Extract variable: fix replacement to be case sensitive
+
+* Config: default config contains well formed inc_dir
 
 
 
