@@ -445,8 +445,7 @@ sub aDirIncProject {
     my $dirProject = dir($self->dirProject)->absolute;
     my $dirProjectRelativeTo = $dirProject->relative( $dirRelativeTo );
 
-    ###TODO: extract method for the inc_dir config entry aIncDirConfig
-    my @aDirIncProject = @{ $self->oPerlySense->rhConfig->{project}->{inc_dir} || [] };
+	 my @aDirIncProject = split /\s+/, $self->oPerlySense->rhConfig->{project}->{inc_dir};
     my @aDirInc = (@aDirIncProject, ".", "lib");
 
     my @aDirIncRelative =
@@ -469,10 +468,7 @@ directories in the config, plus the usual inc directories.
 sub aDirIncAbsolute {
     my $dirProject = dir($self->dirProject)->absolute;
 
-    ###TODO: extract method for the inc_dir config entry aIncDirConfig
-    my @aDirIncProject = @{
-        $self->oPerlySense->rhConfig->{project}->{inc_dir} || []
-    };
+	 my @aDirIncProject = split /\s+/, $self->oPerlySense->rhConfig->{project}->{inc_dir};
     my @aDirInc = (@aDirIncProject, ".", "lib");
 
     my @aDirIncAbsolute =
