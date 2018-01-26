@@ -8,6 +8,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 * Config: default config contains well formed inc_dir
 
+* Fix deprecated Perl 5.26 regex syntax for {}
+
 
 
 0.0218 -- 2016-07-26 12:22:22 UTC
