@@ -77,6 +77,9 @@ project:
   #Extra @INC directories, relative to the project root
   #These come before the default inc directories "." and "lib"
   inc_dir:
+  # e.g.
+  # - t/lib
+  # - that/other/lib
 
 
 #Bookmarks are regexes that may match against a single line.
