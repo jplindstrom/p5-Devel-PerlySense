@@ -1,0 +1,14 @@
+#!/bin/bash
+ack --nopager --nogroup --nocolor --perl -- 'sub|field' | \
+perl -nE '/(sub|field)\s+"?(\w+)/ and say $2' | \
+perl -nE '/[a-z]/ and print' | \
+perl -nE '/[A-Z]/ and print' | \
+perl -nE '/^[a-z]/ and print' | \
+sort | \
+uniq | \
+perl -MMojo::Util -nE '/(\w+)/ and say "$1\t" . Mojo::Util::decamelize(ucfirst($1))' | \
+perl -nE 'print s/rh_(\w+?)$/${1}_rec/sr' | \
+perl -nE 'print s/rs_(\w+?)$/${1}_rs/sr' | \
+grep -v worm | grep -v showScore | grep -v crashed_into \
+> ../notes/naming/old_new.txt
+# cat
