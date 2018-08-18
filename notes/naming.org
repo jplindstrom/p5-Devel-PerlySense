@@ -1,0 +1,8 @@
+* Rename identifiers to non-experimental style
+* Find
+** sub, fields
+ack --nopager --nogroup --nocolor --perl -- 'sub|field' | perl -nE '/(sub|field)\s+"?(\w+)/ and say $2' | perl -nE '/[a-z]/ and print' | perl -nE '/[A-Z]/ and print' | perl -nE '/^[a-z]/ and print' | sort | uniq -c |  > ../notes/naming/old_new.txt
+** variables
+$
+** hash keys
+=>
