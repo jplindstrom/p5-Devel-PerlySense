@@ -894,7 +894,7 @@ at point. Default to a sensible ack command line.
 Look for 'method', 'sub', 'has' (somehwat simplistic atm).
 "
   (interactive)
-  (ps/find-project-method-regex-at-point "^\\s*(sub|method|has)\\s+[\"']?%s\\b")
+  (ps/find-project-method-regex-at-point "^\\s*(sub|method|has)\\s+[\"']?\\+?%s\\b")
 )
 
 
