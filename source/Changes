@@ -4,7 +4,7 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
-*
+* "Find sub declarations" (C-o f s) now finds quoted attribute names
 
 
 
