@@ -1239,7 +1239,7 @@ If a Magit buffer is found, magit-refresh it before returning it.
   there isn't one."
   (save-excursion
     (end-of-line)
-    (if (search-backward-regexp "^ *\\bpackage +\\([a-zA-Z0-9:]+\\)" nil t)
+    (if (search-backward-regexp "^ *\\bpackage +\\([a-zA-Z0-9:_]+\\)" nil t)
         (let (( package-name (match-string 1) ))
           package-name)
       nil)))

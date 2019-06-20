@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Bug fix: include _ in search for package name
+
 * "Find sub declarations" (C-o f s) now finds quoted attribute names,
   and attributes overridden with a leading +
 
