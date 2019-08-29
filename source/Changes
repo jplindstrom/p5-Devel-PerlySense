@@ -9,6 +9,9 @@ Feature oriented Revision history for Devel-PerlySense
 * "Find sub declarations" (C-o f s) now finds quoted attribute names,
   and attributes overridden with a leading +
 
+* Feature: Edit - Copy Method Name -- C-o e c m.
+  Copy the current method name (i.e. package->sub).
+
 
 
 0.0219 -- 2018-01-26 14:40:53 UTC

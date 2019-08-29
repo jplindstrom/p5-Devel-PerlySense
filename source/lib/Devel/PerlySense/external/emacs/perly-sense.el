@@ -1284,6 +1284,35 @@ display it in the echo area"
     )
   )
 
+(defun ps/current-method-name ()
+  "Return the 'name' of the current method, i.e. the
+__PACKAGE__->SUB name, or nil if none was found."
+  (save-excursion
+    (let* ((package-name (ps/current-package-name))
+           (sub-name (ps/current-sub-name)))
+      (if (and package-name sub-name)
+          (format "%s->%s" package-name sub-name)
+        nil
+        )
+      )
+    )
+  )
+
+(defun ps/edit-copy-method-name ()
+  "Copy (put in the kill-ring) the name of the current method,
+and display it in the echo area"
+  (interactive)
+  (let ((method-name (ps/current-method-name)))
+    (if method-name
+        (progn
+          (kill-new method-name)
+          (message "Copied method name '%s'" method-name)
+          )
+      (error "No method found")
+      )
+    )
+  )
+
 (defun ps/edit-copy-file-name ()
   "Copy (put in the kill-ring) the name of the current file, and
 display it in the echo area"
@@ -2666,6 +2695,7 @@ Return t if found, else nil."
 (global-set-key (format "%secp" ps/key-prefix) 'ps/edit-copy-package-name)
 (global-set-key (format "%secP" ps/key-prefix) 'ps/edit-copy-package-name-from-file)
 (global-set-key (format "%secs" ps/key-prefix) 'ps/edit-copy-sub-name)
+(global-set-key (format "%secm" ps/key-prefix) 'ps/edit-copy-method-name)
 (global-set-key (format "%secf" ps/key-prefix) 'ps/edit-copy-file-name)
 (global-set-key (format "%semu" ps/key-prefix) 'ps/edit-move-use-statement)
 (global-set-key (format "%seau" ps/key-prefix) 'ps/edit-add-use-statement)
