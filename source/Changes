@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0220 -- 2019-08-29 12:08:18 UTC
+
 * Bug fix: include _ in search for package name
 
 * "Find sub declarations" (C-o f s) now finds quoted attribute names,
