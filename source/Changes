@@ -6,6 +6,9 @@ Feature oriented Revision history for Devel-PerlySense
 
 * POD fixes
 
+* Fix RT#130415: escape { in regexes for Perl 5.30.
+  Thanks to Slaven Rezic for the bug report.
+
 
 
 0.0220 -- 2019-08-29 12:08:18 UTC

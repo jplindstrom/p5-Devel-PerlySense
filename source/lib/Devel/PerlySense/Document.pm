@@ -1009,7 +1009,10 @@ my $matchReplace = {
     q/sub\s+\w+\s*:\s*\w+[^{]+{/ => q/SPECIAL/,
     q/^=(?:head|item|for|pod)/ => q/SPECIAL/,
 };
-my $rexMatch = join("|", keys %$matchReplace );
+my $rexMatch = join(
+    "|",
+    map { s/\{/\\{/; $_; } keys %$matchReplace,
+);
 sub _stringReplace {
     my ($match) = @_;
 
