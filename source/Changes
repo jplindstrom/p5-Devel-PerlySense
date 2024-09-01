@@ -4,6 +4,8 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+0.0222 -- 2024-09-01 21:17:04 UTC
+
 * Fix elisp so that it loads correctly in Emacs 29
 
   This is the simplest thing to just get it to load. Some
