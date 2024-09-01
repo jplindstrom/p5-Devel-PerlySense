@@ -11,10 +11,31 @@
 
 (load "cl-seq")  ;; find-if
 
-(require 'pc-select)  ;; next-line-nomark
 (require 'gud)        ;; perldb
 (require 'grep)       ;; grep-find (or rather grep-host-defaults-alist)
 (require 'thingatpt)  ;; thing-at-point, etc.
+
+
+
+(defun ps/next-line-nomark (&optional arg)
+  "Deactivate mark; move cursor vertically down ARG lines.
+If there is no character in the target line exactly under the current column,
+the cursor is positioned after the character in that line which spans this
+column, or at the end of the line if it is not long enough.
+If there is no line in the buffer after this one, behavior depends on the
+value of `next-line-add-newlines'.  If non-nil, it inserts a newline character
+to create a line, and moves the cursor to that line.  Otherwise it moves the
+cursor to the end of the buffer (if already at the end of the buffer, an error
+is signaled).
+
+The command \\[set-goal-column] can be used to create
+a semipermanent goal column to which this command always moves.
+Then it does not try to move vertically.  This goal column is stored
+in `goal-column', which is nil when there is none."
+  (interactive "p")
+  (setq mark-active nil)
+  (next-line arg)
+  (setq this-command 'next-line))
 
 
 
@@ -1273,7 +1294,7 @@ statement in the file, or nil if none was found."
         (message "No 'use Module' section found")
       (push-mark)
       (goto-char use-position)
-      (next-line-nomark)
+      (ps/next-line-nomark)
       (beginning-of-line)
       )
     )
