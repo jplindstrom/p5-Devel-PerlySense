@@ -4,6 +4,12 @@ Feature oriented Revision history for Devel-PerlySense
 
 {{$NEXT}}
 
+* Fix elisp so that it loads correctly in Emacs 29
+
+  This is the simplest thing to just get it to load. Some
+  functionality, e.g. the dropdown was removed.
+
+
 0.0221 -- 2019-08-30 08:10:09 UTC
 
 * POD fixes
