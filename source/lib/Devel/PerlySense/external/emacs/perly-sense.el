@@ -160,7 +160,7 @@ region is active"
 
 ;; Regex Tool
 (load "regex-tool" nil t)
-(load "dropdown-list" nil t)
+;; Disabled: doesn't work in Emacs 29: (load "dropdown-list" nil t)
 
 
 ;; lang-refactor-perl
