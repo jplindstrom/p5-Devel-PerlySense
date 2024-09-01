@@ -426,6 +426,56 @@ See the POD docs for how to enable flymake."
 
 
 
+(defun ps/parse-sexp (result)
+;;  (message "RESPONSE AS TEXT |%s|" result)
+  ;; TODO: check for "Error: " and display the error message
+  (if (string= result "")
+      '()
+    (let ((response-alist (eval (car (read-from-string result)))))
+      response-alist
+      )
+    )
+  )
+
+
+
+;;;(ps/parse-result-into-alist "'((\"class-overview\" . \"Hej baberiba [ Class::Accessor ]\") (\"class_name\" . \"Class::Accessor\") (\"message\" . \"Whatever\"))")
+;;(ps/parse-result-into-alist "'((\"class_name\" . \"alpha\"))")
+
+
+
+(defun ps/shell-command-to-string (command args-string)
+  "Run command with args-string and return the response"
+
+  (let* ((response
+          (if (and ps/use-prepare-shell-command (string= command "perly_sense"))
+              (scp/shell-command-to-string
+               default-directory
+               (concat command " --stdin ") args-string)
+            (shell-command-to-string (concat command " " args-string))
+            )))
+;;    (message "Called (%s), got (%s)" command response)
+    response
+    )
+)
+
+
+
+(defun ps/command (command &optional options)
+  "Call 'perly_sense COMMAND OPTIONS' and some additional default
+options, and return the parsed result as a sexp"
+  (unless options (setq options ""))
+  (ps/parse-sexp
+   (ps/shell-command-to-string
+    "perly_sense"
+    (format "%s --width_display=%s %s"
+            command
+            (- (window-width) 2)
+            options
+            ))))
+
+
+
 ; should use something that fontifies
 (defun ps/display-pod-for-module (module)
   (let* ((result-alist
@@ -518,21 +568,19 @@ and return the parsed result as a sexp"
 
 
 
-(defun ps/parse-sexp (result)
-;;  (message "RESPONSE AS TEXT |%s|" result)
-  ;; TODO: check for "Error: " and display the error message
-  (if (string= result "")
-      '()
-    (let ((response-alist (eval (car (read-from-string result)))))
-      response-alist
-      )
-    )
-  )
-
-
-
-;;;(ps/parse-result-into-alist "'((\"class-overview\" . \"Hej baberiba [ Class::Accessor ]\") (\"class_name\" . \"Class::Accessor\") (\"message\" . \"Whatever\"))")
-;;(ps/parse-result-into-alist "'((\"class_name\" . \"alpha\"))")
+(defun ps/async-shell-command-to-string (command callback)
+  "Run command asynchronously and call callback with the
+response"
+  (lexical-let
+      ((command-string command)
+       (callback-fun callback))
+;;     (message "Calling (%s)" command-string)
+    (async-shell-command-to-string
+     command
+     (lambda (response)
+;;        (message "Called (%s), got (%s)" command-string response)
+       (funcall callback-fun response)
+       ))))
 
 
 
@@ -553,54 +601,6 @@ call CALLBACK with the parsed result as a sexp"
        (funcall callback-fun (ps/parse-sexp output))
        )
      )))
-
-
-
-(defun ps/command (command &optional options)
-  "Call 'perly_sense COMMAND OPTIONS' and some additional default
-options, and return the parsed result as a sexp"
-  (unless options (setq options ""))
-  (ps/parse-sexp
-   (ps/shell-command-to-string
-    "perly_sense"
-    (format "%s --width_display=%s %s"
-            command
-            (- (window-width) 2)
-            options
-            ))))
-
-
-
-(defun ps/shell-command-to-string (command args-string)
-  "Run command with args-string and return the response"
-
-  (let* ((response
-          (if (and ps/use-prepare-shell-command (string= command "perly_sense"))
-              (scp/shell-command-to-string
-               default-directory
-               (concat command " --stdin ") args-string)
-            (shell-command-to-string (concat command " " args-string))
-            )))
-;;    (message "Called (%s), got (%s)" command response)
-    response
-    )
-)
-
-
-
-(defun ps/async-shell-command-to-string (command callback)
-  "Run command asynchronously and call callback with the
-response"
-  (lexical-let
-      ((command-string command)
-       (callback-fun callback))
-;;     (message "Calling (%s)" command-string)
-    (async-shell-command-to-string
-     command
-     (lambda (response)
-;;        (message "Called (%s), got (%s)" command-string response)
-       (funcall callback-fun response)
-       ))))
 
 
 
@@ -1010,6 +1010,23 @@ If not, search for an empty string.
 
 
 
+(defun ps/class-method-at-point ()
+  "Return the method name at (or very near) point, or nil if none was found."
+  (save-excursion
+    (if (looking-at "[ \n(]") (backward-char)) ;; if at end of method name, move into it
+    (if (looking-at "[a-zA-Z0-9_]")                ;; we may be on a method name
+        (while (looking-at "[a-zA-Z0-9_]") (backward-char))   ;; position at beginning of word
+      )
+    (if (looking-at ">") (backward-char))
+    (if (looking-at "[\\\\-]>\\([a-zA-Z0-9_]+\\)")            ;; If on -> or \>, capture method name
+        (match-string 1)
+      nil
+      )
+    )
+  )
+
+
+
 (defun ps/method-of-method-or-object-at-point ()
   "Find name of method of method call at point. This can be:
 
@@ -1116,6 +1133,18 @@ col is 0, the point isn't moved in that dimension."
 
 
 
+(defun ps/get-alist-from-list (list-of-alist key value)
+  "Return the first alist in list which aliast's key is value, or
+nil if none was found"
+  (catch 'found
+    (dolist (alist list-of-alist)
+      (let ((alist-item-value (alist-value alist key)))
+        (if (string= alist-item-value value)
+            (throw 'found alist)
+          nil)))))
+
+
+
 (defun ps/choose-class-alist-from-class-list-with-dropdown (what-text class-list)
   "Let the user choose a class-alist from the lass-list of Class
 definitions using a dropdown list.
@@ -1185,18 +1214,6 @@ Return class-alist with (keys: class_name, file, row)"
     (message "%s" class-inheritance)
     )
   )
-
-
-
-(defun ps/get-alist-from-list (list-of-alist key value)
-  "Return the first alist in list which aliast's key is value, or
-nil if none was found"
-  (catch 'found
-    (dolist (alist list-of-alist)
-      (let ((alist-item-value (alist-value alist key)))
-        (if (string= alist-item-value value)
-            (throw 'found alist)
-          nil)))))
 
 
 
@@ -2041,6 +2058,198 @@ t on success, else nil"
 
 
 
+;; PerlySense Class major mode
+
+;;;
+
+
+
+
+(defvar ps/class-name nil "The name of the name in the current Class Overview buffer.")
+(make-variable-buffer-local 'ps/class-name)
+
+
+
+;; Set point where class-name is mentioned in current [< xxx >]
+(defun ps/class-find-current-class-name (class-name)
+  "Search from the buffer beginning for 'class-name'.
+
+Return t if found, or nil if not"
+  (let ((class-name-box (format "[<%s" class-name)))
+    (goto-char (point-min))
+    (if (search-forward class-name-box nil t)
+        (progn
+          (search-backward "[<" nil t)
+          (forward-char)
+          t)
+      nil)))
+
+
+
+(defun ps/class-find-neighbourhood ()
+  "Navigate to the * NeighbourHood * in the Class Overview"
+  (interactive)
+  (push-mark)
+  (goto-char (point-min))
+  (if (search-forward "* NeighbourHood *" nil t)
+      (progn
+        (search-forward "[<" nil t)
+        (backward-char)
+        t)
+    nil))
+
+
+
+(defun ps/class-find-used ()
+  "Navigate to the * Uses * in the Class Overview"
+  (interactive)
+  (push-mark)
+  (goto-char (point-min))
+  (if (search-forward "* Uses *" nil t)
+      (progn
+        (beginning-of-line 2)
+        (forward-char)
+        t)
+    nil))
+
+
+
+(defun ps/class-find-bookmarks ()
+  "Navigate to the * Bookmarks * in the Class Overview"
+  (interactive)
+  (push-mark)
+  (goto-char (point-min))
+  (if (search-forward "* Bookmarks *" nil t)
+      (progn
+        (beginning-of-line 2)
+        (if (looking-at "-")
+            (beginning-of-line 2))
+        t)
+    nil))
+
+
+
+(defun ps/class-find-api ()
+  "Navigate to the * API * in the Class Overview.
+Return t if found, else nil."
+  (interactive)
+  (push-mark)
+  (goto-char (point-min))
+  (if (search-forward "* API *" nil t)
+      (progn
+        (beginning-of-line 2)
+        t)
+    nil))
+
+
+
+(defun ps/class-find-api-new ()
+  "Navigate to the new method in the Class Overview"
+  (interactive)
+  (push-mark)
+  (goto-char (point-min))
+  (search-forward-regexp ".>new\\b" nil t)
+  (backward-char 3)
+  )
+
+
+
+(defun ps/class-find-default-heading (class-name)
+  "Position point at the first available heading in importance
+order, e.g. first Inheritance, then Api, etc."
+  (or
+   (ps/class-find-current-class-name class-name)
+   (ps/class-find-api)
+   (ps/class-find-bookmarks)
+   (ps/class-find-used)
+   (ps/class-find-neighbourhood)
+   nil
+  ))
+
+
+
+(defun ps/fontify-class-overview-buffer (buffer-name)
+  "Mark up a buffer with Class Overview text."
+  (interactive)
+  (save-excursion
+    (set-buffer buffer-name)
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "\\[ \\w+ +\\]" nil t)
+      (put-text-property (match-beginning 0) (match-end 0) 'face ps/module-name-face))
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "\\[<\\w+ *>\\]" nil t)
+      (put-text-property (match-beginning 0) (match-end 0) 'face ps/highlighted-module-name-face))
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "^[^:\n]+:[0-9]+:" nil t)
+      (let
+          ((file-beginning (match-beginning 0))
+           (row-end (- (match-end 0) 1)))
+        (search-backward-regexp ":[0-9]+:" nil t)
+        (let
+            ((file-end (match-beginning 0))
+             (row-beginning (+ (match-beginning 0) 1)))
+          (put-text-property file-beginning file-end 'face ps/bookmark-file-face)
+          (put-text-property row-beginning row-end 'face ps/bookmark-line-number-face)
+          )))
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "->\\w+" nil t)  ;; ->method
+      (put-text-property (match-beginning 0) (match-end 0) 'face ps/current-class-method-face))
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "\\\\>\\w+" nil t)  ;; \>method
+      (put-text-property (match-beginning 0) (match-end 0) 'face 'font-lock-keyword-face))
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "->new\\b" nil t)  ;; ->new
+      (put-text-property (match-beginning 0) (match-end 0) 'face ps/current-new-method-face))
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "\\\\>new\\b" nil t)  ;; \>new
+      (put-text-property (match-beginning 0) (match-end 0) 'face ps/base-new-method-face))
+
+
+
+    (goto-char (point-min))
+    (while (search-forward-regexp "\\* \\w+ +\\*" nil t)
+      (let
+          ((heading-beginning (match-beginning 0) )
+           (heading-end (match-end 0) ))
+        (put-text-property heading-beginning heading-end 'face ps/heading-face)
+        (add-text-properties heading-beginning (+ heading-beginning 2) '(invisible t))
+        (add-text-properties (- heading-end 2) heading-end '(invisible t))
+      ))
+    )
+  )
+
+
+
+
+(defun ps/display-class-overview (class-name overview-text dir)
+  (let ((buffer-name "*Class Overview*"))
+    (with-current-buffer (get-buffer-create buffer-name)
+;; (message "dir (%s)" dir)
+
+      (setq default-directory dir)
+      (toggle-read-only t)(toggle-read-only)  ; No better way?
+      (erase-buffer)
+      (insert overview-text)
+
+      (ps/class-mode)
+      (ps/fontify-class-overview-buffer buffer-name)
+      (ps/class-find-default-heading class-name)
+      (switch-to-buffer (current-buffer))  ;; before: display-buffer
+      (toggle-read-only t)
+      (setq ps/class-name class-name)  ;; Buffer local
+      )
+    )
+  )
+
+
+
 (defun ps/class-overview-with-argstring (argstring)
   "Call perly_sense class_overview with argstring and display Class Overview with the response"
   (interactive)
@@ -2116,6 +2325,30 @@ t on success, else nil"
 
 
 
+(defun ps/class-find-structure ()
+  "Navigate to the * Structure * in the Class Overview"
+  (interactive)
+  (push-mark)
+  (goto-char (point-min))
+  (search-forward "* Structure *" nil t)
+  (search-forward "-" nil t)
+  (beginning-of-line 2)
+  )
+
+
+
+;; ;; Set point where class-name is mentioned in brackets
+;; (defun ps/search-class-name (class-name)
+;;   (let ((class-name-box (format "[ %s " class-name)))
+;;     (goto-char (point-min))
+;;     (search-forward class-name-box)
+;;     (search-backward "[ ")
+;;     (forward-char)
+;;     )
+;;   )
+
+
+
 
 
 
@@ -2136,175 +2369,6 @@ t on success, else nil"
     )
   )
 
-
-
-;; PerlySense Class major mode
-
-;;;
-
-
-
-
-(defvar ps/class-name nil "The name of the name in the current Class Overview buffer.")
-(make-variable-buffer-local 'ps/class-name)
-
-
-
-(defun ps/display-class-overview (class-name overview-text dir)
-  (let ((buffer-name "*Class Overview*"))
-    (with-current-buffer (get-buffer-create buffer-name)
-;; (message "dir (%s)" dir)
-
-      (setq default-directory dir)
-      (toggle-read-only t)(toggle-read-only)  ; No better way?
-      (erase-buffer)
-      (insert overview-text)
-
-      (ps/class-mode)
-      (ps/fontify-class-overview-buffer buffer-name)
-      (ps/class-find-default-heading class-name)
-      (switch-to-buffer (current-buffer))  ;; before: display-buffer
-      (toggle-read-only t)
-      (setq ps/class-name class-name)  ;; Buffer local
-      )
-    )
-  )
-
-
-
-(defun ps/class-find-default-heading (class-name)
-  "Position point at the first available heading in importance
-order, e.g. first Inheritance, then Api, etc."
-  (or
-   (ps/class-find-current-class-name class-name)
-   (ps/class-find-api)
-   (ps/class-find-bookmarks)
-   (ps/class-find-used)
-   (ps/class-find-neighbourhood)
-   nil
-  ))
-
-
-
-;; ;; Set point where class-name is mentioned in brackets
-;; (defun ps/search-class-name (class-name)
-;;   (let ((class-name-box (format "[ %s " class-name)))
-;;     (goto-char (point-min))
-;;     (search-forward class-name-box)
-;;     (search-backward "[ ")
-;;     (forward-char)
-;;     )
-;;   )
-
-
-
-;; Set point where class-name is mentioned in current [< xxx >]
-(defun ps/class-find-current-class-name (class-name)
-  "Search from the buffer beginning for 'class-name'.
-
-Return t if found, or nil if not"
-  (let ((class-name-box (format "[<%s" class-name)))
-    (goto-char (point-min))
-    (if (search-forward class-name-box nil t)
-        (progn
-          (search-backward "[<" nil t)
-          (forward-char)
-          t)
-      nil)))
-
-
-
-(defun ps/fontify-class-overview-buffer (buffer-name)
-  "Mark up a buffer with Class Overview text."
-  (interactive)
-  (save-excursion
-    (set-buffer buffer-name)
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "\\[ \\w+ +\\]" nil t)
-      (put-text-property (match-beginning 0) (match-end 0) 'face ps/module-name-face))
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "\\[<\\w+ *>\\]" nil t)
-      (put-text-property (match-beginning 0) (match-end 0) 'face ps/highlighted-module-name-face))
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "^[^:\n]+:[0-9]+:" nil t)
-      (let
-          ((file-beginning (match-beginning 0))
-           (row-end (- (match-end 0) 1)))
-        (search-backward-regexp ":[0-9]+:" nil t)
-        (let
-            ((file-end (match-beginning 0))
-             (row-beginning (+ (match-beginning 0) 1)))
-          (put-text-property file-beginning file-end 'face ps/bookmark-file-face)
-          (put-text-property row-beginning row-end 'face ps/bookmark-line-number-face)
-          )))
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "->\\w+" nil t)  ;; ->method
-      (put-text-property (match-beginning 0) (match-end 0) 'face ps/current-class-method-face))
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "\\\\>\\w+" nil t)  ;; \>method
-      (put-text-property (match-beginning 0) (match-end 0) 'face 'font-lock-keyword-face))
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "->new\\b" nil t)  ;; ->new
-      (put-text-property (match-beginning 0) (match-end 0) 'face ps/current-new-method-face))
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "\\\\>new\\b" nil t)  ;; \>new
-      (put-text-property (match-beginning 0) (match-end 0) 'face ps/base-new-method-face))
-
-
-
-    (goto-char (point-min))
-    (while (search-forward-regexp "\\* \\w+ +\\*" nil t)
-      (let
-          ((heading-beginning (match-beginning 0) )
-           (heading-end (match-end 0) ))
-        (put-text-property heading-beginning heading-end 'face ps/heading-face)
-        (add-text-properties heading-beginning (+ heading-beginning 2) '(invisible t))
-        (add-text-properties (- heading-end 2) heading-end '(invisible t))
-      ))
-    )
-  )
-
-
-
-
-(defun ps/compile-goto-error-file-line ()
-  "Go to the file + line specified on the row at point, or ask for a
-text to parse for a file + line."
-  (interactive)
-  (let* ((file_row (ps/compile-get-file-line-from-buffer) )
-         (file (nth 0 file_row))
-         (row (nth 1 file_row)))
-    (if file
-        (ps/find-file-location file (string-to-number row) 1)
-      (let* ((file_row (ps/compile-get-file-line-from-user-input) )
-             (file (nth 0 file_row))
-             (row (nth 1 file_row)))
-        (if file
-            (ps/find-file-location file (string-to-number row) 1)
-          (message "No 'FILE line N' found")
-          )
-        )
-      )
-    )
-  )
-
-
-(defun ps/compile-get-file-line-from-user-input ()
-  "Ask for a text to parse for a file + line, parse it using
-'ps/compile-get-file-line-from-buffer'. Return what it
-returns."
-  (with-temp-buffer
-    (insert (read-string "FILE, line N text: " (current-kill 0 t)))
-    (ps/compile-get-file-line-from-buffer)
-    )
-  )
 
 
 (defun ps/compile-get-file-line-from-buffer ()
@@ -2330,29 +2394,55 @@ point, or an empty list () if none was found."
 
 
 
+(defun ps/compile-get-file-line-from-user-input ()
+  "Ask for a text to parse for a file + line, parse it using
+'ps/compile-get-file-line-from-buffer'. Return what it
+returns."
+  (with-temp-buffer
+    (insert (read-string "FILE, line N text: " (current-kill 0 t)))
+    (ps/compile-get-file-line-from-buffer)
+    )
+  )
+
+
+(defun ps/compile-goto-error-file-line ()
+  "Go to the file + line specified on the row at point, or ask for a
+text to parse for a file + line."
+  (interactive)
+  (let* ((file_row (ps/compile-get-file-line-from-buffer) )
+         (file (nth 0 file_row))
+         (row (nth 1 file_row)))
+    (if file
+        (ps/find-file-location file (string-to-number row) 1)
+      (let* ((file_row (ps/compile-get-file-line-from-user-input) )
+             (file (nth 0 file_row))
+             (row (nth 1 file_row)))
+        (if file
+            (ps/find-file-location file (string-to-number row) 1)
+          (message "No 'FILE line N' found")
+          )
+        )
+      )
+    )
+  )
+
 
 
 ;;;;;
 
 
-(defun ps/class-goto-at-point ()
-  "Go to the class/method/bookmark at point"
-  (interactive)
-  (message "Goto at point")
-  (let* ((class-name (ps/find-class-name-at-point)))
-         (if class-name
-             (progn
-               (message (format "Going to class (%s)" class-name))
-               (ps/find-source-for-module class-name)
-               )
-           (if (not (ps/class-goto-method-at-point))
-               (if (not (ps/class-goto-bookmark-at-point))
-                   (message "No Class/Method/Bookmark at point")
-                 )
-             )
-           )
-         )
-  )
+
+(defun ps/class-current-class ()
+  "Return the class currenlty being displayed in the Class Overview buffer.
+Use the buffer ps/class-name, or find the buffer name in the
+buffer."
+  (or
+   ps/class-name
+   (save-excursion
+     (message "PS internal: Warning: looking for the class name in the buffer text (obsolete?)")
+     (goto-char (point-min))
+     (search-forward-regexp "\\[<\\(\\w+\\) *>\\]" nil t)
+     (match-string 1))))
 
 
 
@@ -2367,47 +2457,6 @@ return t, or return nil if no method could be found at point."
           (ps/class-method-go-to current-class method)
           t
           )
-      nil
-      )
-    )
-  )
-
-
-
-(defun ps/class-docs-at-point ()
-  "Display docs for the class/method at point"
-  (interactive)
-  (message "Docs at point")
-  (let* ((class-name (ps/find-class-name-at-point)))
-         (if class-name
-             (progn
-               (message (format "Finding docs for class (%s)" class-name))
-               (ps/display-pod-for-module class-name)
-               )
-           (let* ((method (ps/class-method-at-point))  ;;;'
-                  (current-class (ps/class-current-class)))
-             (if (and current-class method)
-                 (ps/class-method-docs current-class method)
-               (message "No Class or Method at point")
-               )
-             )
-           )
-         )
-
-  )
-
-
-
-(defun ps/class-method-at-point ()
-  "Return the method name at (or very near) point, or nil if none was found."
-  (save-excursion
-    (if (looking-at "[ \n(]") (backward-char)) ;; if at end of method name, move into it
-    (if (looking-at "[a-zA-Z0-9_]")                ;; we may be on a method name
-        (while (looking-at "[a-zA-Z0-9_]") (backward-char))   ;; position at beginning of word
-      )
-    (if (looking-at ">") (backward-char))
-    (if (looking-at "[\\\\-]>\\([a-zA-Z0-9_]+\\)")            ;; If on -> or \>, capture method name
-        (match-string 1)
       nil
       )
     )
@@ -2433,6 +2482,70 @@ Return t if there was any, else nil"
     )
   )
 
+
+
+
+(defun ps/find-class-name-at-point ()
+  "Return the class name at point, or nil if none was found"
+  (save-excursion
+    (if (looking-at "[\\[]")
+        (forward-char) ;; So we can search backwards without fear of missing the current char
+      )
+    (if (search-backward-regexp "[][]" nil t)
+        (if (looking-at "[\\[]")
+            (progn  ;; TODO: only match on the class name, this matches e.g. [ $blah ]
+              (search-forward-regexp "\\w+" nil t)
+              (match-string 0)
+              )
+          )
+      )
+    )
+  )
+
+
+
+(defun ps/class-goto-at-point ()
+  "Go to the class/method/bookmark at point"
+  (interactive)
+  (message "Goto at point")
+  (let* ((class-name (ps/find-class-name-at-point)))
+         (if class-name
+             (progn
+               (message (format "Going to class (%s)" class-name))
+               (ps/find-source-for-module class-name)
+               )
+           (if (not (ps/class-goto-method-at-point))
+               (if (not (ps/class-goto-bookmark-at-point))
+                   (message "No Class/Method/Bookmark at point")
+                 )
+             )
+           )
+         )
+  )
+
+
+
+(defun ps/class-docs-at-point ()
+  "Display docs for the class/method at point"
+  (interactive)
+  (message "Docs at point")
+  (let* ((class-name (ps/find-class-name-at-point)))
+         (if class-name
+             (progn
+               (message (format "Finding docs for class (%s)" class-name))
+               (ps/display-pod-for-module class-name)
+               )
+           (let* ((method (ps/class-method-at-point))  ;;;'
+                  (current-class (ps/class-current-class)))
+             (if (and current-class method)
+                 (ps/class-method-docs current-class method)
+               (message "No Class or Method at point")
+               )
+             )
+           )
+         )
+
+  )
 
 
 
@@ -2470,20 +2583,6 @@ or go to the Bookmark at point"
 
 
 
-(defun ps/class-current-class ()
-  "Return the class currenlty being displayed in the Class Overview buffer.
-Use the buffer ps/class-name, or find the buffer name in the
-buffer."
-  (or
-   ps/class-name
-   (save-excursion
-     (message "PS internal: Warning: looking for the class name in the buffer text (obsolete?)")
-     (goto-char (point-min))
-     (search-forward-regexp "\\[<\\(\\w+\\) *>\\]" nil t)
-     (match-string 1))))
-
-
-
 (defun ps/class-quit ()
   "Quit the Class Overview buffer"
   (interactive)
@@ -2501,105 +2600,6 @@ buffer."
   (search-forward "* Inheritance *" nil t)
   (search-forward "[<" nil t)
   (backward-char)
-  )
-
-
-
-(defun ps/class-find-neighbourhood ()
-  "Navigate to the * NeighbourHood * in the Class Overview"
-  (interactive)
-  (push-mark)
-  (goto-char (point-min))
-  (if (search-forward "* NeighbourHood *" nil t)
-      (progn
-        (search-forward "[<" nil t)
-        (backward-char)
-        t)
-    nil))
-
-
-
-(defun ps/class-find-used ()
-  "Navigate to the * Uses * in the Class Overview"
-  (interactive)
-  (push-mark)
-  (goto-char (point-min))
-  (if (search-forward "* Uses *" nil t)
-      (progn
-        (beginning-of-line 2)
-        (forward-char)
-        t)
-    nil))
-
-
-
-(defun ps/class-find-bookmarks ()
-  "Navigate to the * Bookmarks * in the Class Overview"
-  (interactive)
-  (push-mark)
-  (goto-char (point-min))
-  (if (search-forward "* Bookmarks *" nil t)
-      (progn
-        (beginning-of-line 2)
-        (if (looking-at "-")
-            (beginning-of-line 2))
-        t)
-    nil))
-
-
-
-(defun ps/class-find-structure ()
-  "Navigate to the * Structure * in the Class Overview"
-  (interactive)
-  (push-mark)
-  (goto-char (point-min))
-  (search-forward "* Structure *" nil t)
-  (search-forward "-" nil t)
-  (beginning-of-line 2)
-  )
-
-
-
-(defun ps/class-find-api ()
-  "Navigate to the * API * in the Class Overview.
-Return t if found, else nil."
-  (interactive)
-  (push-mark)
-  (goto-char (point-min))
-  (if (search-forward "* API *" nil t)
-      (progn
-        (beginning-of-line 2)
-        t)
-    nil))
-
-
-
-(defun ps/class-find-api-new ()
-  "Navigate to the new method in the Class Overview"
-  (interactive)
-  (push-mark)
-  (goto-char (point-min))
-  (search-forward-regexp ".>new\\b" nil t)
-  (backward-char 3)
-  )
-
-
-
-(defun ps/find-class-name-at-point ()
-  "Return the class name at point, or nil if none was found"
-  (save-excursion
-    (if (looking-at "[\\[]")
-        (forward-char) ;; So we can search backwards without fear of missing the current char
-      )
-    (if (search-backward-regexp "[][]" nil t)
-        (if (looking-at "[\\[]")
-            (progn  ;; TODO: only match on the class name, this matches e.g. [ $blah ]
-              (search-forward-regexp "\\w+" nil t)
-              (match-string 0)
-              )
-          )
-      )
-    )
   )
 
 
